@@ -34,10 +34,11 @@
                             </div>
                         </div>
                         {% if obj.user.get_full_name  %}
-                        <p class='text-muted '>Author: {{ obj.user.get_full_name }}</p><!-- {{ obj.user }} is the same-->
+                            <p class='text-muted '>Author: {{ obj.user.get_full_name }}</p><!-- {{ obj.user }} is the same-->
                         {% endif %}
                         <div class="content-markdown">
-                            <p class="card-text">{{ obj.content|truncatechars:120|safe }}</p>
+
+                            <p class="card-text">{{ obj.content|truncatechars:120 }}</p>
                         </div>
                         <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
                     </div>
