@@ -21,44 +21,32 @@
     <script type='text/javascript'>
         $(document).ready(function () {
             // Render Markdown content
+            // Get content input and preview elements by their IDs
             var contentInput = $("#wmd-input-id_content");
+            var previewContent = $("#markdown-content div");
 
-            function setContentPreview(value) {
-                var markedContent = marked(value);
-                $("#preview-content").html(markedContent);
-                $("#preview-content img").each(function () {
+            // Function to update the preview
+            function updatePreview() {
+                var markedContent = marked(contentInput.val());
+                previewContent.html(markedContent);
+
+                // Add the img-thumbnail class to images within the preview
+                previewContent.find("img").each(function () {
                     $(this).addClass("img-thumbnail");
                 });
             }
 
-            setContentPreview(contentInput.val());
+            // post_form: Initial preview update
+            updatePreview();
 
-            contentInput.keyup(function () {
-                var newContent = $(this).val();
-                setContentPreview(newContent);
+            // post_form: Listen for input changes and update preview in real-time
+            contentInput.on("input", function () {
+                updatePreview();
             });
     
-            // Style images inside post_detail and post_form
+            // post_detail :Style images inside 
             $(".post-detail-item img").each(function () {
                 $(this).addClass("img-thumbnail");
-            });
-            $(".content-preview img").each(function () {
-                $(this).addClass("img-fluid w-25");
-            });
-
-            
-           // title preview
-            var titleInput = $("#id_title");
-
-            function setTitlePreview(value) {
-                $("#preview-title").text(value);
-            }
-
-            setTitlePreview(titleInput.val());
-
-            titleInput.keyup(function () {
-                var newTitle = $(this).val();
-                setTitlePreview(newTitle);
             });
 
         });
