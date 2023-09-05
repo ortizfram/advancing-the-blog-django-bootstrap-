@@ -38,7 +38,7 @@
                             <p class='text-muted '>Author: {{ obj.user.get_full_name }}</p><!-- {{ obj.user }} is the same-->
                         {% endif %}
                         <div class="">
-                            <p class="card-text post-detail-item">{{ obj.get_markdown }}</p>
+                            <p class="card-text post-detail-item">{{ obj.get_markdown|truncatechars_html:12 }}</p>
                         </div>
                         <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
                     </div>
