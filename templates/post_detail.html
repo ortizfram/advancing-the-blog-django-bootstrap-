@@ -70,9 +70,7 @@
                 {% if instance.user.get_full_name  %}
                     <p>Author: {{ instance.user.get_full_name }}</p><br/><!-- {{ instance.user }} is the same-->
                 {% endif %}
-                <div class="content-markdown">
-                    <h5 class='pt-3'>{{instance.content|safe}}</h5>
-                </div>
+                <h5 class='pt-3 post-detail-item'>{{instance.get_markdown}}</h5>
                 <hr/>
             </div>
 

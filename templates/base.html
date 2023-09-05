@@ -28,19 +28,19 @@
 
     <!--apply Jquery function Markdown HTML-->
     <script type='text/javascript'>
-        $(document).ready(function(){
-            $(".content-markdown").each(function(){
-                var content =  $(this).text()
-                var markedContent =  marked(content)
-                $(this).html(markedContent)
-            })
-        })
-        $(document).ready(function(){
-            $(".content-markdown img").each(function(){
-                $(this).addClass("img-responsive");
-            })
-        })
-        
+        $(document).ready(function () {
+            // Render Markdown content
+            $(".content-markdown").each(function () {
+                var content = $(this).text();
+                var markedContent = marked(content);
+                $(this).html(markedContent);
+            });
+    
+            // Style images
+            $(".post-detail-item img").each(function () {
+                $(this).addClass("img-thumbnail");
+            });
+        });
     </script>
     {% block head_extra %} {% endblock head_extra%} <!--for post_form-->
 </head>

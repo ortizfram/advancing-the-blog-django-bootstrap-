@@ -14,10 +14,11 @@
     <div class="posts-list row">
         {% for obj in object_list %}
             <div class="col-sm-6 col-lg-4 mb-4">
-                <div class="card">
+                <div class="card  post-detail-item">
                     {% if obj.image %}
                         <img src="{{ obj.image.url }}" class="card-img-top img-fluid" alt="Post Image">
                     {% endif %}
+
                     <div class="card-body">
                         <div class='row'>
                             <div class="col-md-8">
@@ -36,9 +37,8 @@
                         {% if obj.user.get_full_name  %}
                             <p class='text-muted '>Author: {{ obj.user.get_full_name }}</p><!-- {{ obj.user }} is the same-->
                         {% endif %}
-                        <div class="content-markdown">
-
-                            <p class="card-text">{{ obj.content|truncatechars:120 }}</p>
+                        <div class="">
+                            <p class="card-text post-detail-item">{{ obj.get_markdown }}</p>
                         </div>
                         <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
                     </div>
