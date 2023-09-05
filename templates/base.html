@@ -18,6 +18,7 @@
     
     <!--marked-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/8.0.0/marked.min.js" integrity="sha512-BXVL0B4hjclkEj5vS1KjYncDRB7XHVAUFb/j8oaOZMTVK38R6hj6ZQsLCuijQyuN73ECpNrlc7YEC2cbfxOoLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     
     <!-- css -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -41,13 +42,38 @@
                 $(this).addClass("img-thumbnail");
             });
 
-            // preview-title
-            var titleItem = $("#id_title");
-            $("#preview-title").text(titleItem.val())
-
+            
             // preview-content
-            var contentItem = $("#wmd-input-id_content");
-            $("#preview-content").text(contentItem.val())
+            var contentInput = $("#wmd-input-id_content");
+            $("#preview-content").html(marked(contentInput.val()));
+            
+            function setContent(value){
+                var markedContent = marked(value)
+                $("#preview-content").html(markedContent)
+                $("#preview-content img").each(function(){
+                    $(this).addClass("img-thumbnail")
+                })
+            }
+            setContent(contentInput.val())
+            
+            contentInput.keyup(function(){
+                var newContent = $(this).val()
+                setContent(newContent)
+            })
+            
+            // preview-title
+            var titleInput = $("#id_title");
+
+            function setTitle(value) {
+                $("#preview-title").text(value)
+            }
+            setTitle(titleInput.val())
+
+            titleInput.keyup(function(){
+                var newContent = $(this).val()
+                setTitle(newContent)
+            })
+
         });
     </script>
     {% block head_extra %} {% endblock head_extra%} <!--for post_form-->
