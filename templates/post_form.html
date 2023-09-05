@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% comment %} {% load crispy_forms_tags %} {% endcomment %}
+{% load crispy_forms_tags %} 
 
 {% block head_extra %}
 {{ form.media }}
@@ -23,8 +23,8 @@
         <h1>Create post</h1>
         <hr/>
         <form method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
-            {{ form.as_p }} 
-            {% comment %} <!--{{ form|crispy }}--> {% endcomment %}
+            <!-- {{ form.as_p }}  -->
+            {{ form|crispy }} 
             <input type='submit' value='Create Post'/>
         </form>
     </div>

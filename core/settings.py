@@ -27,7 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # third party
-    # 'crispy_forms',
+    'crispy_forms',
+    "crispy_bootstrap5",
     'markdown_deux',
     'pagedown', # markdown editor
 
@@ -35,7 +36,9 @@ INSTALLED_APPS = [
     'apps.posts',
 ]
 
-# CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 
 MIDDLEWARE = [
