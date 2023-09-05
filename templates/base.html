@@ -7,19 +7,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block head_title %}POSTS{% endblock head_title %}</title>
 
-    <!--Jquery-->
-    <script
-    src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-    crossorigin="anonymous"></script>
-    
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <!-- marked -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/8.0.0/marked.min.js" integrity="sha512-BXVL0B4hjclkEj5vS1KjYncDRB7XHVAUFb/j8oaOZMTVK38R6hj6ZQsLCuijQyuN73ECpNrlc7YEC2cbfxOoLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     
     <!--marked-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/8.0.0/marked.min.js" integrity="sha512-BXVL0B4hjclkEj5vS1KjYncDRB7XHVAUFb/j8oaOZMTVK38R6hj6ZQsLCuijQyuN73ECpNrlc7YEC2cbfxOoLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <!--apply Jquery function Markdown HTML-->
+    <script type='text/javascript'>
+        $(document).ready(function () {
+            // Render Markdown content
+            var contentInput = $("#wmd-input-id_content");
+
+            function setContentPreview(value) {
+                var markedContent = marked(value);
+                $("#preview-content").html(markedContent);
+                $("#preview-content img").each(function () {
+                    $(this).addClass("img-thumbnail");
+                });
+            }
+
+            setContentPreview(contentInput.val());
+
+            contentInput.keyup(function () {
+                var newContent = $(this).val();
+                setContentPreview(newContent);
+            });
+    
+            // Style images inside post_detail and post_form
+            $(".post-detail-item img").each(function () {
+                $(this).addClass("img-thumbnail");
+            });
+            $(".content-preview img").each(function () {
+                $(this).addClass("img-fluid w-25");
+            });
+
+            
+           // title preview
+            var titleInput = $("#id_title");
+
+            function setTitlePreview(value) {
+                $("#preview-title").text(value);
+            }
+
+            setTitlePreview(titleInput.val());
+
+            titleInput.keyup(function () {
+                var newTitle = $(this).val();
+                setTitlePreview(newTitle);
+            });
+
+        });
+    </script>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     
     <!-- css -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -28,55 +75,6 @@
     <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
     <script src="https://kit.fontawesome.com/98d1538458.js" crossorigin="anonymous"></script>
 
-    <!--apply Jquery function Markdown HTML-->
-    <script type='text/javascript'>
-        $(document).ready(function () {
-            // Render Markdown content
-            $(".content-markdown").each(function () {
-                var content = $(this).text();
-                var markedContent = marked(content);
-                $(this).html(markedContent);
-            });
-    
-            // Style images inside post_detail
-            $(".post-detail-item img").each(function () {
-                $(this).addClass("img-thumbnail");
-            });
-
-            
-            // preview-content
-            var contentInput = $("#wmd-input-id_content");
-            $("#preview-content").html(marked(contentInput.val()));
-            
-            function setContent(value){
-                var markedContent = marked(value)
-                $("#preview-content").html(markedContent)
-                $("#preview-content img").each(function(){
-                    $(this).addClass("img-thumbnail")
-                })
-            }
-            setContent(contentInput.val())
-            
-            contentInput.keyup(function(){
-                var newContent = $(this).val()
-                setContent(newContent)
-            })
-            
-            // preview-title
-            var titleInput = $("#id_title");
-
-            function setTitle(value) {
-                $("#preview-title").text(value)
-            }
-            setTitle(titleInput.val())
-
-            titleInput.keyup(function(){
-                var newContent = $(this).val()
-                setTitle(newContent)
-            })
-
-        });
-    </script>
     {% block head_extra %} {% endblock head_extra%} <!--for post_form-->
 </head>
 

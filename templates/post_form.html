@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %} 
+{% load markdown_deux_tags %}
+
 
 {% block head_extra %}
 {{ form.media }}
@@ -13,8 +15,8 @@
         <h1>Preview</h1>
         <hr/>
         <div class="content-preview">
-            <h3 id='preview-title'></h3>
-            <p id='preview-content'></p>
+            <h3>{{ form.title.value|default:''|safe }}</h3>
+            <div>{{ form.content.value|default:''|safe|markdown }}</div>
         </div>
     </div>
 

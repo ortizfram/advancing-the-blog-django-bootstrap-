@@ -43,16 +43,17 @@
         
 
             <div class='post-body'>
-                 <!-- Like button -->
-            <div class="fb-like" 
-            data-href="{{ request.build_absolute_uri }}" 
-            data-width="200"
-            data-layout="standard" 
-            data-action="like" 
-            data-size="small"  
-            data-share="false">
-            </div>
-            <hr />
+                <!-- Like button -->
+                <div class="fb-like" 
+                data-href="{{ request.build_absolute_uri }}" 
+                data-width="200"
+                data-layout="standard" 
+                data-action="like" 
+                data-size="small"  
+                data-share="false">
+                </div>
+                
+                <hr />
                 {% if instance.image %}
                     <img src={{ instance.image.url }} class='img-fluid align-items-center'/>
                 {% endif %}
