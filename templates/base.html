@@ -36,10 +36,18 @@
                 $(this).html(markedContent);
             });
     
-            // Style images
+            // Style images inside post_detail
             $(".post-detail-item img").each(function () {
                 $(this).addClass("img-thumbnail");
             });
+
+            // preview-title
+            var titleItem = $("#id_title");
+            $("#preview-title").text(titleItem.val())
+
+            // preview-content
+            var contentItem = $("#wmd-input-id_content");
+            $("#preview-content").text(contentItem.val())
         });
     </script>
     {% block head_extra %} {% endblock head_extra%} <!--for post_form-->

@@ -6,14 +6,26 @@
 {% endblock head_extra %}
 
 {% block content %}
+<div class="row p-5">
+    <!--Post preview-->
+    <div class="col-sm-6">
+        <h1>Preview</h1>
+        <hr/>
+        <div class="content-preview">
+            <h3 id='preview-title'></h3>
+            <p id='preview-content'></p>
+        </div>
+    </div>
 
-    <div class='p-5'>
+    <!--Create Post-->
+    <div class='col-sm-6'>
         <h1>Create post</h1>
-
+        <hr/>
         <form method='POST' action='' enctype='multipart/form-data'>{% csrf_token %}
             {{ form.as_p }}
             <input type='submit' value='Create Post'/>
         </form>
     </div>
 
+</div>
 {% endblock content %}
