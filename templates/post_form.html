@@ -14,8 +14,14 @@
     <div class="col-sm-6">
         <h1>Preview</h1>
         <hr/>
+        {% if instance.image %}
+                <div class="post-image realtime-img-preview">
+                    <img src={{ instance.image.url }} class='img-fluid'/>
+                </div>
+        {% endif %}
+        
         <div class="content-preview" id="markdown-content">
-            <h3 id="preview-title"></h3>
+            <h3 id="preview-title" class="fw-bold"></h3>
             <div id="preview-content"></div>
         </div>
     </div>
