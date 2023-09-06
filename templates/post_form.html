@@ -14,9 +14,13 @@
     <div class="col-sm-6">
         <h1>Preview</h1>
         <hr/>
-        <div class="content-preview" id="markdown-content">
+        <!--<div class="content-preview" id="markdown-content">
             <h3>{{ form.title.value|default:''|safe }}</h3>
             <div id="content-markdown">{{ form.content.value|default:''|safe|markdown }}</div>
+        </div> -->
+        <div class="content-preview" id="markdown-content">
+            <h3 id="preview-title"></h3>
+            <div id="preview-content"></div>
         </div>
     </div>
 

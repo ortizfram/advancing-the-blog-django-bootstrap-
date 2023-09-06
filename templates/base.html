@@ -18,26 +18,25 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/8.0.0/marked.min.js" integrity="sha512-BXVL0B4hjclkEj5vS1KjYncDRB7XHVAUFb/j8oaOZMTVK38R6hj6ZQsLCuijQyuN73ECpNrlc7YEC2cbfxOoLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!--apply Jquery function Markdown HTML-->
-    <script type="text/javascript">
+    <script>
         $(document).ready(function () {
-            // Function to update the content preview in real-time
-            function updateContentPreview() {
-                var content = $('#id_content').val(); // Updated to match the field ID
-                var contentMarkdown = $('#content-markdown'); // Target the content div
+            // Function to update the preview
+            function updatePreview() {
+                // Get the values from the form fields
+                var title = $("#id_title").val();
+                var content = $("#wmd-input-real-time-content").val();
     
-                // Use Ajax to send the content to a server for processing (if needed)
-    
-                // Update the content preview div with the new content
-                contentMarkdown.html(marked(content));
+                // Update the preview elements
+                $("#preview-title").text(title);
+                $("#preview-content").html(content);
             }
     
-            // Call the updateContentPreview function initially to populate the preview
-            updateContentPreview();
-    
-            // Attach an event listener to the textarea to update the preview as the user types
-            $('#id_content').on('input', updateContentPreview); // Updated to match the field ID
+            // Attach an event listener to form fields to trigger the preview update
+            $("#id_title, #wmd-input-real-time-content").on("keyup", updatePreview);
+
         });
     </script>
+    
     
     
     <!-- Bootstrap -->
