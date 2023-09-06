@@ -15,7 +15,7 @@ h2 {
   display: none;
 }
 
-#content-markdown img {
+#preview-content img {
     /* images inside content-markdown maintain the same size */
   width: 100%;
   height: 100%;
