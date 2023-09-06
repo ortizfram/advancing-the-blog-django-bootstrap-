@@ -1,5 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %} 
+{% load markdown_deux_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,6 +28,9 @@
                 var title = $("#id_title").val();
                 var content = $("#wmd-input-real-time-content").val();
         
+                // Apply the Markdown filter to the content
+                var markdownContent = "{{ content|markdown }}".replace(/(?:\r\n|\r|\n)/g, '<br>'); // Convert line breaks to <br> tags
+                
                 // Update the preview elements
                 $("#preview-title").text(title);
                 $("#preview-content").html(content); // Use .html() to render HTML content
