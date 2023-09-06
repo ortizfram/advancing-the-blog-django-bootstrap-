@@ -10,7 +10,7 @@ h2 {
 
 
 
-/* @ post_form: preview  */
+/* @@ post_form: preview  */
 .wmd-preview{ 
   /*prevent default preview to generate a custom one*/
   display: none;
@@ -27,13 +27,13 @@ h2 {
 
 /* @@ post_detail: object cover imgs =====================================================================*/
 .post-body img{ 
-  /* images inside content-markdown maintain the same size */
+  /* post_detail cover container: images inside content-markdown maintain the same size */
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 .post-image {
-  /* post_detail: post image container */
+  /* post_detail cover: post image container */
   width: 100%;
   height: 0;
   padding-bottom: 46.88%; /* 900 / 1920 * 100 */
@@ -53,8 +53,13 @@ h2 {
 
 
 /* @@ post_list: object cover imgs==========================================================================*/
-.post-detail-item img{ 
+.post-detail-content img{ 
   /* images inside content-markdown maintain the same size */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-img-top img{
   width: 100%;
   height: 100%;
   object-fit: cover;

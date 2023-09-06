@@ -72,9 +72,9 @@
                 </div>
                 
                 {% if instance.user.get_full_name  %}
-                    <p>Author: {{ instance.user.get_full_name }}</p><br/><!-- {{ instance.user }} is the same-->
+                    <p class="fst-italic">Written by: {{ instance.user.get_full_name }}</p><br/><!-- {{ instance.user }} is the same-->
                 {% endif %}
-                <h5 class='pt-3 post-detail-item'>{{instance.get_markdown}}</h5>
+                <h5 class='pt-3 post-detail-content'>{{instance.get_markdown|linebreaksbr}}</h5>
                 <hr/>
             </div>
 

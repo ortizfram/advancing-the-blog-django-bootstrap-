@@ -34,6 +34,9 @@
         
                 // Render Markdown content to HTML using Showdown, instead of marked
                 var htmlContent = converter.makeHtml(content);
+
+                // Replace newline characters with <br> tags in the HTML content
+                htmlContent = htmlContent.replace(/\n/g, '<br>');
         
                 // Update the preview elements
                 $("#preview-title").text(title);
