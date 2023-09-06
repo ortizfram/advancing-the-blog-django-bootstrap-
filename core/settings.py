@@ -48,6 +48,17 @@ MARKDOWN_DEUX_EXTENSIONS = [
     "markdown.extensions.headerid",  # Add this line for heading IDs
 ]
 
+MARKDOWN_DEUX_STYLES = {
+    "default": {
+        "extras": {
+            "code-friendly": None,
+            # Add any other Markdown extensions you want to enable.
+        },
+        "safe_mode": "escape",
+    },
+}
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
