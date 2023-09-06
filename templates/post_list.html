@@ -11,7 +11,7 @@
 
 
     <!-- /// POSTS -->
-    <div class="posts-list row">
+    <div class="posts-list row ">
         {% for obj in object_list %}
             <div class="col-sm-6 col-lg-4 mb-4">
                 <div class="card  post-detail-content">
@@ -40,9 +40,9 @@
                             <p class='text-muted '>Author: {{ obj.user.get_full_name }}</p><!-- {{ obj.user }} is the same-->
                         {% endif %}
                         <div class="">
-                            <p class="card-text post-detail-content">{{ obj.get_markdown|truncatechars_html:50 }}</p>
+                            <p class="card-text post-detail-content">{{ obj.get_markdown|striptags|truncatewords_html:100 }}...</p>
                         </div>
-                        <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary" role="button">View</a></p>
+                        <p><a href="{{ obj.get_absolute_url }}" class="btn btn-primary mt-2" role="button">View</a></p>
                     </div>
                 </div>
             </div>
