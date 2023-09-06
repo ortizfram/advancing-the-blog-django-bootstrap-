@@ -22,3 +22,7 @@ h2 {
   object-fit: cover;
 }
 
+#preview-content {
+  /* respect spaces */
+  white-space: pre-line;
+}
