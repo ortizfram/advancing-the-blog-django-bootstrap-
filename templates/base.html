@@ -15,34 +15,39 @@
     <!-- marked -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/8.0.0/marked.min.js" integrity="sha512-BXVL0B4hjclkEj5vS1KjYncDRB7XHVAUFb/j8oaOZMTVK38R6hj6ZQsLCuijQyuN73ECpNrlc7YEC2cbfxOoLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    
-    <!--marked-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/8.0.0/marked.min.js" integrity="sha512-BXVL0B4hjclkEj5vS1KjYncDRB7XHVAUFb/j8oaOZMTVK38R6hj6ZQsLCuijQyuN73ECpNrlc7YEC2cbfxOoLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- Showdown library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
 
+    
     <!--apply Jquery function Markdown HTML-->
     <script>
         $(document).ready(function () {
+            // Create a Showdown converter instance
+            var converter = new showdown.Converter();
+    
             // Function to update the preview
             function updatePreview() {
                 // Get the values from the form fields
                 var title = $("#id_title").val();
                 var content = $("#wmd-input-real-time-content").val();
         
-                // Apply the Markdown filter to the content
-                var markdownContent = "{{ content|markdown }}".replace(/(?:\r\n|\r|\n)/g, '<br>'); // Convert line breaks to <br> tags
-                
+                // Render Markdown content to HTML using Showdown, instead of marked
+                var htmlContent = converter.makeHtml(content);
+        
                 // Update the preview elements
                 $("#preview-title").text(title);
-                $("#preview-content").html(content); // Use .html() to render HTML content
+                $("#preview-content").html(htmlContent);
             }
         
             // Attach an event listener to form fields to trigger the preview update
             $("#id_title, #wmd-input-real-time-content").on("keyup", updatePreview);
-
+        
             // Call the updatePreview() function initially
             updatePreview();
         });
-        </script>
+    </script>
+    
+    
         
     
     

@@ -40,6 +40,14 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+MARKDOWN_DEUX_EXTENSIONS = [
+    "markdown.extensions.extra",
+    "markdown.extensions.codehilite",
+    "markdown.extensions.toc",
+    "markdown.extensions.tables",
+    "markdown.extensions.headerid",  # Add this line for heading IDs
+]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
