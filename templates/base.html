@@ -18,39 +18,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/8.0.0/marked.min.js" integrity="sha512-BXVL0B4hjclkEj5vS1KjYncDRB7XHVAUFb/j8oaOZMTVK38R6hj6ZQsLCuijQyuN73ECpNrlc7YEC2cbfxOoLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!--apply Jquery function Markdown HTML-->
-    <script type='text/javascript'>
+    <script type="text/javascript">
         $(document).ready(function () {
-            // Render Markdown content
-            // Get content input and preview elements by their IDs
-            var contentInput = $("#wmd-input-id_content");
-            var previewContent = $("#markdown-content div");
-
-            // Function to update the preview
-            function updatePreview() {
-                var markedContent = marked(contentInput.val());
-                previewContent.html(markedContent);
-
-                // Add the img-thumbnail class to images within the preview
-                previewContent.find("img").each(function () {
-                    $(this).addClass("img-thumbnail");
-                });
-            }
-
-            // post_form: Initial preview update
-            updatePreview();
-
-            // post_form: Listen for input changes and update preview in real-time
-            contentInput.on("input", function () {
-                updatePreview();
-            });
+            // Function to update the content preview in real-time
+            function updateContentPreview() {
+                var content = $('#id_content').val(); // Updated to match the field ID
+                var contentMarkdown = $('#content-markdown'); // Target the content div
     
-            // post_detail :Style images inside 
-            $(".post-detail-item img").each(function () {
-                $(this).addClass("img-thumbnail");
-            });
-
+                // Use Ajax to send the content to a server for processing (if needed)
+    
+                // Update the content preview div with the new content
+                contentMarkdown.html(marked(content));
+            }
+    
+            // Call the updateContentPreview function initially to populate the preview
+            updateContentPreview();
+    
+            // Attach an event listener to the textarea to update the preview as the user types
+            $('#id_content').on('input', updateContentPreview); // Updated to match the field ID
         });
     </script>
+    
     
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">

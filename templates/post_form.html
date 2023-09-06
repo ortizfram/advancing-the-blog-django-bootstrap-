@@ -16,9 +16,8 @@
         <hr/>
         <div class="content-preview" id="markdown-content">
             <h3>{{ form.title.value|default:''|safe }}</h3>
-            <div>{{ form.content.value|default:''|safe|markdown }}</div>
+            <div id="content-markdown">{{ form.content.value|default:''|safe|markdown }}</div>
         </div>
-        
     </div>
 
     <!--Create Post-->
@@ -34,3 +33,5 @@
 
 </div>
 {% endblock content %}
+
+
