@@ -79,7 +79,10 @@
             </div>
 
             <!--Comments-->
-            <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-width="600" data-numposts="5"></div>
+            {% comment %} <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-width="600" data-numposts="5"></div> {% endcomment %}
+            <div>
+                {{ instance.comment_set.all }}
+            </div>
 
     </div>
 </div>
