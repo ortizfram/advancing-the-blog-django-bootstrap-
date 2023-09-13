@@ -9,6 +9,10 @@ from markdown_deux import markdown
 from django.utils.safestring import mark_safe
 import markdown2
 
+from apps.comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
+
+
 
 
 # Create your models here.
@@ -57,6 +61,18 @@ class Post(models.Model):
         # Render Markdown content to HTML using markdown2
         htmlContent = markdown2.markdown(content)
         return mark_safe(htmlContent)
+    
+    @property
+    def comments(self):
+        instance = self
+        qs = Comment.objects.filter_by_instance(instance)
+        return qs
+  
+    @property
+    def get_content_type(self):
+        instance = self
+        content_type = ContentType.objects.get_for_model(instance.__class__)
+        return content_type
 
     class Meta:
         ordering = ["-timestamp", "-updated"]

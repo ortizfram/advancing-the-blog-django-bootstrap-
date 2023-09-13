@@ -43,9 +43,7 @@ def post_detail(request, slug): # retrieve
             raise Http404
     # instance.user = request.user #-> require auth to see
     share_string = quote_plus(instance.content)
-    content_type = ContentType.objects.get_for_model(Post)
-    obj_id = instance.id
-    comments = Comment.objects.filter(content_type=content_type, object_id=obj_id)
+    comments = instance.comments # from model comment manager
     context = {
         "title" : instance.title,
         "instance" : instance,

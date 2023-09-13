@@ -75,22 +75,21 @@
                     <p class="fst-italic">Written by: {{ instance.user.get_full_name }}</p><br/><!-- {{ instance.user }} is the same-->
                 {% endif %}
                 <h5 class='pt-3 post-detail-content'>{{instance.get_markdown|linebreaksbr}}</h5>
-                <hr/>
             </div>
 
             <!--Comments-->
             <div>
                 <p class='lead'>Comments</p>
+                <hr/>
                 {% for comment in comments %}
-                    <div class="">
-                        <small>{{ comment.user }} | {{ comment.timestamp|timesince }} ago</small>
-                        <br/>
-                        {{ comment.content }}
-                        <hr/>
-                    </div>
+                <blockquote class="blockquote">
+                    <small><strong>{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago</small>
+                    <p>{{ comment.content }}</p>
+                </blockquote>
+                <hr/>
                 {% endfor %}
             </div>
-
+            
     </div>
 </div>
 
