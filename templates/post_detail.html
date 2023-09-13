@@ -80,6 +80,10 @@
             <!--Comments-->
             <div>
                 <p class='lead'>Comments</p>
+                <form action="." method="submit"> {% csrf_token %}
+                    {{ comment_form }}
+                    <input type="submit" value="Post Comment" class="btn btn-default">
+                </form>
                 <hr/>
                 {% for comment in comments %}
                 <blockquote class="blockquote">

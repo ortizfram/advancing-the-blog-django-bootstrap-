@@ -14,7 +14,7 @@ from django.utils import timezone
 
 from apps.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
-
+from apps.comments.forms import CommentForm
 
 
 
@@ -43,13 +43,23 @@ def post_detail(request, slug): # retrieve
             raise Http404
     # instance.user = request.user #-> require auth to see
     share_string = quote_plus(instance.content)
+
+    initial_data = { # comes from comment forms.py
+            "content_type": instance.get_content_type,
+            "object_id": instance.id
+    }
+    form = CommentForm(request.POST or None, initial=initial_data)
+    if form.is_valid():
+        print(form.cleaned_data)
     comments = instance.comments # from model comment manager
+
     context = {
         "title" : instance.title,
         "instance" : instance,
         "slug": instance.slug,
         'share_string': share_string,
         "comments": comments,
+        "comment_form":form,
     }
     return render(request, "post_detail.html", context)
 
