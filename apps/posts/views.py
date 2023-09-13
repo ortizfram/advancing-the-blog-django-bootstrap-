@@ -6,13 +6,16 @@ from django.urls import reverse
 
 from .models import Post
 from .forms import PostForm
-
 from django.core.paginator import Paginator
 
 from urllib.parse import quote_plus
 from django.db.models import Q
-
 from django.utils import timezone
+
+from apps.comments.models import Comment
+from django.contrib.contenttypes.models import ContentType
+
+
 
 
 # Create your views here.
@@ -40,11 +43,15 @@ def post_detail(request, slug): # retrieve
             raise Http404
     # instance.user = request.user #-> require auth to see
     share_string = quote_plus(instance.content)
+    content_type = ContentType.objects.get_for_model(Post)
+    obj_id = instance.id
+    comments = Comment.objects.filter(content_type=content_type, object_id=obj_id)
     context = {
         "title" : instance.title,
         "instance" : instance,
         "slug": instance.slug,
         'share_string': share_string,
+        "comments": comments,
     }
     return render(request, "post_detail.html", context)
 
