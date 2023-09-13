@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'pagedown', # markdown editor
 
     # local
+    'apps.comments',
     'apps.posts',
 ]
 
