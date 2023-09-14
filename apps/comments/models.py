@@ -18,11 +18,15 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey("content_type", "object_id")
-   
+    parent = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE)
+
     content     = models.TextField()
     timestamp   = models.DateTimeField(auto_now_add=True)
 
     objects     = CommentManager()
+
+    class Meta:
+        ordering = ['-timestamp'] # -timestamp = newest || timestamp=oldest
 
     def __unicode__(self):
         return str(self.user.username)
@@ -30,4 +34,11 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.user.username)
     
-   
+    def children(self): # replies
+        return Comment.objects.filter(parent=self)
+    
+    @property
+    def is_parent(self):
+        if self.parent is not None:
+            return False # is children
+        return True      # is parent
