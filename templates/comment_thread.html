@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %} 
 
 
-{% block head_title %}{{ instance.title }} | {{ block.super }}{% endblock head_title %}
+{% block head_title %}{{ comment.content|truncatechars:30 }} | {{ block.super }}{% endblock head_title %}
 
 {% block content %}
 
@@ -12,6 +12,31 @@
         
 
         <h1>Comment Thread</h1>
+
+                    <div class="comment">
+                        <blockquote class="blockquote">
+                            <small class='text-muted'><strong>@{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago| {% if comment.children.count > 0 %}{{ comment.children.count }} Answer{% if comment.children.count > 1 %}s{% endif %} |{% endif %} </small>
+                            <p>{{ comment.content }}</p>
+                        </blockquote>
+            
+                        <!-- Child comment view -->
+                        <div id="comment-{{ comment.id }}" style='display:none;'>
+                            {% for child_comment in comment.children %} 
+                                <blockquote class="blockquote ms-4">
+                                    <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
+                                    <p>{{ child_comment.content }}</p>   
+                                </blockquote>
+                            {% endfor %} 
+                        
+                            <!-- Reply comment form -->
+                            <form action="." method="POST"> {% csrf_token %}
+                                {{ comment_form|crispy }}
+                                <input type="hidden" name='parent_id' value='{{ comment.id }}'>
+                                <input type="submit" value="Reply" class="btn btn-primary reply-btn">
+                            </form>
+                        </div>
+                    </div>
+                    <hr/>
                
             
     </div>
