@@ -80,20 +80,43 @@
             <!--Comments-->
             <div>
                 <p class='lead'>Comments</p>
+                <!-- New comment form -->
                 <form action="{% url 'post_detail' slug=instance.slug %}" method="post">
                     {% csrf_token %}
                     {{ comment_form|crispy }}
-                    <input type="submit" value="Post Comment" class="btn btn-default">
+                    <input type="submit" value="Post Comment" class="btn btn-primary">
                 </form>
                 <hr/>
+            
                 {% for comment in comments %}
-                <blockquote class="blockquote">
-                    <small><strong>{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago</small>
-                    <p>{{ comment.content }}</p>
-                </blockquote>
-                <hr/>
+                    <div class="comment">
+                        <blockquote class="blockquote">
+                            <small class='text-muted'><strong>@{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago</small>
+                            <p>{{ comment.content }}</p>
+                        </blockquote>
+            
+                        <!-- Child comment view -->
+                        <div class="child-comments">
+                            {% for child_comment in comment.children %} 
+                                <blockquote class="blockquote ms-4">
+                                    <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
+                                    <p>{{ child_comment.content }}</p>   
+                                </blockquote>
+                            {% endfor %} 
+            
+                            <!-- Reply comment form -->
+                            <form action="{% url 'post_detail' slug=instance.slug %}" method="post">
+                                {% csrf_token %}
+                                {{ comment_form|crispy }}
+                                <input type="hidden" name='parent_id' value='{{ comment.id }}'>
+                                <input type="submit" value="Reply" class="btn btn-primary">
+                            </form>
+                        </div>
+                    </div>
+                    <hr/>
                 {% endfor %}
             </div>
+            
             
     </div>
 </div>
