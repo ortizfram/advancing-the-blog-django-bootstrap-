@@ -6,7 +6,12 @@ h2 {
   display:none;
 }
 
-
+/* Style child comments as block replies */
+.child-comment {
+  border-left: 4px solid #ccc; /* Add a left border to create a visual separator */
+  margin-left: 20px; /* Adjust the margin for indentation */
+  padding-left: 10px; /* Add some padding for spacing */
+}
 
 .wmd-panel {
   margin-left: 0% !important; 
@@ -15,7 +20,7 @@ h2 {
 
 
 
-/* @ post_form: preview  */
+/* @@ post_form: preview  */
 .wmd-preview{ 
   /*prevent default preview to generate a custom one*/
   display: none;
@@ -60,6 +65,11 @@ h2 {
 /* @@ post_list: object cover imgs==========================================================================*/
 .post-detail-content img{ 
   /* images inside content-markdown maintain the same size */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-img-top img{
   width: 100%;
   height: 100%;
   object-fit: cover;
