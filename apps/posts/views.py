@@ -45,12 +45,25 @@ def post_detail(request, slug): # retrieve
     share_string = quote_plus(instance.content)
 
     initial_data = { # comes from comment forms.py
-            "content_type": instance.get_content_type,
+            "content_type": instance.get_content_type.model,
             "object_id": instance.id
     }
     form = CommentForm(request.POST or None, initial=initial_data)
     if form.is_valid():
-        print(form.cleaned_data)
+        c_type = form.cleaned_data.get("content_type")
+        content_type = ContentType.objects.get(model=c_type)
+        obj_id = form.cleaned_data.get("object_id")
+        content_data = form.cleaned_data.get("content")
+        new_comment, created = Comment.objects.get_or_create(
+                            user = request.user,
+                            content_type = content_type,
+                            object_id = obj_id,
+                            content = content_data
+        )
+        if created:
+            print("Comment working!!")
+
+
     comments = instance.comments # from model comment manager
 
     context = {
