@@ -82,7 +82,7 @@
                 <p class='lead'>Comments</p>
                 <form action="{% url 'post_detail' slug=instance.slug %}" method="post">
                     {% csrf_token %}
-                    {{ comment_form }}
+                    {{ comment_form|crispy }}
                     <input type="submit" value="Post Comment" class="btn btn-default">
                 </form>
                 <hr/>
