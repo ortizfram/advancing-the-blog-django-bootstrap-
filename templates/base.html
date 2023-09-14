@@ -19,9 +19,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
 
     
-    <!--apply Jquery function Markdown HTML-->
     <script>
         $(document).ready(function () {
+         //-- JQ function: apply Jquery function Markdown HTML
             // Create a Showdown converter instance
             var converter = new showdown.Converter();
             
@@ -48,8 +48,29 @@
         
             // preview: Call the updatePreview() function initially
             updatePreview();
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            // JQ function: comments fade replies IN OUT @@post_detail : comments
+            $(".comment-reply-btn").click(function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+                var targetId = $(this).data("target");
+                $("#" + targetId).fadeToggle();
+    
+                // Prevent the page from scrolling to the top
+                return false;
+            });
+    
+            // JQ function: Prevent form submission when clicking the "Reply" button
+            $(".reply-comment-form").submit(function(event) {
+                // Your additional logic (if needed) to handle the reply
+            });
         });
     </script>
+
+        
     
     
         
