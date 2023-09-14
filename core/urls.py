@@ -4,6 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+
+    path("comments/", include("apps.comments.urls")),
     path("posts/", include("apps.posts.urls")),
     path('admin/', admin.site.urls),
 ]
