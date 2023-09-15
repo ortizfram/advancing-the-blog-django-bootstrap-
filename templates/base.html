@@ -48,35 +48,11 @@
         
             // preview: Call the updatePreview() function initially
             updatePreview();
-    </script>
-
-
-    <script>
-        $(document).ready(function () {
-            // JQ function: comments fade replies IN OUT @@post_detail : comments
-            $(".comment-reply-btn").click(function(event) {
-                event.preventDefault(); // Prevent the default link behavior
-                var targetId = $(this).data("target");
-                $("#" + targetId).fadeToggle();
-    
-                // Prevent the page from scrolling to the top
-                return false;
-            });
-    
-            // JQ function: Prevent form submission when clicking the "Reply" button
-            $(".reply-comment-form").submit(function(event) {
-                // Your additional logic (if needed) to handle the reply
-            });
         });
     </script>
 
-        
     
-    
-        
-    
-    
-    
+
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>

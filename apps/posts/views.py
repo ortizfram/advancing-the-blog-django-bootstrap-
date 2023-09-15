@@ -43,7 +43,7 @@ def post_detail(request, slug): # retrieve
             raise Http404
     # instance.user = request.user #-> require auth to see
     share_string = quote_plus(instance.content)
-
+    
     initial_data = { # comes from comment forms.py
             "content_type": instance.get_content_type.model,
             "object_id": instance.id
