@@ -14,7 +14,7 @@
 
         <!-- list Child comments -->
         <div id="comment-{{ comment.id }}">
-            {% for child_comment in comment.children %}
+            {% for child_comment in comment.children.all %}
                 <blockquote class="blockquote ms-4">
                     <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
                     <p>{{ child_comment.content }}</p>
