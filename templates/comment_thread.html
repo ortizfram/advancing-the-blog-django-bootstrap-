@@ -1,4 +1,3 @@
-<!-- comment_thread.html -->
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
@@ -15,15 +14,17 @@
 
         <!-- list Child comments -->
         <div id="comment-{{ comment.id }}">
-            {% for child_comment in comment.children %}
-                <blockquote class="blockquote ms-4">
-                    <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
-                    <p>{{ child_comment.content }}</p>
-                </blockquote>
-            {% endfor %}
+            {% if comment.children.count > 0 %}
+                {% for child_comment in comment.children %}
+                    <blockquote class="blockquote ms-4">
+                        <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
+                        <p>{{ child_comment.content }}</p>
+                    </blockquote>
+                {% endfor %}
+            {% endif %}
 
             <!-- Reply comment form -->
-            <form action="" method="post">
+            <form action="{% url 'comments:thread' id=comment.id %}" method="post">
                 {% csrf_token %}
                 {{ comment_form|crispy }}
                 <input type="hidden" name='parent_id' value='{{ comment.id }}'>

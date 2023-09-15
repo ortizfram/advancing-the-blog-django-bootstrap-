@@ -85,20 +85,35 @@
                 <form action="{% url 'post_detail' slug=instance.slug %}" method="post">
                     {% csrf_token %}
                     {{ comment_form|crispy }}
-                    <input type="submit" value="Post Comment" class="btn btn-primary">
+                    <div style="text-align: right;">
+                        <button type="submit" class="btn btn-primary rounded " style="float: right;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
                 </form>
+                
+                
                 <hr/>
             
                 <!-- list comments-->
                 {% for comment in comments %}
                     <div class="comment">
-                        <blockquote class="blockquote">
-                            <small class='text-muted'><strong>@{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago| {% if comment.children.count > 0 %}<a href="{% url 'comments:thread' id=comment.id %}" class='comment-thread-link'>{{ comment.children.count }} {% if comment.children.count == 1 %}Reply{% endif %}{% if comment.children.count > 1 %}Replies{% else %}{% endif %} |{% endif %}</a></small>
-                            <p>{{ comment.content }}</p>
-                        </blockquote>
+                        <a href="{% url 'comments:thread' id=comment.id %}" class='comment-thread-link' style="text-decoration: none;">
+                            <blockquote class="blockquote">
+                                <small class='text-muted'>
+                                    <strong>@{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago|
+                                    {% if comment.children.count > 0 %}
+                                        <i class="fas fa-comment"></i> <!-- Font Awesome chat icon -->
+                                        {{ comment.children.count }} 
+                                    {% endif %}
+                                </small>
+                                <p>{{ comment.content }}</p>
+                            </blockquote>
+                        </a>
                     </div>
                     <hr/>
                 {% endfor %}
+
             </div>
             
             
