@@ -7,32 +7,52 @@
     <h1>Comment Thread</h1>
 
     <!-- Parent Comment -->
-    <div class="comment">
-        <blockquote class="blockquote">
-            <small class='text-muted'><strong>@{{ parent_comment.user }}</strong> | {{ parent_comment.timestamp|timesince }} ago| {% if children_comments.count > 0 %}{{ children_comments.count }} Answer{% if children_comments.count > 1 %}s{% endif %} |{% endif %}</small>
-            <p>{{ parent_comment.content }}</p>
-        </blockquote>
-    </div>
+<div class="comment">
+    <blockquote class="blockquote">
+        <small class='text-muted'><strong>@{{ parent_comment.user }}</strong> | {{ parent_comment.timestamp|timesince }} ago| {% if children_comments.count > 0 %}{{ children_comments.count }} Answer{% if children_comments.count > 1 %}s{% endif %} |{% endif %}</small>
+        <p>{{ parent_comment.content }}</p>
+    </blockquote>
+</div>
 
-    <!-- Children Comments -->
-    <div class="child-comments">
-        {% for child_comment in children_comments %}
-            <div class="comment">
-                <blockquote class="blockquote ms-4">
-                    <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
-                    <p>{{ child_comment.content }}</p>
-                </blockquote>
+<!-- Children Comments -->
+<div class="child-comments">
+    {% for child_comment in children_comments %}
+        <div class="comment">
+            <blockquote class="blockquote ms-4">
+                <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
+                <p>{{ child_comment.content }}</p>
+            </blockquote>
+            
+            <!-- Replies to Child Comment -->
+            <div class="child-replies">
+                {% for reply_comment in child_comment.children.all %}
+                    <div class="comment">
+                        <blockquote class="blockquote ms-4">
+                            <small class='text-muted'><strong>@{{ reply_comment.user }}</strong> | {{ reply_comment.timestamp|timesince }} ago</small>
+                            <p>{{ reply_comment.content }}</p>
+                        </blockquote>
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
+            <!-- End of Replies to Child Comment -->
 
-    <!-- Reply comment form -->
-    <form id="parent-comment-reply-form" class="reply-comment-form" method="post">
-        {% csrf_token %}
-        {{ comment_form|crispy }}
-        <input type="hidden" name="parent_id" value="{{ parent_comment.id }}">
-        <input type="submit" value="Reply" class="btn btn-primary">
-    </form>
+            <!-- Reply comment form -->
+            <form id="parent-comment-reply-form" class="reply-comment-form" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="content_type" value="{{ parent_comment.content_type }}">
+                <input type="hidden" name="object_id" value="{{ parent_comment.object_id }}">
+                {{ comment_form|crispy }}
+                <input type="submit" value="Reply" class="btn btn-primary">
+            </form>
+            
+
+            
+        </div>
+    {% endfor %}
+    
+</div>
+
+
 
 </div>
 {% endblock content %}
