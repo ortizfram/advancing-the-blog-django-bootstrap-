@@ -14,24 +14,21 @@
 
         <!-- list Child comments -->
         <div id="comment-{{ comment.id }}">
-            {% if comment.children.count > 0 %}
-                {% for child_comment in comment.children %}
-                    <blockquote class="blockquote ms-4">
-                        <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
-                        <p>{{ child_comment.content }}</p>
-                    </blockquote>
-                {% endfor %}
-            {% endif %}
-
-            <!-- Reply comment form -->
-            <form action="{% url 'comments:thread' id=comment.id %}" method="post">
-                {% csrf_token %}
-                {{ comment_form|crispy }}
-                <input type="hidden" name='parent_id' value='{{ comment.id }}'>
-                <input type="submit" value="Reply" class="btn btn-primary reply-btn">
-            </form>
+            {% for child_comment in comment.children %}
+                <blockquote class="blockquote ms-4">
+                    <small class='text-muted'><strong>@{{ child_comment.user }}</strong> | {{ child_comment.timestamp|timesince }} ago</small>
+                    <p>{{ child_comment.content }}</p>
+                </blockquote>
+            {% endfor %}
         </div>
+
+        <!-- Reply comment form -->
+        <form action="{% url 'comments:thread' id=comment.id %}" method="post">
+            {% csrf_token %}
+            {{ comment_form|crispy }}
+            <input type="hidden" name='parent_id' value='{{ comment.id }}'>
+            <input type="submit" value="Reply" class="btn btn-primary reply-btn">
+        </form>
     </div>
-    <hr/>
 </div>
 {% endblock content %}
