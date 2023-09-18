@@ -1,8 +1,24 @@
-from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 from .models import Comment
 from .forms import CommentForm
 from django.contrib.contenttypes.models import ContentType
 from .models import Comment
+
+
+def comment_delete(request, id):
+    comment = get_object_or_404(Comment, id=id)
+    if request.method == "POST":
+        parent_obj_url = comment.content_object.get_absolute_url() 
+        comment.delete()
+        messages.success(request, "This has been deleted.")
+        return HttpResponseRedirect(parent_obj_url)
+    context = {
+        "comment": comment,
+    }
+    return render(request, "confirm_delete.html", context)
+
 
 def comment_thread(request, id):
     parent_comment = get_object_or_404(Comment, id=id)

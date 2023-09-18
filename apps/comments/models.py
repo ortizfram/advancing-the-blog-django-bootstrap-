@@ -41,8 +41,8 @@ class Comment(models.Model):
     def __str__(self):
         return str(self.user.username)
 
-    # def get_absolute_url(self):
-    #     return reverse("comments:tread", kwargs={"id": self.id})
+    def get_absolute_url(self):
+        return reverse("comments:thread", kwargs={"id": self.id})
     
     
     def children(self): # replies
@@ -52,4 +52,4 @@ class Comment(models.Model):
     def is_parent(self):
         if self.parent is not None:
             return False # is children
-        return True      # is parent
+            return True      # is parent
