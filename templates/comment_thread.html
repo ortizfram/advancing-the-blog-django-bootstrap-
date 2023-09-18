@@ -34,24 +34,19 @@
                     </div>
                 {% endfor %}
             </div>
-            <!-- End of Replies to Child Comment -->
-
-            <!-- Reply comment form -->
-            <form id="parent-comment-reply-form" class="reply-comment-form" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="content_type" value="{{ parent_comment.content_type }}">
-                <input type="hidden" name="object_id" value="{{ parent_comment.object_id }}">
-                {{ comment_form|crispy }}
-                <input type="submit" value="Reply" class="btn btn-primary">
-            </form>
-            
-
             
         </div>
     {% endfor %}
-    
 </div>
 
+<!-- Reply comment form -->
+<form id="parent-comment-reply-form" class="reply-comment-form" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="content_type" value="{{ parent_comment.content_type }}">
+    <input type="hidden" name="object_id" value="{{ parent_comment.object_id }}">
+    {{ comment_form|crispy }}
+    <input type="submit" value="Reply" class="btn btn-primary">
+</form>
 
 
 </div>

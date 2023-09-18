@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, HttpResponseRedirect
 from .models import Comment
 from .forms import CommentForm
 from django.contrib.contenttypes.models import ContentType
+from .models import Comment
 
 def comment_thread(request, id):
     parent_comment = get_object_or_404(Comment, id=id)
@@ -40,7 +41,7 @@ def comment_thread(request, id):
                     # Handle the case where content_type is not found (you can customize this part)
                     # You might want to raise an error, log a message, or handle it differently
                     # For now, we'll set a default content_type for demonstration purposes
-                    new_comment.content_type = ContentType.objects.get_for_model(YourModel)  # Replace YourModel with your actual model
+                    new_comment.content_type = ContentType.objects.get_for_model(Comment)  # Replace YourModel with your actual model
                     
                 new_comment.save()
             else:
@@ -56,7 +57,7 @@ def comment_thread(request, id):
                     # Handle the case where content_type is not found (you can customize this part)
                     # You might want to raise an error, log a message, or handle it differently
                     # For now, we'll set a default content_type for demonstration purposes
-                    new_comment.content_type = ContentType.objects.get_for_model(Post)  # Replace YourModel with your actual model
+                    new_comment.content_type = ContentType.objects.get_for_model(Comment)  # Replace YourModel with your actual model
                     
                 new_comment.save()
     
