@@ -17,7 +17,6 @@ from django.contrib.contenttypes.models import ContentType
 from apps.comments.forms import CommentForm
 
 
-
 # Create your views here.
 
 def post_create(request):

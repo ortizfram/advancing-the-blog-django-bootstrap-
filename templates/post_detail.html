@@ -74,6 +74,7 @@
                 {% if instance.user.get_full_name  %}
                     <p class="fst-italic">Written by: {{ instance.user.get_full_name }}</p><br/><!-- {{ instance.user }} is the same-->
                 {% endif %}
+                <p class='text-muted'>Read Time: {{instance.read_time|time:'i'}}min.</p>
                 <h5 class='pt-3 post-detail-content'>{{instance.get_markdown|linebreaksbr}}</h5>
             </div>
 
