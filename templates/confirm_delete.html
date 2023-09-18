@@ -11,11 +11,24 @@
 <div class="col-md-8 mx-auto py-5">
 
     <h2>Confirm Delete</h2>
-    <form method="POST" action="{% url 'comments:comment_delete' comment.id %}"> {% csrf_token %}
+    <form method="POST" action="{% url 'comments:delete' comment.id %}"> {% csrf_token %}
         <p>Are you sure you want to delete: {{ comment.content }}</p>
 
-        <input type="submit" value='Confirm' class='btn btn-warning'>
-        <a href="{{ comment.get_absolute_url }}" class='btn btn-default'>Cancel</a> 
+        <input type="submit" value='Confirm' class='btn btn-warning'> <!--confirm delete-->
+
+
+        {% if comment.is_parent %}
+        <!-- If it's a parent comment, link back to the same comment thread -->
+        <a href="{% url 'comments:thread' id=comment.id %}" class='btn btn-default'>Cancel</a>
+        {% else %}
+            {% if comment.parent %}
+                <!-- If it's a child comment, link to the parent comment thread -->
+                <a href="{% url 'comments:thread' id=comment.parent.id %}" class='btn btn-default'>Cancel</a>
+            {% else %}
+                <!-- If it's neither a parent nor a child comment, redirect to the detail page of the associated object -->
+                <a href="{{ comment.content_object.get_absolute_url }}" class='btn btn-default'>Cancel</a>
+            {% endif %}
+        {% endif %}
     </form>
 </div>
 
