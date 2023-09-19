@@ -42,7 +42,16 @@ class Comment(models.Model):
         return str(self.user.username)
 
     def get_absolute_url(self):
-        return reverse("comments:thread", kwargs={"id": self.id})
+        # If it's a parent comment, return the URL for its comment thread
+        if self.is_parent:
+        # If it's a parent comment, return the URL for the post detail page
+            return reverse("posts:post_detail", kwargs={"slug": self.content_object.slug})
+        elif self.parent:
+            # If it's a child comment, return the URL for the parent comment's thread
+            return reverse("comments:thread", kwargs={"id": self.parent.id})
+        else:
+            # Handle the case where neither self.parent nor self.is_parent is True
+            return reverse("comments:thread", kwargs={"id": self.id})
 
     def get_delete_url(self):
         return reverse("comments:delete", kwargs={"id": self.id})
@@ -53,6 +62,4 @@ class Comment(models.Model):
     
     @property
     def is_parent(self):
-        if self.parent is not None:
-            return False # is children
-            return True      # is parent
+        return self.parent is None

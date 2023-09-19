@@ -80,10 +80,11 @@
 
             <!--Comments-->
             <div>
-                <p class='lead'>Comments</p>
+                <hr>
+                <p class='lead'>Leave a comment :</p>
             
                 <!-- New comment form -->
-                <form action="{% url 'post_detail' slug=instance.slug %}" method="post">
+                <form action="{% url 'posts:post_detail' slug=instance.slug %}" method="post">
                     {% csrf_token %}
                     {{ comment_form|crispy }}
                     <div style="text-align: right;">
@@ -94,24 +95,27 @@
                 </form>
                 
                 
-                <hr/>
             
                 <!-- list comments-->
+                <hr/>
                 {% for comment in comments %}
+                <a href="{% url 'comments:thread' id=comment.id %}" class='comment-thread-link' style="text-decoration: none;">
                     <div class="comment">
-                        <a href="{% url 'comments:thread' id=comment.id %}" class='comment-thread-link' style="text-decoration: none;">
                             <blockquote class="blockquote">
                                 <small class='text-muted'>
                                     <strong>@{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago|
                                     {% if comment.children.count > 0 %}
-                                        <i class="fas fa-comment"></i> <!-- Font Awesome chat icon -->
-                                        {{ comment.children.count }} 
-                                    {% endif %}
+                                        {{ comment.children.count }}
+                                        <i class="fas fa-comment"></i> |<!-- Font Awesome chat icon -->
+                                    {% else %} 
+                                    <i class="fa-brands fa-rocketchat"></i> |
+                                    {% endif %} 
+                                    {%  if request.user == comment.user %}<a href='{{ comment.get_delete_url }}'><i class="fa-solid fa-x text-danger"></i></a>{% endif %}
                                 </small>
                                 <p>{{ comment.content }}</p>
                             </blockquote>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                     <hr/>
                 {% endfor %}
 

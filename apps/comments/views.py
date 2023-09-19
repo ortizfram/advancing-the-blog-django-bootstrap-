@@ -5,31 +5,43 @@ from .models import Comment
 from .forms import CommentForm
 from django.contrib.contenttypes.models import ContentType
 from .models import Comment
+from django.urls import reverse
+from django.http import Http404
 
 
 def comment_delete(request, id):
-    # comment = get_object_or_404(Comment, id=id)
-    # comment = Comment.objects.get(id=id) 
-    try:# => get id, if not exists 404
-        comment = Comment.objects.get(id=id) 
-    except:
-        raise Http404
-    
-    if comment.user != request.user : #=> if not mine, can't delete (403)
+    try:
+        comment = Comment.objects.get(id=id)
+    except Comment.DoesNotExist:
+        raise Http404("Comment does not exist")
+
+    if comment.user != request.user:
         response = HttpResponse("You do not have permission to do this!")
         response.status_code = 403
         return response
-    
 
     if request.method == "POST":
-        parent_obj_url = comment.content_object.get_absolute_url() 
-        comment.delete()
-        messages.success(request, "This has been deleted.")
-        return redirect(parent_obj_url)
+        parent_obj_url = comment.content_object.get_absolute_url()
+
+        if comment.is_parent:
+            comment.delete()
+            messages.success(request, "This parent comment has been deleted.")
+            print("Parent comment deleted")
+        elif comment.parent:
+            parent_comment_url = reverse("comments:thread", kwargs={"id": comment.parent.id})
+            comment.delete()
+            messages.success(request, "This child comment has been deleted.")
+            print("Child comment deleted")
+            return redirect(parent_comment_url)
+        
+        return redirect(parent_obj_url)  # Redirect after deleting the comment
+
     context = {
         "comment": comment,
     }
     return render(request, "confirm_delete.html", context)
+
+
 
 
 def comment_thread(request, id):
