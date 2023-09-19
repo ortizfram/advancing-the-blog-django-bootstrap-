@@ -43,6 +43,7 @@
 
 <!-- Reply comment form -->
 <div id="reply-form-wrapper">
+    {% if request.user.is_authenticated %}
     <form id="parent-comment-reply-form" class="reply-comment-form" method="post">
         {% csrf_token %}
         <input type="hidden" name="content_type" value="{{ parent_comment.content_type }}">
@@ -50,6 +51,9 @@
         {{ comment_form|crispy }}
         <input type="submit" value="Reply" class="btn btn-primary">
     </form>
+    {% else %}
+    <p>You must login to comment</p>
+    {% endif %}
 </div>
 
 

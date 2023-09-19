@@ -1,6 +1,7 @@
 # apps/posts/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.core.exceptions import PermissionDenied 
 from django.contrib import messages
 from django.urls import reverse
 
@@ -11,6 +12,7 @@ from django.core.paginator import Paginator
 from urllib.parse import quote_plus
 from django.db.models import Q
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 from apps.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
@@ -18,10 +20,10 @@ from apps.comments.forms import CommentForm
 
 
 # Create your views here.
-
+@login_required
 def post_create(request):
     if not request.user.is_staff or not request.user.is_superuser: # change in /admin/
-        raise Http404
+        raise PermissionDenied
     # make fields requested or POST
     form = PostForm(request.POST or None, request.FILES or None) #from forms.py
     if form.is_valid():
@@ -48,7 +50,7 @@ def post_detail(request, slug): # retrieve
             "object_id": instance.id
     }
     form = CommentForm(request.POST or None, initial=initial_data)
-    if form.is_valid():
+    if form.is_valid() and request.user.is_authenticated():
         c_type = form.cleaned_data.get("content_type")
         content_type = ContentType.objects.get(model=c_type)
         obj_id = form.cleaned_data.get("object_id")
@@ -111,10 +113,10 @@ def post_list(request): #list items
     }
     return render(request, "post_list.html", context)
 
-
+@login_required
 def post_update(request, slug):
     if not request.user.is_staff or not request.user.is_superuser:
-        raise Http404
+        raise PermissionDenied
     instance = get_object_or_404(Post, slug=slug)
     form = PostForm(request.POST or None, request.FILES or None, instance=instance ) #from forms.py
     if form.is_valid():
@@ -129,10 +131,11 @@ def post_update(request, slug):
         "slug": instance.slug,
     }
     return render(request, "post_form.html", context)
-
+    
+@login_required
 def post_delete(request, slug=None):
     if not request.user.is_staff or not request.user.is_superuser:
-        raise Http404
+        raise PermissionDenied
     instance = get_object_or_404(Post, slug=slug)
     instance.delete()
     messages.success(request, "Successfully deleted")

@@ -3,12 +3,13 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.contrib import messages
 from .models import Comment
 from .forms import CommentForm
+from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from .models import Comment
 from django.urls import reverse
 from django.http import Http404
 
-
+@login_required
 def comment_delete(request, id):
     try:
         comment = Comment.objects.get(id=id)
@@ -52,7 +53,7 @@ def comment_thread(request, id):
         comment_form = CommentForm(request.POST)
         print(request.POST)  # Debug: Print POST data to check form submission data
 
-        if comment_form.is_valid():
+        if comment_form.is_valid() and request.user.is_authenticated:
             parent_id = request.POST.get("parent_id")
             object_id = request.POST.get("object_id")
             content_type_str = request.POST.get("content_type")  # Get the content_type string

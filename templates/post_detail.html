@@ -84,6 +84,7 @@
                 <p class='lead'>Leave a comment :</p>
             
                 <!-- New comment form -->
+                {% if request.user.is_authenticated %}
                 <form action="{% url 'posts:post_detail' slug=instance.slug %}" method="post">
                     {% csrf_token %}
                     {{ comment_form|crispy }}
@@ -93,6 +94,9 @@
                         </button>
                     </div>
                 </form>
+                {% else %}
+                <p>You must login to comment</p>
+                {% endif %}
                 
                 
             
