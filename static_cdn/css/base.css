@@ -1,3 +1,39 @@
+/* Navbar background color */
+.navbar {
+  background-color: #f8f9fa; /* Light gray background */
+}
+
+/* Navbar link styles */
+.navbar-nav .nav-link {
+  color: #a3b7cb; /* Text color */
+  font-weight: 500; /* Font weight */
+  padding: 0.5rem 1rem; /* Padding around the links */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.navbar-nav .nav-link:hover {
+  color: #9254d6; /* Text color on hover */
+}
+
+
+/* Adjust padding for small screens */
+@media (max-width: 767px) {
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0; /* Reduce padding for small screens */
+  }
+}
+
+/* Dark text color for specific links */
+.nav-link.text-dark {
+  color: #a3b7cb !important; /* Dark text color */
+}
+
+/* Dark text color on hover for specific links */
+.nav-link.text-dark:hover {
+  color: #25323c !important; /* Dark text color on hover */
+}
+
+
 h2 {
   color: #777777
 }
@@ -6,12 +42,6 @@ h2 {
   display:none;
 }
 
-/* Style child comments as block replies */
-.child-comment {
-  border-left: 4px solid #ccc; /* Add a left border to create a visual separator */
-  margin-left: 20px; /* Adjust the margin for indentation */
-  padding-left: 10px; /* Add some padding for spacing */
-}
 
 .wmd-panel {
   margin-left: 0% !important; 
