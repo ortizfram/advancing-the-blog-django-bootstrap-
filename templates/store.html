@@ -6,5 +6,42 @@
 {% block content %}
 <div class="col-md-8 mx-auto py-5">
     <h1>This is store 🛍️</h1>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card mb-3 product">
+                <img src="{% static 'images/placeholder.jpg' %}" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title">Product Name</h5>
+                    <p class="card-text">Product Description</p>
+                    <p class="card-text"><strong>Price: $XX.XX</strong></p>
+                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-3 product">
+                <img src="{% static 'images/placeholder.jpg' %}" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title">Product Name</h5>
+                    <p class="card-text">Product Description</p>
+                    <p class="card-text"><strong>Price: $XX.XX</strong></p>
+                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card mb-3 product">
+                <img src="{% static 'images/placeholder.jpg' %}" class="card-img-top" alt="Product Image">
+                <div class="card-body">
+                    <h5 class="card-title">Product Name</h5>
+                    <p class="card-text">Product Description</p>
+                    <p class="card-text"><strong>Price: $XX.XX</strong></p>
+                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 {% endblock content %}
