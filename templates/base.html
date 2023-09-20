@@ -86,34 +86,62 @@
   
   {% include "messages_display.html" %}
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container d-flex justify-content-between align-items-center">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
+    <div class="container">
+      <!-- Your logo or brand here -->
+
+      {% comment %} <a class="navbar-brand" href="">
+        <!-- Insert your logo or brand image here -->
+      </a> {% endcomment %}
+  
+      <!-- Navbar Toggler Button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <!-- Navbar Items -->
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav ms-auto" style="font-size:24px">
+          <li class="nav-item">
+            <a class="nav-link" href="posts/">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="store/">Store</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'store:cart' %}">
+                <div class="cart-badge">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cart-total">0</span>
+                </div>
+            </a>
+          </li>               
+        </ul>
+
+  
+        <!-- Authenticated User Links -->
+        <div class="justify-content-end ms-auto">
+            {% if not request.user.is_authenticated %}
+            <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link btn btn-outline-light text-dark" href="/posts" style="font-size: 24px;">Blog</a>
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link btn btn-outline-light text-dark" href="/store" style="font-size: 24px;">Store</a>
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
                 </li>
-                {% if not request.user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light" href="{% url 'register' %}">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light" href="{% url 'login' %}">Login</a>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-light text-dark" href="{% url 'logout' %}">Logout</a>
-                    </li>
-                {% endif %}
             </ul>
+            {% else %}
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+            {% endif %}
         </div>
+      </div>
     </div>
-</nav>
+  </nav>
+  
+
 
 
 

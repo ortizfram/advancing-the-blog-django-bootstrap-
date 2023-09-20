@@ -1,3 +1,21 @@
+/* body {
+  background-color: #dcdcdc;
+} */
+.cart-badge {
+  position: relative;
+  display: inline-block;
+}
+.cart-badge #cart-total {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: violet;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 8px;
+  font-size: 14px;
+}
+
 /* Navbar background color */
 .navbar {
   background-color: #f8f9fa; /* Light gray background */
