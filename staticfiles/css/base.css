@@ -1,0 +1,134 @@
+/* body {
+  background-color: #dcdcdc;
+} */
+.cart-badge {
+  position: relative;
+  display: inline-block;
+}
+.cart-badge #cart-total {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: violet;
+  color: white;
+  border-radius: 50%;
+  padding: 5px 8px;
+  font-size: 14px;
+}
+
+.box-element {
+  box-shadow: hsl(0, 0%, 80%) 0 0 16px;
+  background-color:  #fff;
+  border-radius: 4px;
+  padding: 10px;
+}
+.product {
+  border-radius: 0 0 4px 4px;
+}
+
+/* Navbar background color */
+.navbar {
+  background-color: #f8f9fa; /* Light gray background */
+}
+
+/* Navbar link styles */
+.navbar-nav .nav-link {
+  color: #a3b7cb; /* Text color */
+  font-weight: 500; /* Font weight */
+  padding: 0.5rem 1rem; /* Padding around the links */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.navbar-nav .nav-link:hover {
+  color: #9254d6; /* Text color on hover */
+}
+
+
+/* Adjust padding for small screens */
+@media (max-width: 767px) {
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0; /* Reduce padding for small screens */
+  }
+}
+
+/* Dark text color for specific links */
+.nav-link.text-dark {
+  color: #a3b7cb !important; /* Dark text color */
+}
+
+/* Dark text color on hover for specific links */
+.nav-link.text-dark:hover {
+  color: #25323c !important; /* Dark text color on hover */
+}
+
+
+h2 {
+  color: #777777
+}
+
+.comment-reply {
+  display:none;
+}
+
+
+.wmd-panel {
+  margin-left: 0% !important; 
+  margin-right: 0% !important; 
+}
+
+
+
+/* @@ post_form: preview  */
+.wmd-preview{ 
+  /*prevent default preview to generate a custom one*/
+  display: none;
+}
+
+#preview-content img {
+    /* images inside content-markdown maintain the same size */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+/* @@ post_detail: object cover imgs =====================================================================*/
+.post-body img{ 
+  /* post_detail cover container: images inside content-markdown maintain the same size */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.post-image {
+  /* post_detail cover: post image container */
+  width: 100%;
+  height: 0;
+  padding-bottom: 46.88%; /* 900 / 1920 * 100 */
+  position: relative;
+  overflow: hidden;
+}
+.post-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* @@ post_list: object cover imgs==========================================================================*/
+.post-detail-content img{ 
+  /* images inside content-markdown maintain the same size */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-img-top img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
