@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # local
     'apps.comments',
     'apps.posts',
+    'apps.store',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

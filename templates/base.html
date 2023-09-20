@@ -92,7 +92,12 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
-                <a class="nav-link btn btn-outline-light text-dark" href="/posts" style="font-size: 24px;">Posts</a>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light text-dark" href="/posts" style="font-size: 24px;">Blog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link btn btn-outline-light text-dark" href="/store" style="font-size: 24px;">Store</a>
+                </li>
                 {% if not request.user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link btn btn-outline-light" href="{% url 'register' %}">Register</a>

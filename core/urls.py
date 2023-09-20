@@ -18,6 +18,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("comments/", include("apps.comments.urls")),
     path("posts/", include("apps.posts.urls")),
+    path("store/", include("apps.store.urls")),
 ]
 
 # for online static
