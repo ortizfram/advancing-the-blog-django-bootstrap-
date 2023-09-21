@@ -5,6 +5,66 @@
 
 {% block content %}
 <div class="col-md-8 mx-auto py-5">
-    <h1>Chekout order</h1>
+    <h1 class='pb-2'>Chekout order</h1>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="box-element" id='form-wrapper'>
+                <form id="form">
+                    <div id="user-info">
+                        <div class="form-field">
+                            <input required placeholder='Name..' name='name' type="text" class="form-control">
+                        </div>
+                        <div class="form-field">
+                            <input required placeholder='Email..' name='email' type="email" class="form-control">
+                        </div>
+                    </div>
+                    <div id="shipping-info">
+
+                    </div>
+                    <hr/>
+                    <p>Shipping Information:</p>
+                    <hr>
+                    <div class="form-field">
+                        <input placeholder='Address..' name='address' type="text" class="form-control">
+                    </div>
+                    <div class="form-field">
+                        <input placeholder='State..' name='state' type="text" class="form-control">
+                    </div>
+                    <div class="form-field">
+                        <input placeholder='Country..' name='country' type="text" class="form-control">
+                    </div>
+                    <div class="form-field">
+                        <input placeholder='Zipcode..' name='zipcode' type="text" class="form-control">
+                    </div>
+                    <hr>
+                    <input id='form-button' class='btn btn-success btn-block' value='Continue' type="submit" id="form-button">
+                </form>
+            </div>
+            <br>
+
+            <div class="box-element hidden" id='payment-info'>
+                <small>Paypal Options</small>
+            </div>
+
+        </div>
+        <div class="col-lg-6">
+            <div class="box-element">
+                <a href="{% url 'store:cart' %}" class="btn btn-outline-dark">&larr; Back to Cart</a>
+                <hr>
+                <h3>Order Summary</h3>
+                <hr>
+                <div class="cart-row">
+                    <div style="flex:2;"><img class='row-image' src="{% static 'images/placeholder.jpg'%}" alt=""></div>
+                    <div style="flex:2;">Product 1</div>
+                    <div style="flex:1;">$20</div>
+                    <div style="flex:1;"><p>x2</p></div>
+                </div>
+
+                <h5>Items: 2</h5>
+                <h5>Total: $40</h5>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
