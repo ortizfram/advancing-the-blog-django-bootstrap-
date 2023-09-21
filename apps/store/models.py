@@ -49,7 +49,7 @@ class Order(models.Model):
                                       null=True)
 
     def __str__(self):
-        return self.id
+        return f"Order ID: {self.id}, Customer: {self.customer.name if self.customer else 'N/A'}"
     
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, 
