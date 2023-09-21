@@ -1,6 +1,37 @@
 /* body {
   background-color: #dcdcdc;
 } */
+
+/* Adjust padding for small screens */
+@media (max-width: 767px) {
+  .navbar-nav .nav-link {
+    padding: 0.5rem 0; /* Reduce padding for small screens */
+  }
+}
+
+/* CART */
+.cart-row{
+  display:flex;
+  align-items: flex-stretch;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ececec;
+}
+.row-image{
+  width: 100px;
+}
+.quantity{
+  display: inline-block;
+  font-weight: 700;
+  padding-right: 10px;
+}
+.chg-quantity{
+  width: 12px;
+  cursor: pointer;
+  display: block;
+}
+
+/* Navbar */
 .cart-badge {
   position: relative;
   display: inline-block;
@@ -15,7 +46,30 @@
   padding: 5px 8px;
   font-size: 14px;
 }
+/* Navbar background color */
+.navbar {
+  background-color: #f8f9fa; /* Light gray background */
+}
+/* Navbar link styles */
+.navbar-nav .nav-link {
+  color: #a3b7cb; /* Text color */
+  font-weight: 500; /* Font weight */
+  padding: 0.5rem 1rem; /* Padding around the links */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+.navbar-nav .nav-link:hover {
+  color: #9254d6; /* Text color on hover */
+}
+/* Dark text color for specific links */
+.nav-link.text-dark {
+  color: #a3b7cb !important; /* Dark text color */
+}
+/* Dark text color on hover for specific links */
+.nav-link.text-dark:hover {
+  color: #25323c !important; /* Dark text color on hover */
+}
 
+/* STORE */
 .box-element {
   box-shadow: hsl(0, 0%, 80%) 0 0 16px;
   background-color:  #fff;
@@ -26,41 +80,6 @@
   border-radius: 0 0 4px 4px;
 }
 
-/* Navbar background color */
-.navbar {
-  background-color: #f8f9fa; /* Light gray background */
-}
-
-/* Navbar link styles */
-.navbar-nav .nav-link {
-  color: #a3b7cb; /* Text color */
-  font-weight: 500; /* Font weight */
-  padding: 0.5rem 1rem; /* Padding around the links */
-  transition: color 0.3s ease; /* Smooth color transition on hover */
-}
-
-.navbar-nav .nav-link:hover {
-  color: #9254d6; /* Text color on hover */
-}
-
-
-/* Adjust padding for small screens */
-@media (max-width: 767px) {
-  .navbar-nav .nav-link {
-    padding: 0.5rem 0; /* Reduce padding for small screens */
-  }
-}
-
-/* Dark text color for specific links */
-.nav-link.text-dark {
-  color: #a3b7cb !important; /* Dark text color */
-}
-
-/* Dark text color on hover for specific links */
-.nav-link.text-dark:hover {
-  color: #25323c !important; /* Dark text color on hover */
-}
-
 
 h2 {
   color: #777777
@@ -69,21 +88,15 @@ h2 {
 .comment-reply {
   display:none;
 }
-
-
 .wmd-panel {
   margin-left: 0% !important; 
   margin-right: 0% !important; 
 }
-
-
-
 /* @@ post_form: preview  */
 .wmd-preview{ 
   /*prevent default preview to generate a custom one*/
   display: none;
 }
-
 #preview-content img {
     /* images inside content-markdown maintain the same size */
   width: 100%;
@@ -91,8 +104,7 @@ h2 {
   object-fit: cover;
 }
 
-
-
+/* BLOG */
 /* @@ post_detail: object cover imgs =====================================================================*/
 .post-body img{ 
   /* post_detail cover container: images inside content-markdown maintain the same size */
@@ -118,8 +130,6 @@ h2 {
   height: 100%;
   object-fit: cover;
 }
-
-
 /* @@ post_list: object cover imgs==========================================================================*/
 .post-detail-content img{ 
   /* images inside content-markdown maintain the same size */
