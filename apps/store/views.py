@@ -18,7 +18,12 @@ def updateItem(request):
     print("ProductId:", productId)
 
     if request.user.is_authenticated:
-        customer = request.user.customer
+        try:
+            customer = request.user.customer
+        except Customer.DoesNotExist:
+                customer = None  # Handle the case where Customer doesn't exist for this user
+        else:
+            customer = None
         product = Product.objects.get(id=productId)
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
@@ -50,7 +55,12 @@ def updateItem(request):
 
 def cart(request):
     if request.user.is_authenticated:
-        customer = request.user.customer
+        try:
+            customer = request.user.customer
+        except Customer.DoesNotExist:
+                customer = None  # Handle the case where Customer doesn't exist for this user
+        else:
+            customer = None
         order, created = Order.objects.get_or_create(customer=customer,
                                                      complete=False)
         items = order.orderitem_set.all()
@@ -62,7 +72,12 @@ def cart(request):
 
 def checkout(request):
     if request.user.is_authenticated:
-        customer = request.user.customer
+        try:
+            customer = request.user.customer
+        except Customer.DoesNotExist:
+                customer = None  # Handle the case where Customer doesn't exist for this user
+        else:
+            customer = None
         order, created = Order.objects.get_or_create(customer=customer,
                                                      complete=False)
         items = order.orderitem_set.all()
