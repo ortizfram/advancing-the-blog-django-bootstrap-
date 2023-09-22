@@ -6,6 +6,6 @@ def cart_count(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        cart_total = order.get_cart_items()
+        cart_total = order.get_cart_items
 
     return {'cart_count': cart_total}
