@@ -22,26 +22,29 @@ def updateItem(request):
         product = Product.objects.get(id=productId)
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
+        # Define orderItem before accessing its properties
         orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+
         if action == 'add':
             orderItem.quantity = (orderItem.quantity + 1)
         elif action == 'remove':
             orderItem.quantity = (orderItem.quantity - 1)
 
+            # Check if the quantity is less than or equal to 0 and delete the orderItem
+            if orderItem.quantity <= 0:
+                orderItem.delete()
+
         # Save the orderItem
         orderItem.save()
 
-        # Check if the quantity is less than or equal to 0 and delete the orderItem
-        if orderItem.quantity <= 0:
-            orderItem.delete()
-
         # Calculate the updated cart total
-        cart_total = order.get_cart_items
+        cart_total = order.get_cart_items  # Corrected
 
-        # Include the cart_total in the response
+        # Include the cart_total and quantity in the response
         response_data['cart_total'] = cart_total
+        response_data['quantity'] = orderItem.quantity
+        return JsonResponse(response_data)
 
-    return JsonResponse(response_data)
 
 
 

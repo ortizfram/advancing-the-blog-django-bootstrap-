@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateBtns[i].addEventListener('click', function () {
             var productId = this.dataset.product;
             var action = this.dataset.action;
-            console.log("~ update-cart:","productId", productId, "Action:", action);
+            console.log("~ update-cart:", "productId", productId, "Action:", action);
 
             // Check if the user variable is defined (loaded in base.html)
             if (typeof user !== "undefined") {
@@ -27,9 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateUserOrder(productId, action) {
         console.log("# User: ", user, "authenticated, sending data...");
-    
+
         var url = 'update_item/';
-    
+
         // Send POST request with product ID and action as JSON data
         fetch(url, {
             method: 'POST',
@@ -37,22 +37,27 @@ document.addEventListener("DOMContentLoaded", function () {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken,
             },
-            body: JSON.stringify({'productId': productId, 'action': action})
+            body: JSON.stringify({ 'productId': productId, 'action': action })
         })
-    
+
         // Handle the response as JSON
         .then((response) => {
             return response.json();
         })
-    
+
         .then((data) => {
-            console.log("data:", data.message);// Access the message property
-    
+            console.log("data:", data.message);
+        
+            // Update the quantity element using jQuery
+            var quantityElement = $('#quantity-' + productId);
+            if (quantityElement.length > 0) {
+                quantityElement.text('X' + data.quantity);
+            }
+
             // Update the cart total element on the page
             document.getElementById('cart-total').textContent = data.cart_total;
         });
-    
+
         console.log("Script loaded: updateUserOrder"); // Debugging
     }
-    
 });
