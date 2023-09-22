@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updateBtns[i].addEventListener('click', function () {
             var productId = this.dataset.product;
             var action = this.dataset.action;
-            console.log("~ update-cart:", "productId", productId, "Action:", action);
+            console.log("-> update-cart:", "productId", productId, "Action:", action);
 
             // Check if the user variable is defined (loaded in base.html)
             if (typeof user !== "undefined") {
@@ -23,10 +23,10 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    console.log("Script loaded: update-cart"); // Debugging
+    // console.log("Script loaded: update-cart"); // Debugging
 
     function updateUserOrder(productId, action) {
-        console.log("# User: ", user, "authenticated, sending data...");
+        // console.log("User: ", user, "authenticated, sending data...");
 
         var url = 'update_item/';
 
@@ -48,16 +48,21 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
             console.log("data:", data.message);
         
-            // Update the quantity element using jQuery
-            var quantityElement = $('#quantity-' + productId);
+            var quantityElement = $('#quantity-value-' + productId);
             if (quantityElement.length > 0) {
-                quantityElement.text('X' + data.quantity);
+                quantityElement.text(data.quantity);
             }
 
             // Update the cart total element on the page
             document.getElementById('cart-total').textContent = data.cart_total;
+
+            // Update the total price for the specific item
+            var totalPriceElement = $('#total-price-' + productId);
+            if (totalPriceElement.length > 0) {
+                totalPriceElement.text('$' + data.total_price.toFixed(2));
+            }
         });
 
-        console.log("Script loaded: updateUserOrder"); // Debugging
+        // console.log("Script loaded: updateUserOrder"); // Debugging
     }
 });

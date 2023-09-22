@@ -9,7 +9,7 @@ def store(request):
     return render(request, "store.html", context)
 
 def updateItem(request):
-    response_data = {'message': '# Item was added'}
+    response_data = {'message': 'Item was added'}
 
     data = json.loads(request.body.decode('utf-8'))
     productId = data['productId']
