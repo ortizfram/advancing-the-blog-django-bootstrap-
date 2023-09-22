@@ -26,10 +26,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // console.log("Script loaded: update-cart"); // Debugging
 
     function updateUserOrder(productId, action) {
-        // console.log("User: ", user, "authenticated, sending data...");
-
+        console.log("Updating order for productId:", productId, "Action:", action);
+    
         var url = 'update_item/';
-
+    
         // Send POST request with product ID and action as JSON data
         fetch(url, {
             method: 'POST',
@@ -39,30 +39,24 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify({ 'productId': productId, 'action': action })
         })
-
-        // Handle the response as JSON
         .then((response) => {
             return response.json();
         })
-
         .then((data) => {
-            console.log("data:", data.message);
-        
+            console.log("Response data:", data);
+    
+            // Add these lines for debugging
+            console.log("Updating quantity element for productId:", productId);
             var quantityElement = $('#quantity-value-' + productId);
-            if (quantityElement.length > 0) {
-                quantityElement.text(data.quantity);
-            }
-
+            console.log("Quantity element:", quantityElement);
+    
             // Update the cart total element on the page
             document.getElementById('cart-total').textContent = data.cart_total;
-
+    
             // Update the total price for the specific item
             var totalPriceElement = $('#total-price-' + productId);
-            if (totalPriceElement.length > 0) {
-                totalPriceElement.text('$' + data.total_price.toFixed(2));
-            }
+            totalPriceElement.text('$' + data.total_price.toFixed(2));
         });
-
-        // console.log("Script loaded: updateUserOrder"); // Debugging
     }
+    
 });
