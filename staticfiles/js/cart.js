@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Before assignment
             console.log('Before assignment:', cartTotalElement.textContent);
             // Update the cart total element on the page
-            cartTotalElement.textContent = '$' + data.cart_total.toFixed(2);
+            cartTotalElement.textContent = data.cart_total.toFixed(2);
             cartItemsElement.textContent = data.cart_quantity; // Add this line to update cart items count
             console.log('After assignment:', cartTotalElement.textContent); // debugging
         });

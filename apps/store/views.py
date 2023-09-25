@@ -33,12 +33,12 @@ def updateItem(request):
             elif action == 'remove':
                 orderItem.quantity -= 1
 
-                # Check if the quantity is less than or equal to 0 and delete the orderItem
-                if orderItem.quantity <= 0:
-                    orderItem.delete()
-
-            # Save the orderItem
-            orderItem.save()
+            # Check if the quantity is less than or equal to 0 and delete the orderItem
+            if orderItem.quantity <= 0:
+                orderItem.delete()
+            else:
+                # Save the orderItem
+                orderItem.save()
 
             # Calculate the updated cart total and quantity
             cart_items = order.orderitem_set.all()
@@ -55,6 +55,7 @@ def updateItem(request):
             response_data['quantity'] = orderItem.quantity
 
         else:
+            customer = None
             response_data['message'] = 'User is not authenticated'
 
     elif request.method == 'GET':
@@ -74,6 +75,8 @@ def updateItem(request):
             response_data['cart_quantity'] = cart_quantity
         else:
             response_data['message'] = 'User is not authenticated'
+            order = None
+            items = []
     else:
         response_data['message'] = 'Invalid request method'
 
@@ -106,14 +109,12 @@ def checkout(request):
         try:
             customer = request.user.customer
         except Customer.DoesNotExist:
-                customer = None  # Handle the case where Customer doesn't exist for this user
-        else:
             customer = None
-        order, created = Order.objects.get_or_create(customer=customer,
-                                                     complete=False)
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
     else:
         items = []
-        order = {'get_cart_total':0, 'get_cart_items':0}
-    context = {"items":items, "order":order}
+        order = {'get_cart_total': 0, 'get_cart_items': 0}
+    
+    context = {"items": items, "order": order}
     return render(request, "checkout.html", context)

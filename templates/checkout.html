@@ -54,17 +54,23 @@
                 <hr>
                 <h3>Order Summary</h3>
                 <hr>
-                {% for item in items %}
-                <div class="cart-row">
-                    <div style="flex:2;"><img class='row-image' src="{{item.product.imageURL}}" alt="{{item.product.name}}_img"></div>
-                    <div style="flex:2;"><p>{{item.product.name}}</p></div>
-                    <div style="flex:1;"><p>${{item.product.price}}</p></div>
-                    <div style="flex:1;"><p>X {{item.quantity}}</p></div>
-                </div>
-                {% endfor %}
+                {% if items %}
+                    {% for item in items %}
+                        {% if item.quantity > 0 %}
+                        <div class="cart-row">
+                            <div style="flex:2;"><img class='row-image' src="{{item.product.imageURL}}" alt="{{item.product.name}}_img"></div>
+                            <div style="flex:2;"><p>{{item.product.name}}</p></div>
+                            <div style="flex:1;"><p>${{item.product.price}}</p></div>
+                            <div style="flex:1;"><p>X {{item.quantity}}</p></div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
 
-                <h5>Items: {{order.get_cart_items}}</h5>
-                <h5>Total: $<span id="cart-total">{{ order.get_cart_total|floatformat:2 }}</span></h5>
+                <tr>
+                    <th><h5>Items: {{order.get_cart_items}}</h5></th>
+                    <th><h5>Total: $<span id="cart-total">{{ order.get_cart_total|floatformat:2 }}</span></h5></th>
+                </tr>
 
             </div>
         </div>
