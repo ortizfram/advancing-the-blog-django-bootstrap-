@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Call the function to update the cart total when an item is updated
             updateCartTotal();
+            location.reload();
 
             // Check if the quantity is 0, and if so, trigger a fast refresh
             if (data.quantity === 0) {
