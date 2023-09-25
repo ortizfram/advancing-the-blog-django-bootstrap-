@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var url = 'update_item/';
 
         fetch(url, {
-            method: 'GET',  
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrftoken,
@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('AJAX response data:', data); // Add this line for debugging
             // Update the cart total element on the page
             cartTotalElement.textContent = '$' + data.cart_total.toFixed(2);
+            cartItemsElement.textContent = data.cart_quantity; // Add this line to update cart items count
         });
     }
 
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
             var productId = this.dataset.product;
             var action = this.dataset.action;
 
-            console.log('Button clicked:', productId, action); 
+            console.log('Button clicked:', productId, action);
 
             if (typeof user !== "undefined") {
                 if (user === "AnonymousUser") {
@@ -76,9 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Call the function to update the cart total when an item is updated
             updateCartTotal();
-
-            // Update the cart items count
-            cartItemsElement.textContent = data.cart_quantity;
         });
     }
 });

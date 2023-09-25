@@ -9,7 +9,7 @@ def store(request):
     return render(request, "store.html", context)
 
 def updateItem(request):
-    response_data = {'message': 'Item was added', 'cart_total': 0}
+    response_data = {'message': '', 'cart_total': 0}
 
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
@@ -57,19 +57,30 @@ def updateItem(request):
         else:
             response_data['message'] = 'User is not authenticated'
 
+    elif request.method == 'GET':
+        # Handle GET request to calculate and return the cart total
+        if request.user.is_authenticated:
+            try:
+                customer = request.user.customer
+            except Customer.DoesNotExist:
+                customer = None
+
+            order, created = Order.objects.get_or_create(customer=customer, complete=False)
+            cart_items = order.orderitem_set.all()
+            cart_total = sum(item.product.price * item.quantity for item in cart_items)
+            cart_quantity = sum(item.quantity for item in cart_items)
+
+            response_data['cart_total'] = cart_total
+            response_data['cart_quantity'] = cart_quantity
+        else:
+            response_data['message'] = 'User is not authenticated'
     else:
         response_data['message'] = 'Invalid request method'
 
-        # Set cart_total to 0 for non-POST requests
+        # Set cart_total to 0 for non-POST and non-GET requests
         response_data['cart_total'] = 0
 
     return JsonResponse(response_data)
-
-
-
-
-
-
 
 
 def cart(request):
@@ -77,17 +88,18 @@ def cart(request):
         try:
             customer = request.user.customer
         except Customer.DoesNotExist:
-                customer = None  # Handle the case where Customer doesn't exist for this user
-        else:
             customer = None
-        order, created = Order.objects.get_or_create(customer=customer,
-                                                     complete=False)
+
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
     else:
         items = []
-        order = {'get_cart_total':0, 'get_cart_items':0}
-    context = {"items":items, "order":order}
+        order = {'get_cart_total': 0, 'get_cart_items': 0}
+    
+    context = {"items": items, "order": order}
     return render(request, "cart.html", context)
+
+
 
 def checkout(request):
     if request.user.is_authenticated:
