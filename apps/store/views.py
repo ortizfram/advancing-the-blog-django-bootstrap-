@@ -9,46 +9,65 @@ def store(request):
     return render(request, "store.html", context)
 
 def updateItem(request):
-    response_data = {'message': 'Item was added'}
+    response_data = {'message': 'Item was added', 'cart_total': 0}
 
-    data = json.loads(request.body.decode('utf-8'))
-    productId = data['productId']
-    action = data['action']
-    print("Action:", action)
-    print("ProductId:", productId)
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        productId = data.get('productId')
+        action = data.get('action')
 
-    if request.user.is_authenticated:
-        try:
-            customer = request.user.customer
-        except Customer.DoesNotExist:
-                customer = None  # Handle the case where Customer doesn't exist for this user
+        if request.user.is_authenticated:
+            try:
+                customer = request.user.customer
+            except Customer.DoesNotExist:
+                customer = None
+
+            product = Product.objects.get(id=productId)
+            order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
+            # Define orderItem before accessing its properties
+            orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+            if action == 'add':
+                orderItem.quantity += 1
+            elif action == 'remove':
+                orderItem.quantity -= 1
+
+                # Check if the quantity is less than or equal to 0 and delete the orderItem
+                if orderItem.quantity <= 0:
+                    orderItem.delete()
+
+            # Save the orderItem
+            orderItem.save()
+
+            # Calculate the updated cart total and quantity
+            cart_items = order.orderitem_set.all()
+            cart_total = sum(item.product.price * item.quantity for item in cart_items)
+            cart_quantity = sum(item.quantity for item in cart_items)
+
+            # Calculate the updated total price for the specific item
+            item_total_price = product.price * orderItem.quantity
+
+            # Include the cart_total, cart_quantity, and item_total_price in the response
+            response_data['cart_total'] = cart_total
+            response_data['cart_quantity'] = cart_quantity
+            response_data['item_total_price'] = item_total_price
+            response_data['quantity'] = orderItem.quantity
+
         else:
-            customer = None
-        product = Product.objects.get(id=productId)
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+            response_data['message'] = 'User is not authenticated'
 
-        # Define orderItem before accessing its properties
-        orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+    else:
+        response_data['message'] = 'Invalid request method'
 
-        if action == 'add':
-            orderItem.quantity = (orderItem.quantity + 1)
-        elif action == 'remove':
-            orderItem.quantity = (orderItem.quantity - 1)
+        # Set cart_total to 0 for non-POST requests
+        response_data['cart_total'] = 0
 
-            # Check if the quantity is less than or equal to 0 and delete the orderItem
-            if orderItem.quantity <= 0:
-                orderItem.delete()
+    return JsonResponse(response_data)
 
-        # Save the orderItem
-        orderItem.save()
 
-        # Calculate the updated cart total
-        cart_total = order.get_cart_items  # Corrected
 
-        # Include the cart_total and quantity in the response
-        response_data['cart_total'] = cart_total
-        response_data['quantity'] = orderItem.quantity
-        return JsonResponse(response_data)
+
 
 
 

@@ -21,8 +21,8 @@
 
             <table class='table'>
                 <tr>
-                    <th><h5>Items: <strong>{{order.get_cart_items}}</strong></h5></th>
-                    <th><h5>Total: <strong>${{order.get_cart_total|floatformat:2}}</strong></h5></th>
+                    <th><h5>Items: <strong><span id="cart-items">{{ order.get_cart_items }}</span></strong></h5></th>
+                    <th><h5>Total: <strong>$<span id="cart-total">{{ order.get_cart_total }}</span></strong></h5></th>
                     <th>
                         <a style="float:right; margin:5px" href="{% url 'store:checkout' %}" class='btn btn-success'>Checkout</a>
                     </th>
@@ -52,7 +52,7 @@
                     </div>
                     
                     
-                    <div style="flex:1;">${{ item.get_total|floatformat:2 }} <span id="total-price-{{ item.product.id }}"></span></div>
+                    <div style="flex:1;">$<span id="total-price-{{ item.product.id }}">{{ item.get_total|floatformat:2 }}</span></div>
                 </div>
                 {% endfor %}
             </div>

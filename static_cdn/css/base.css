@@ -1,6 +1,6 @@
-/* body {
-  background-color: #dcdcdc;
-} */
+body {
+  background-color: #9452c3;
+}
 
 /* Adjust padding for small screens */
 @media (max-width: 767px) {
@@ -29,6 +29,14 @@
   width: 12px;
   cursor: pointer;
   display: block;
+  margin-top: 5px;
+}
+.chg-quantity:hover{
+  opacity: .6;
+}
+
+.hidden{
+  display: none!important;
 }
 
 /* Navbar */
