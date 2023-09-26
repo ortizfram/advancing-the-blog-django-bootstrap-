@@ -20,31 +20,32 @@
                         </div>
                     </div>
                     <div id="shipping-info">
+                        <hr/>
+                        <p>Shipping Information:</p>
+                        <hr>
+                        <div class="form-field">
+                            <input placeholder='Address..' name='address' type="text" class="form-control">
+                        </div>
+                        <div class="form-field">
+                            <input placeholder='State..' name='state' type="text" class="form-control">
+                        </div>
+                        <div class="form-field">
+                            <input placeholder='Country..' name='country' type="text" class="form-control">
+                        </div>
+                        <div class="form-field">
+                            <input placeholder='Zipcode..' name='zipcode' type="text" class="form-control">
+                        </div>
+                        <hr>
+                        <input id='form-button' class='btn btn-success btn-block' value='Continue' type="submit">
+                    </div>
 
-                    </div>
-                    <hr/>
-                    <p>Shipping Information:</p>
-                    <hr>
-                    <div class="form-field">
-                        <input placeholder='Address..' name='address' type="text" class="form-control">
-                    </div>
-                    <div class="form-field">
-                        <input placeholder='State..' name='state' type="text" class="form-control">
-                    </div>
-                    <div class="form-field">
-                        <input placeholder='Country..' name='country' type="text" class="form-control">
-                    </div>
-                    <div class="form-field">
-                        <input placeholder='Zipcode..' name='zipcode' type="text" class="form-control">
-                    </div>
-                    <hr>
-                    <input id='form-button' class='btn btn-success btn-block' value='Continue' type="submit" id="form-button">
                 </form>
             </div>
             <br>
 
-            <div class="box-element hidden" id='payment-info'>
+            <div class="box-element hidden mb-3 bg-info-subtle" id='payment-info'>
                 <small>Paypal Options</small>
+                <button id='make-payment'>Make payment</button>
             </div>
 
         </div>
@@ -76,4 +77,28 @@
         </div>
     </div>
 </div>
+
+
+<script type='text/javascript'>
+    var form = document.getElementById('form');
+
+    form.addEventListener('submit', function (e) {
+        // hide Chekout btn and show payment options
+        e.preventDefault();
+        console.log("Form submitted...");
+        document.getElementById('form-button').classList.add('hidden');
+        document.getElementById('shipping-info').classList.add('hidden');
+        document.getElementById('payment-info').classList.remove('hidden');
+    });
+
+    document.getElementById('make-payment').addEventListener('click', function(e){
+        // target make-payment btn
+        submitFormData()
+    })
+
+    function submitFormData(){
+        console.log('Payment button clicked')
+    }
+</script>
+
 {% endblock content %}

@@ -8,8 +8,10 @@ def cart_count(request):
             customer = request.user.customer
         except Customer.DoesNotExist:
                 customer = None  # Handle the case where Customer doesn't exist for this user
-        else:
-            customer = None
+    else:
+        customer = None
+        
+    if customer:
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         cart_total = order.get_cart_items
 

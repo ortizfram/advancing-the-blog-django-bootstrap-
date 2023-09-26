@@ -22,10 +22,12 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then((data) => {
             console.log('AJAX response data:', data); // Add this line for debugging
+            // Before assignment
+            console.log('Before assignment:', cartTotalElement.textContent);
             // Update the cart total element on the page
-            cartTotalElement.textContent = '$' + data.cart_total.toFixed(2);
+            cartTotalElement.textContent = data.cart_total.toFixed(2);
             cartItemsElement.textContent = data.cart_quantity; // Add this line to update cart items count
-            console.log('Updated cart total:', cartTotalElement.textContent); //debugging
+            console.log('After assignment:', cartTotalElement.textContent); // debugging
         });
     }
 
@@ -78,6 +80,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Call the function to update the cart total when an item is updated
             updateCartTotal();
+            location.reload();
+
+            // Check if the quantity is 0, and if so, trigger a fast refresh
+            if (data.quantity === 0) {
+                location.reload();
+            }
         });
     }
 });
