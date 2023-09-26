@@ -114,6 +114,29 @@
 
     function submitFormData(){
         console.log('Payment button clicked')
+
+        var userFormData = { //declare
+            'name': null,
+            'email':null,
+            'total':total,
+        }
+        var shippingInfo = { //declare
+            'adress': null,
+            'city':null,
+            'state':null,
+            'zipcode':null,
+        }
+
+        if (shipping != false){ // if needs shipping fill in 
+            shippingInfo.address = form.address.value
+            shippingInfo.city = form.city.value
+            shippingInfo.state = form.state.value
+            shippingInfo.zipcode = form.zipcode.value
+        }
+        if (user == 'AnonymousUser'){ // if no user logged fill in
+            userFormData.name = form.name.value
+            userFormData.email = form.email.value
+        }
     }
 </script>
 
