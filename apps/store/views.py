@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import *
 from django.http import JsonResponse
 import json
+import datetime
 
 def store(request):
     products = Product.objects.all()
@@ -93,7 +94,32 @@ def updateItem(request):
 # endpoint view: process_order
 def processOrder(request):
     print('Data:', request.body)
-    return JsonResponse('Payment complete', safe=False)
+    transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
+
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        total = float(data['form']['total'])
+        order.transaction_id = transaction_id
+
+        if total == order.get_cart_total: # against hacking $0
+            order.complete = True
+        order.save()
+
+        if order.shipping == True:
+            ShippingAddress.objects.create(
+                customer=customer,
+                order=order,
+                address=data['shipping']['address'],
+                country = data['shipping']['country'],
+                state=data['shipping']['stated'],
+                zipcode = data['shipping']['zipcode'],
+            )
+    else: 
+        print('User not authenticated')
+
+    return JsonResponse({'message': 'Payment completed'})
 
 def cart(request):
     if request.user.is_authenticated:

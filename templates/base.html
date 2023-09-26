@@ -18,7 +18,11 @@
     <!-- Showdown library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
 
-    
+    <!-- CSRFToken -->
+    <script>
+      const csrftoken = '{{ csrf_token }}';
+   </script>
+   
     <script>
         $(document).ready(function () {
          //-- JQ function: apply Jquery function Markdown HTML
@@ -76,7 +80,6 @@
         }
         return cookieValue;
     }
-    const csrftoken = getToken('csrftoken');
     </script>
 
 

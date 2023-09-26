@@ -71,7 +71,7 @@
                 {% endif %}
 
                 <tr>
-                    <th><h5>Items: {{order.get_cart_items}}</h5></th>
+                    <th><h5>Items: <span id="cart-items">{{order.get_cart_items}}</span></h5></th>
                     <th><h5>Total: $<span id="cart-total">{{ order.get_cart_total|floatformat:2 }}</span></h5></th>
                 </tr>
 
@@ -82,7 +82,7 @@
 
 
 <script type='text/javascript'>
-    var shipping = '{{ shipping_required }};' // Convert Python boolean
+    var shipping = '{{ shipping_required }}'; // Convert Python boolean
 
     if (user != 'AnonymousUser'){ // if user logged, dont ask for info
         document.getElementById('user-info').innerHTML = ''
@@ -97,6 +97,10 @@
     }
 
     var form = document.getElementById('form');
+    if (!form) {
+        console.log('Form element not found.');
+        return;
+    }
 
     form.addEventListener('submit', function (e) {
         // hide Chekout btn and show payment options
@@ -115,10 +119,14 @@
     function submitFormData(){
         console.log('Payment button clicked')
 
+        // Get the total from the span element
+        var totalElement = document.getElementById('cart-total');
+        var total = totalElement.textContent;
+
         var userFormData = { //declare
             'name': null,
             'email':null,
-            'total':total,
+            'total': total,
         }
         var shippingInfo = { //declare
             'adress': null,
@@ -128,8 +136,8 @@
         }
         if (shipping != false){ // if needs shipping fill in 
             shippingInfo.address = form.address.value
-            shippingInfo.city = form.city.value
             shippingInfo.state = form.state.value
+            shippingInfo.country = form.country.value
             shippingInfo.zipcode = form.zipcode.value
         }
         if (user == 'AnonymousUser'){ // if no user logged fill in
@@ -137,21 +145,25 @@
             userFormData.email = form.email.value
         }
 
-        var url = '/process_order/'
+        var url = '/process_order/';
+
         fetch(url, {
             method: 'POST',
             headers:{
                 'Content-Type':'application/json',
-                'C-CSDRFToken': csrftoken, // is in head of base
+                'X-CSRFToken': csrftoken, // is in head of base
             },
             body: JSON.stringify({'form':userFormData,'shipping':shippingInfo})
         })
         .then((response) => response.json())
-        .then((data) =>.{
+        .then((data) => {
             console.log('Success:', data);
             alert('Transaction completed');
-            windown.locatino.href = "{% url 'store:store' %}"
+            window.location.href = "{% url 'store:store' %}"
         })
+        .catch((error) => {
+        console.error('Error:', error);
+        });
     }
 </script>
 
