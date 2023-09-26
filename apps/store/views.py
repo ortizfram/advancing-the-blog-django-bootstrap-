@@ -89,6 +89,9 @@ def updateItem(request):
 
     return JsonResponse(response_data)
 
+def processOrder(request):
+    return JsonResponse('Payment complete', safe=False)
+
 def cart(request):
     if request.user.is_authenticated:
         try:
