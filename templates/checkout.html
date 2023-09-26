@@ -126,7 +126,6 @@
             'state':null,
             'zipcode':null,
         }
-
         if (shipping != false){ // if needs shipping fill in 
             shippingInfo.address = form.address.value
             shippingInfo.city = form.city.value
@@ -137,6 +136,22 @@
             userFormData.name = form.name.value
             userFormData.email = form.email.value
         }
+
+        var url = '/process_order/'
+        fetch(url, {
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'C-CSDRFToken': csrftoken, // is in head of base
+            },
+            body: JSON.stringify({'form':userFormData,'shipping':shippingInfo})
+        })
+        .then((response) => response.json())
+        .then((data) =>.{
+            console.log('Success:', data);
+            alert('Transaction completed');
+            windown.locatino.href = "{% url 'store:store' %}"
+        })
     }
 </script>
 

@@ -16,4 +16,5 @@ urlpatterns = [
 
     # endpoints : process_order
     path('process_order/', views.processOrder, name='process_order'),
+    path('checkout/process_order/', views.processOrder, name='process_order'),
 ]

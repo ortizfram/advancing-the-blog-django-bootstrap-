@@ -8,6 +8,7 @@ def store(request):
     context = {'products':products}
     return render(request, "store.html", context)
 
+# endpoint view: update_item
 def updateItem(request):
     response_data = {'message': '', 'cart_total': 0}
 
@@ -89,7 +90,9 @@ def updateItem(request):
 
     return JsonResponse(response_data)
 
+# endpoint view: process_order
 def processOrder(request):
+    print('Data:', request.body)
     return JsonResponse('Payment complete', safe=False)
 
 def cart(request):
