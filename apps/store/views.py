@@ -33,12 +33,16 @@ def updateItem(request):
             elif action == 'remove':
                 orderItem.quantity -= 1
 
-            # Check if the quantity is less than or equal to 0 and delete the orderItem
             if orderItem.quantity <= 0:
                 orderItem.delete()
             else:
                 # Save the orderItem
                 orderItem.save()
+
+            # Check if the order is empty (no items left)
+            if order.orderitem_set.count() == 0:
+                order.complete = True
+                order.save()
 
             # Calculate the updated cart total and quantity
             cart_items = order.orderitem_set.all()
@@ -85,7 +89,6 @@ def updateItem(request):
 
     return JsonResponse(response_data)
 
-
 def cart(request):
     if request.user.is_authenticated:
         try:
@@ -102,8 +105,6 @@ def cart(request):
     context = {"items": items, "order": order}
     return render(request, "cart.html", context)
 
-
-
 def checkout(request):
     if request.user.is_authenticated:
         try:
@@ -112,9 +113,20 @@ def checkout(request):
             customer = None
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
+
+        # Debugging: Print the values of item.product.digital for each item
+        for item in items:
+            print(f"Product {item.product.name}, Digital: {item.product.digital}")
+
+        # Check if any product in the order needs shipping
+        shipping_required = any(item.product.digital is False for item in items)
+        print("Shipping Required:", shipping_required)
+
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
+        shipping_required = False  # Set to False for anonymous users
     
-    context = {"items": items, "order": order}
+    context = {"items": items, "order": order, "shipping_required": shipping_required}
     return render(request, "checkout.html", context)
+

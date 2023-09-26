@@ -18,32 +18,34 @@
                         <div class="form-field">
                             <input required placeholder='Email..' name='email' type="email" class="form-control">
                         </div>
+                        <hr/>
                     </div>
                     <div id="shipping-info">
-                        <hr/>
-                        <p>Shipping Information:</p>
-                        <hr>
-                        <div class="form-field">
-                            <input placeholder='Address..' name='address' type="text" class="form-control">
-                        </div>
-                        <div class="form-field">
-                            <input placeholder='State..' name='state' type="text" class="form-control">
-                        </div>
-                        <div class="form-field">
-                            <input placeholder='Country..' name='country' type="text" class="form-control">
-                        </div>
-                        <div class="form-field">
-                            <input placeholder='Zipcode..' name='zipcode' type="text" class="form-control">
-                        </div>
-                        <hr>
-                        <input id='form-button' class='btn btn-success btn-block' value='Continue' type="submit">
+                        {% if shipping_required %}
+                            <p>Shipping Information:</p>
+                            <hr>
+                            <div class="form-field">
+                                <input placeholder='Address..' name='address' type="text" class="form-control">
+                            </div>
+                            <div class="form-field">
+                                <input placeholder='State..' name='state' type="text" class="form-control">
+                            </div>
+                            <div class="form-field">
+                                <input placeholder='Country..' name='country' type="text" class="form-control">
+                            </div>
+                            <div class="form-field">
+                                <input placeholder='Zipcode..' name='zipcode' type="text" class="form-control">
+                            </div>
+                            <hr>
+                            <input id='form-button' class='btn btn-success btn-block' value='Continue' type="submit">
+                        {% endif %}
                     </div>
 
                 </form>
             </div>
             <br>
 
-            <div class="box-element hidden mb-3 bg-info-subtle" id='payment-info'>
+            <div class="box-element mb-3 bg-info-subtle" id='payment-info'>
                 <small>Paypal Options</small>
                 <button id='make-payment'>Make payment</button>
             </div>
@@ -80,6 +82,20 @@
 
 
 <script type='text/javascript'>
+    var shipping = '{{ shipping_required }};' // Convert Python boolean
+
+    if (user != 'AnonymousUser'){ // if user logged, dont ask for info
+        document.getElementById('user-info').innerHTML = ''
+    }
+    
+    if (shipping == false && user != 'AnonymousUser'){
+        // hide entire form if user logged and shipping is false
+        var formWrapper = document.getElementById('form-wrapper');
+        formWrapper.style.display = 'none';
+        // only show payment options
+        document.getElementById('payment-info').classList.remove('hidden');
+    }
+
     var form = document.getElementById('form');
 
     form.addEventListener('submit', function (e) {
@@ -92,7 +108,7 @@
     });
 
     document.getElementById('make-payment').addEventListener('click', function(e){
-        // target make-payment btn
+        // target make-payment btn 
         submitFormData()
     })
 
