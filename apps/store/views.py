@@ -153,20 +153,17 @@ def checkout(request):
             customer = None
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
-
         # Debugging: Print the values of item.product.digital for each item
         for item in items:
             print(f"Product {item.product.name}, Digital: {item.product.digital}")
-
         # Check if any product in the order needs shipping
         shipping_required = any(item.product.digital is False for item in items)
         print("Shipping Required:", shipping_required)
-
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
         shipping_required = False  # Set to False for anonymous users
-    
     context = {"items": items, "order": order, "shipping_required": shipping_required}
     return render(request, "checkout.html", context)
+
 

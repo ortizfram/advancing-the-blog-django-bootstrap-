@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="box-element" id='form-wrapper'>
-                <form id="form">
+                <form id="form" action="{% url 'store:process_order' %}" method="POST">
                     <div id="user-info">
                         <div class="form-field">
                             <input required placeholder='Name..' name='name' type="text" class="form-control">
@@ -100,11 +100,15 @@
     }
 
     form.addEventListener('submit', function (e) {
-        // hide Checkout btn and show payment options
+        // hide Checkout btn & form, and show payment options
         e.preventDefault();
         console.log("Form submitted...");
+        var formElement = document.getElementById('form');
+        if (formElement) {
+            formElement.style.display = 'none';
+        }
         document.getElementById('form-button').classList.add('hidden');
-        document.getElementById('shipping-info').style.display = 'block';
+        document.getElementById('shipping-info').style.display = 'none';
         document.getElementById('payment-info').classList.remove('hidden');
     });
 
@@ -137,13 +141,12 @@
             shippingInfo.country = form.country.value;
             shippingInfo.zipcode = form.zipcode.value;
         }
-        if (user == 'AnonymousUser'){ // if no user logged fill in
-            userFormData.name = form.name.value;
-            userFormData.email = form.email.value;
+        if (user !== 'AnonymousUser'){ // user logged fill in
+            userFormData.name = '{{ request.user.customer.name }}';
+            userFormData.email = '{{ request.user.customer.email }}';
         }
 
         var url = "{% url 'store:process_order' %}";
-
 
         fetch(url, {
             method: 'POST',
@@ -160,8 +163,8 @@
             window.location.href = "{% url 'store:store' %}";
         })
         .catch((error) => {
-        console.error('Error:', error);
-        });
+            console.error('Error:', error);
+            });
     }
 </script>
 
