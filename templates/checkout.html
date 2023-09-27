@@ -11,12 +11,25 @@
         <div class="col-lg-6">
             <div class="box-element" id='form-wrapper'>
                 <form id="form" action="{% url 'store:process_order' %}" method="POST">
+                    {% if checkout_form.non_field_errors %}
+                        <ul class="text-danger">
+                            {% for error in checkout_form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                     <div id="user-info">
                         <div class="form-field">
                             <input required placeholder='Name..' name='name' type="text" class="form-control">
+                            {% for error in checkout_form.name.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                         <div class="form-field">
                             <input required placeholder='Email..' name='email' type="email" class="form-control">
+                            {% for error in checkout_form.email.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
                         </div>
                         <hr/>
                     </div>
@@ -26,15 +39,27 @@
                             <hr>
                             <div class="form-field">
                                 <input placeholder='Address..' name='address' type="text" class="form-control">
+                                {% for error in checkout_form.address.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
                             </div>
                             <div class="form-field">
                                 <input placeholder='State..' name='state' type="text" class="form-control">
+                                {% for error in checkout_form.state.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
                             </div>
                             <div class="form-field">
                                 <input placeholder='Country..' name='country' type="text" class="form-control">
+                                {% for error in checkout_form.country.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
                             </div>
                             <div class="form-field">
                                 <input placeholder='Zipcode..' name='zipcode' type="text" class="form-control">
+                                {% for error in checkout_form.zipcode.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
                             </div>
                             <hr>
                             <input id='form-button' class='btn btn-success btn-block' value='Continue' type="submit">
@@ -139,7 +164,7 @@
         }
         var shippingInfo = {
             'address': null,
-            'city': null,
+            'country': null,
             'state': null,
             'zipcode': null,
         }

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 import json
 import datetime
 from django.contrib.auth.decorators import login_required
+from .forms import CheckoutForm
 
 def store(request):
     products = Product.objects.all()
@@ -122,7 +123,7 @@ def processOrder(request):
             customer=customer,
             order=order,
             address=data['shipping']['address'],
-            city=data['shipping']['city'],
+            country=data['shipping']['country'],
             state=data['shipping']['state'],
             zipcode=data['shipping']['zipcode'],
         )
@@ -146,6 +147,9 @@ def cart(request):
     return render(request, "cart.html", context)
 
 def checkout(request):
+    # Instantiate the form
+    checkout_form = CheckoutForm()
+
     if request.user.is_authenticated:
         try:
             customer = request.user.customer
@@ -163,7 +167,7 @@ def checkout(request):
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
         shipping_required = False  # Set to False for anonymous users
-    context = {"items": items, "order": order, "shipping_required": shipping_required}
+    context = {"items": items, "order": order, "shipping_required": shipping_required, "checkout_form": checkout_form,}
     return render(request, "checkout.html", context)
 
 
