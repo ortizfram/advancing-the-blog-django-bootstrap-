@@ -82,32 +82,29 @@
 
 
 <script type='text/javascript'>
-    var shipping = '{{ shipping_required }}'; // Convert Python boolean
+    var shipping = '{{ shipping_required }}'; 
 
-    if (user != 'AnonymousUser'){ // if user logged, dont ask for info
-        document.getElementById('user-info').innerHTML = ''
+    if (user != 'AnonymousUser'){
+        // User is logged in, hide user-info and show shipping-info
+        document.getElementById('user-info').style.display = 'none';
+        document.getElementById('shipping-info').style.display = 'block';
     }
     
-    if (shipping == false && user != 'AnonymousUser'){
-        // hide entire form if user logged and shipping is false
+    if (shipping === 'False' && user != 'AnonymousUser'){
+        // User is logged in and no need of shipping, hide the entire form-wrapper
         var formWrapper = document.getElementById('form-wrapper');
-        formWrapper.style.display = 'none';
-        // only show payment options
-        document.getElementById('payment-info').classList.remove('hidden');
-    }
-
-    var form = document.getElementById('form');
-    if (!form) {
-        console.log('Form element not found.');
-        return;
+        if (formWrapper) {
+            formWrapper.style.display = 'none';
+        }
+        document.getElementById('user-info').style.display = 'none';
     }
 
     form.addEventListener('submit', function (e) {
-        // hide Chekout btn and show payment options
+        // hide Checkout btn and show payment options
         e.preventDefault();
         console.log("Form submitted...");
         document.getElementById('form-button').classList.add('hidden');
-        document.getElementById('shipping-info').classList.add('hidden');
+        document.getElementById('shipping-info').style.display = 'block';
         document.getElementById('payment-info').classList.remove('hidden');
     });
 
@@ -129,23 +126,24 @@
             'total': total,
         }
         var shippingInfo = { //declare
-            'adress': null,
+            'address': null,
             'city':null,
             'state':null,
             'zipcode':null,
         }
-        if (shipping != false){ // if needs shipping fill in 
-            shippingInfo.address = form.address.value
-            shippingInfo.state = form.state.value
-            shippingInfo.country = form.country.value
-            shippingInfo.zipcode = form.zipcode.value
+        if (shipping !== 'False'){ // if needs shipping fill in 
+            shippingInfo.address = form.address.value;
+            shippingInfo.state = form.state.value;
+            shippingInfo.country = form.country.value;
+            shippingInfo.zipcode = form.zipcode.value;
         }
         if (user == 'AnonymousUser'){ // if no user logged fill in
-            userFormData.name = form.name.value
-            userFormData.email = form.email.value
+            userFormData.name = form.name.value;
+            userFormData.email = form.email.value;
         }
 
-        var url = '/process_order/';
+        var url = "{% url 'store:process_order' %}";
+
 
         fetch(url, {
             method: 'POST',
@@ -159,12 +157,14 @@
         .then((data) => {
             console.log('Success:', data);
             alert('Transaction completed');
-            window.location.href = "{% url 'store:store' %}"
+            window.location.href = "{% url 'store:store' %}";
         })
         .catch((error) => {
         console.error('Error:', error);
         });
     }
 </script>
+
+
 
 {% endblock content %}

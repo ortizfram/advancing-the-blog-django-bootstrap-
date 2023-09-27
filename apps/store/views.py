@@ -3,6 +3,7 @@ from .models import *
 from django.http import JsonResponse
 import json
 import datetime
+from django.contrib.auth.decorators import login_required
 
 def store(request):
     products = Product.objects.all()
@@ -103,7 +104,7 @@ def processOrder(request):
         total = float(data['form']['total'])
         order.transaction_id = transaction_id
 
-        if total == order.get_cart_total: # against hacking $0
+        if float(total) == order.get_cart_total():# against hacking $0
             order.complete = True
         order.save()
 
@@ -113,13 +114,27 @@ def processOrder(request):
                 order=order,
                 address=data['shipping']['address'],
                 country = data['shipping']['country'],
-                state=data['shipping']['stated'],
+                state=data['shipping']['state'],
                 zipcode = data['shipping']['zipcode'],
             )
     else: 
         print('User not authenticated')
 
     return JsonResponse({'message': 'Payment completed'})
+
+@login_required
+def create_customer_profile(request):
+    # Check if the user already has a customer profile
+    if not hasattr(request.user, 'customer'):
+        # Create a Customer instance associated with the logged-in user
+        customer = Customer.objects.create(user=request.user, name=request.user.username, email=request.user.email)
+    else:
+        # User already has a customer profile
+        customer = request.user.customer
+
+    # You can update other fields of the customer profile if needed
+
+    return render(request, 'profile.html', {'customer': customer})
 
 def cart(request):
     if request.user.is_authenticated:
