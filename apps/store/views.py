@@ -93,48 +93,41 @@ def updateItem(request):
     return JsonResponse(response_data)
 
 # endpoint view: process_order
+@login_required
 def processOrder(request):
     print('Data:', request.body)
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
 
-    if request.user.is_authenticated:
+    customer = None  # Initialize customer to None
+
+    try:
+        # Attempt to get the customer profile
         customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id
+    except Customer.DoesNotExist:
+        # If the customer profile does not exist, create one
+        customer = Customer.objects.create(user=request.user, name=request.user.username, email=request.user.email)
+        print(f"Created customer profile for {request.user.username}")
 
-        if float(total) == order.get_cart_total():# against hacking $0
-            order.complete = True
-        order.save()
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id
 
-        if order.shipping == True:
-            ShippingAddress.objects.create(
-                customer=customer,
-                order=order,
-                address=data['shipping']['address'],
-                country = data['shipping']['country'],
-                state=data['shipping']['state'],
-                zipcode = data['shipping']['zipcode'],
-            )
-    else: 
-        print('User not authenticated')
+    if float(total) == order.get_cart_total:  # Protect against hacking with $0 total
+        order.complete = True
+    order.save()
+
+    if ShippingAddress.objects.filter(order=order).exists():
+        ShippingAddress.objects.create(
+            customer=customer,
+            order=order,
+            address=data['shipping']['address'],
+            city=data['shipping']['city'],
+            state=data['shipping']['state'],
+            zipcode=data['shipping']['zipcode'],
+        )
 
     return JsonResponse({'message': 'Payment completed'})
-
-@login_required
-def create_customer_profile(request):
-    # Check if the user already has a customer profile
-    if not hasattr(request.user, 'customer'):
-        # Create a Customer instance associated with the logged-in user
-        customer = Customer.objects.create(user=request.user, name=request.user.username, email=request.user.email)
-    else:
-        # User already has a customer profile
-        customer = request.user.customer
-
-    # You can update other fields of the customer profile if needed
-
-    return render(request, 'profile.html', {'customer': customer})
 
 def cart(request):
     if request.user.is_authenticated:
