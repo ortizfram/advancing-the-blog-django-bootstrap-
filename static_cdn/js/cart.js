@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log('Updating cart total...'); // Add this line for debugging
         var url = "{% url 'store:update_item' %}";
 
-
         fetch(url, {
             method: 'GET',
             headers: {

@@ -82,16 +82,17 @@
 
 
 <script type='text/javascript'>
-    var shipping = '{{ shipping_required }}'; 
+    var shipping = '{{ shipping_required }}';
+    var user = '{{ request.user }}'; // Added to define the user variable
 
-    if (user != 'AnonymousUser'){
+    if (user !== 'AnonymousUser') {
         // User is logged in, hide user-info and show shipping-info
         document.getElementById('user-info').style.display = 'none';
         document.getElementById('shipping-info').style.display = 'block';
     }
-    
-    if (shipping === 'False' && user != 'AnonymousUser'){
-        // User is logged in and no need of shipping, hide the entire form-wrapper
+
+    if (shipping === 'False' && user !== 'AnonymousUser') {
+        // User is logged in and no need for shipping, hide the entire form-wrapper
         var formWrapper = document.getElementById('form-wrapper');
         if (formWrapper) {
             formWrapper.style.display = 'none';
@@ -99,74 +100,82 @@
         document.getElementById('user-info').style.display = 'none';
     }
 
-    form.addEventListener('submit', function (e) {
-        // hide Checkout btn & form, and show payment options
+    document.getElementById('form').addEventListener('submit', function (e) {
+        // Prevent the form from submitting normally
         e.preventDefault();
-        console.log("Form submitted...");
+
+        // Hide the form
         var formElement = document.getElementById('form');
         if (formElement) {
             formElement.style.display = 'none';
         }
+
+        // Hide the form button
         document.getElementById('form-button').classList.add('hidden');
-        document.getElementById('shipping-info').style.display = 'none';
-        document.getElementById('payment-info').classList.remove('hidden');
+
+        // Show the payment info
+        var paymentInfo = document.getElementById('payment-info');
+        if (paymentInfo) {
+            paymentInfo.classList.remove('hidden');
+        }
     });
 
-    document.getElementById('make-payment').addEventListener('click', function(e){
-        // target make-payment btn 
-        submitFormData()
+    document.getElementById('make-payment').addEventListener('click', function (e) {
+        // target make-payment btn
+        submitFormData();
     })
 
-    function submitFormData(){
+    function submitFormData() {
         console.log('Payment button clicked')
 
         // Get the total from the span element
         var totalElement = document.getElementById('cart-total');
         var total = totalElement.textContent;
 
-        var userFormData = { //declare
+        var userFormData = {
             'name': null,
-            'email':null,
+            'email': null,
             'total': total,
         }
-        var shippingInfo = { //declare
+        var shippingInfo = {
             'address': null,
-            'city':null,
-            'state':null,
-            'zipcode':null,
+            'city': null,
+            'state': null,
+            'zipcode': null,
         }
-        if (shipping !== 'False'){ // if needs shipping fill in 
+        if (shipping !== 'False') {
             shippingInfo.address = form.address.value;
             shippingInfo.state = form.state.value;
             shippingInfo.country = form.country.value;
             shippingInfo.zipcode = form.zipcode.value;
         }
-        if (user !== 'AnonymousUser'){ // user logged fill in
+        if (user !== 'AnonymousUser') {
             userFormData.name = '{{ request.user.customer.name }}';
             userFormData.email = '{{ request.user.customer.email }}';
         }
 
-        var url = "{% url 'store:process_order' %}";
+        var url = "process_order/";
 
         fetch(url, {
             method: 'POST',
-            headers:{
-                'Content-Type':'application/json',
-                'X-CSRFToken': csrftoken, // is in head of base
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken,
             },
-            body: JSON.stringify({'form':userFormData,'shipping':shippingInfo})
+            body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo })
         })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log('Success:', data);
-            alert('Transaction completed');
-            window.location.href = "{% url 'store:store' %}";
-        })
-        .catch((error) => {
-            console.error('Error:', error);
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Success:', data);
+                alert('Transaction completed');
+                window.location.href = "{% url 'store:store' %}";
+            })
+            .catch((error) => {
+                console.error('Error:', error);
             });
     }
 </script>
+
 
 
 
