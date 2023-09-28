@@ -1,207 +1,273 @@
-{% extends "base.html" %}
-{% load static %}
-{% load urlify %}
-{% load crispy_forms_tags %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% load urlify %} {% load
+crispy_forms_tags %} {% block content %}
 <div class="col-md-8 mx-auto py-5">
-    <h1 class='pb-2'>Chekout order</h1>
+  <h1 class="pb-2">Chekout order</h1>
 
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="box-element" id='form-wrapper'>
-                <form id="form" action="{% url 'store:process_order' %}" method="POST">
-                    {% if checkout_form.non_field_errors %}
-                        <ul class="text-danger">
-                            {% for error in checkout_form.non_field_errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    <div id="user-info">
-                        <div class="form-field">
-                            <input required placeholder='Name..' name='name' type="text" class="form-control">
-                            {% for error in checkout_form.name.errors %}
-                                <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        <div class="form-field">
-                            <input required placeholder='Email..' name='email' type="email" class="form-control">
-                            {% for error in checkout_form.email.errors %}
-                                <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        <hr/>
-                    </div>
-                    <div id="shipping-info">
-                        {% if shipping_required %}
-                            <p>Shipping Information:</p>
-                            <hr>
-                            <div class="form-field">
-                                <input placeholder='Address..' name='address' type="text" class="form-control">
-                                {% for error in checkout_form.address.errors %}
-                                    <span class="text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="form-field">
-                                <input placeholder='State..' name='state' type="text" class="form-control">
-                                {% for error in checkout_form.state.errors %}
-                                    <span class="text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="form-field">
-                                <input placeholder='Country..' name='country' type="text" class="form-control">
-                                {% for error in checkout_form.country.errors %}
-                                    <span class="text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            <div class="form-field">
-                                <input placeholder='Zipcode..' name='zipcode' type="text" class="form-control">
-                                {% for error in checkout_form.zipcode.errors %}
-                                    <span class="text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            <hr>
-                            <input id='form-button' class='btn btn-success btn-block' value='Continue' type="submit">
-                        {% endif %}
-                    </div>
-
-                </form>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="box-element" id="form-wrapper">
+        <form id="form" action="{% url 'store:process_order' %}" method="POST">
+          {% csrf_token %} {% if checkout_form.non_field_errors %}
+          <ul class="text-danger">
+            {% for error in checkout_form.non_field_errors %}
+            <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <div id="user-info">
+            <div class="form-field">
+              <input
+                required
+                placeholder="Name.."
+                name="name"
+                type="text"
+                class="form-control"
+              />
+              {% for error in checkout_form.name.errors %}
+              <span class="text-danger">{{ error }}</span>
+              {% endfor %}
             </div>
-            <br>
-
-            <div class="box-element mb-3 bg-info-subtle" id='payment-info'>
-                <small>Paypal Options</small>
-                <button id='make-payment'>Make payment</button>
+            <div class="form-field">
+              <input
+                required
+                placeholder="Email.."
+                name="email"
+                type="email"
+                class="form-control"
+              />
+              {% for error in checkout_form.email.errors %}
+              <span class="text-danger">{{ error }}</span>
+              {% endfor %}
             </div>
-
-        </div>
-        <div class="col-lg-6">
-            <div class="box-element">
-                <a href="{% url 'store:cart' %}" class="btn btn-outline-dark">&larr; Back to Cart</a>
-                <hr>
-                <h3>Order Summary</h3>
-                <hr>
-                {% if items %}
-                    {% for item in items %}
-                        {% if item.quantity > 0 %}
-                        <div class="cart-row">
-                            <div style="flex:2;"><img class='row-image' src="{{item.product.imageURL}}" alt="{{item.product.name}}_img"></div>
-                            <div style="flex:2;"><p>{{item.product.name}}</p></div>
-                            <div style="flex:1;"><p>${{item.product.price}}</p></div>
-                            <div style="flex:1;"><p>X {{item.quantity}}</p></div>
-                        </div>
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
-
-                <tr>
-                    <th><h5>Items: <span id="cart-items">{{order.get_cart_items}}</span></h5></th>
-                    <th><h5>Total: $<span id="cart-total">{{ order.get_cart_total|floatformat:2 }}</span></h5></th>
-                </tr>
-
+            <hr />
+          </div>
+          <div id="shipping-info">
+            {% if shipping_required %}
+            <p>Shipping Information:</p>
+            <hr />
+            <div class="form-field">
+              <input
+                placeholder="Address.."
+                name="address"
+                type="text"
+                class="form-control"
+              />
+              {% for error in checkout_form.address.errors %}
+              <span class="text-danger">{{ error }}</span>
+              {% endfor %}
             </div>
-        </div>
+            <div class="form-field">
+              <input
+                placeholder="State.."
+                name="state"
+                type="text"
+                class="form-control"
+              />
+              {% for error in checkout_form.state.errors %}
+              <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+            </div>
+            <div class="form-field">
+              <input
+                placeholder="Country.."
+                name="country"
+                type="text"
+                class="form-control"
+              />
+              {% for error in checkout_form.country.errors %}
+              <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+            </div>
+            <div class="form-field">
+              <input
+                placeholder="Zipcode.."
+                name="zipcode"
+                type="text"
+                class="form-control"
+              />
+              {% for error in checkout_form.zipcode.errors %}
+              <span class="text-danger">{{ error }}</span>
+              {% endfor %}
+            </div>
+            <hr />
+            <input
+              id="form-button"
+              class="btn btn-success btn-block"
+              value="Continue"
+              type="submit"
+            />
+            {% endif %}
+          </div>
+        </form>
+      </div>
+      <br />
+
+      <div class="box-element mb-3 bg-info-subtle hidden" id="payment-info">
+        <small>Paypal Options</small>
+        <button id="make-payment">Make payment</button>
+      </div>
     </div>
+    <div class="col-lg-6">
+      <div class="box-element">
+        <a href="{% url 'store:cart' %}" class="btn btn-outline-dark"
+          >&larr; Back to Cart</a
+        >
+        <hr />
+        <h3>Order Summary</h3>
+        <hr />
+        {% if items %} {% for item in items %} {% if item.quantity > 0 %}
+        <div class="cart-row">
+          <div style="flex: 2">
+            <img
+              class="row-image"
+              src="{{item.product.imageURL}}"
+              alt="{{item.product.name}}_img"
+            />
+          </div>
+          <div style="flex: 2"><p>{{item.product.name}}</p></div>
+          <div style="flex: 1"><p>${{item.product.price}}</p></div>
+          <div style="flex: 1"><p>X {{item.quantity}}</p></div>
+        </div>
+        {% endif %} {% endfor %} {% endif %}
+
+        <tr>
+          <th>
+            <h5>
+              Items: <span id="cart-items">{{order.get_cart_items}}</span>
+            </h5>
+          </th>
+          <th>
+            <h5>
+              Total: $<span id="cart-total"
+                >{{ order.get_cart_total|floatformat:2 }}</span
+              >
+            </h5>
+          </th>
+        </tr>
+      </div>
+    </div>
+  </div>
 </div>
 
-
-<script type='text/javascript'>
-    var shipping = '{{ shipping_required }}';
-    var user = '{{ request.user }}'; // Added to define the user variable
-
-    if (user !== 'AnonymousUser') {
-        // User is logged in, hide user-info and show shipping-info
-        document.getElementById('user-info').style.display = 'none';
-        document.getElementById('shipping-info').style.display = 'block';
-    }
-
-    if (shipping === 'False' && user !== 'AnonymousUser') {
-        // User is logged in and no need for shipping, hide the entire form-wrapper
-        var formWrapper = document.getElementById('form-wrapper');
-        if (formWrapper) {
-            formWrapper.style.display = 'none';
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        var shipping_required = "{{ shipping_required }}";
+        var user = "{{ request.user }}"; // Added to define the user variable
+        var paymentButton = document.getElementById("make-payment"); // Get the payment button element
+        var totalElement = document.getElementById("cart-total"); // Define totalElement here
+      
+        if (user !== "AnonymousUser") {
+          // User is logged in, hide user-info and show shipping-info
+          document.getElementById("user-info").style.display = "none";
+          document.getElementById("shipping-info").style.display = "block";
         }
-        document.getElementById('user-info').style.display = 'none';
-    }
-
-    document.getElementById('form').addEventListener('submit', function (e) {
-        // Prevent the form from submitting normally
-        e.preventDefault();
-
-        // Hide the form
-        var formElement = document.getElementById('form');
-        if (formElement) {
-            formElement.style.display = 'none';
+      
+        if (shipping_required === "False" && user !== "AnonymousUser") {
+          // User is logged in and no need for shipping, hide the entire form-wrapper
+          var formWrapper = document.getElementById("form-wrapper");
+          if (formWrapper) {
+            formWrapper.style.display = "none";
+          }
+          document.getElementById("user-info").style.display = "none";
         }
-
-        // Hide the form button
-        document.getElementById('form-button').classList.add('hidden');
-
-        // Show the payment info
-        var paymentInfo = document.getElementById('payment-info');
-        if (paymentInfo) {
-            paymentInfo.classList.remove('hidden');
+      
+        // Function to enable/disable the payment button based on form field values
+        function togglePaymentButton() {
+          console.log("togglePaymentButton called");
+          var formFields = [
+            "name",
+            "email",
+            "address",
+            "state",
+            "country",
+            "zipcode",
+          ];
+          var allFieldsFilled = true;
+      
+          for (var i = 0; i < formFields.length; i++) {
+            var fieldName = formFields[i];
+            var fieldValue = document.querySelector(`[name=${fieldName}]`).value.trim();
+      
+            if (fieldValue === "") {
+              allFieldsFilled = false;
+              break; // Exit the loop if any field is empty
+            }
+          }
+      
+          if (allFieldsFilled) {
+            paymentButton.disabled = false; // Enable the payment button
+          } else {
+            paymentButton.disabled = true; // Disable the payment button
+          }
         }
-    });
-
-    document.getElementById('make-payment').addEventListener('click', function (e) {
-        // target make-payment btn
-        submitFormData();
-    })
-
-    function submitFormData() {
-        console.log('Payment button clicked')
-
-        // Get the total from the span element
-        var totalElement = document.getElementById('cart-total');
-        var total = totalElement.textContent;
-
-        var userFormData = {
-            'name': null,
-            'email': null,
-            'total': total,
-        }
-        var shippingInfo = {
-            'address': null,
-            'country': null,
-            'state': null,
-            'zipcode': null,
-        }
-        if (shipping !== 'False') {
-            shippingInfo.address = form.address.value;
-            shippingInfo.state = form.state.value;
-            shippingInfo.country = form.country.value;
-            shippingInfo.zipcode = form.zipcode.value;
-        }
-        if (user !== 'AnonymousUser') {
-            userFormData.name = '{{ request.user.customer.name }}';
-            userFormData.email = '{{ request.user.customer.email }}';
-        }
-
-        var url = "process_order/";
-
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrftoken,
+      
+        // Attach an event listener to each form field to check when they change
+        var formFields = document.querySelectorAll(
+          'input[type="text"], input[type="email"]'
+        );
+        formFields.forEach(function (field) {
+          field.addEventListener("input", togglePaymentButton);
+        });
+      
+        document.getElementById("form").addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent the form from submitting normally
+      
+          // Create an object to hold form data
+          var formData = {
+            name: document.querySelector('[name="name"]').value,
+            email: document.querySelector('[name="email"]').value,
+            total: totalElement.textContent,
+            shipping: {
+              address: document.querySelector('[name="address"]').value,
+              state: document.querySelector('[name="state"]').value,
+              country: document.querySelector('[name="country"]').value,
+              zipcode: document.querySelector('[name="zipcode"]').value,
             },
-            body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo })
-        })
+          };
+      
+          // Convert formData object to JSON
+          var jsonData = JSON.stringify(formData);
+      
+          // Now you can submit the form data as JSON
+          submitFormData(jsonData);
+        });
+      
+        paymentButton.addEventListener("click", function (e) {
+          // Target make-payment button
+          if (!paymentButton.disabled) {
+            submitFormData();
+          }
+        });
+      
+        function submitFormData(jsonData) {
+          console.log("submitFormData called");
+      
+          var url = "{% url 'store:process_order' %}";
+      
+          // Get the CSRF token from the cookie
+          var csrftoken = getCookie("csrftoken");
+          console.log("CSRF Token:", csrftoken);
+      
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": csrftoken,
+            },
+            body: jsonData, // Use the JSON data here
+          })
             .then((response) => response.json())
             .then((data) => {
-                console.log('Success:', data);
-                alert('Transaction completed');
-                window.location.href = "{% url 'store:store' %}";
+              console.log("Success:", data);
+              alert("Transaction completed");
+              window.location.href = "{% url 'store:store' %}";
             })
             .catch((error) => {
-                console.error('Error:', error);
+              console.error("Error:", error);
             });
-    }
+        }
+      });
+      
 </script>
-
-
-
 
 {% endblock content %}

@@ -4,6 +4,7 @@ from django.http import JsonResponse
 import json
 import datetime
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from .forms import CheckoutForm
 
 def store(request):
@@ -94,19 +95,23 @@ def updateItem(request):
     return JsonResponse(response_data)
 
 # endpoint view: process_order
+@csrf_exempt
 @login_required
 def processOrder(request):
     print('Data:', request.body)
     transaction_id = datetime.datetime.now().timestamp()
-    data = json.loads(request.body)
+    
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError as e:
+        # Handle invalid JSON data
+        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
 
-    customer = None  # Initialize customer to None
+    customer = None
 
     try:
-        # Attempt to get the customer profile
         customer = request.user.customer
     except Customer.DoesNotExist:
-        # If the customer profile does not exist, create one
         customer = Customer.objects.create(user=request.user, name=request.user.username, email=request.user.email)
         print(f"Created customer profile for {request.user.username}")
 
@@ -114,18 +119,18 @@ def processOrder(request):
     total = float(data['form']['total'])
     order.transaction_id = transaction_id
 
-    if float(total) == order.get_cart_total:  # Protect against hacking with $0 total
+    if float(total) == order.get_cart_total():
         order.complete = True
     order.save()
 
-    if ShippingAddress.objects.filter(order=order).exists():
+    if 'shipping' in data and isinstance(data['shipping'], dict):
         ShippingAddress.objects.create(
             customer=customer,
             order=order,
-            address=data['shipping']['address'],
-            country=data['shipping']['country'],
-            state=data['shipping']['state'],
-            zipcode=data['shipping']['zipcode'],
+            address=data['shipping'].get('address', ''),
+            country=data['shipping'].get('country', ''),
+            state=data['shipping'].get('state', ''),
+            zipcode=data['shipping'].get('zipcode', ''),
         )
 
     return JsonResponse({'message': 'Payment completed'})
