@@ -102,7 +102,7 @@ def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     
     try:
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
     except json.JSONDecodeError as e:
         # Handle invalid JSON data
         return JsonResponse({'error': 'Invalid JSON data'}, status=400)
@@ -116,12 +116,18 @@ def processOrder(request):
         print(f"Created customer profile for {request.user.username}")
 
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    total = float(data['form']['total'])
-    order.transaction_id = transaction_id
+    
+    # Check if 'form' key exists in the data dictionary
+    if 'form' in data:
+        form_data = data['form']
+        total = form_data.get('total', '0.00')
+        total = float(total)
 
-    if float(total) == order.get_cart_total():
-        order.complete = True
-    order.save()
+        order.transaction_id = transaction_id
+
+        if total == order.get_cart_total():
+            order.complete = True
+        order.save()
 
     if 'shipping' in data and isinstance(data['shipping'], dict):
         ShippingAddress.objects.create(
@@ -134,6 +140,7 @@ def processOrder(request):
         )
 
     return JsonResponse({'message': 'Payment completed'})
+
 
 def cart(request):
     if request.user.is_authenticated:

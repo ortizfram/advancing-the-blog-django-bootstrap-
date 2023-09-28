@@ -152,122 +152,132 @@ crispy_forms_tags %} {% block content %}
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function () {
         var shipping_required = "{{ shipping_required }}";
-        var user = "{{ request.user }}"; // Added to define the user variable
-        var paymentButton = document.getElementById("make-payment"); // Get the payment button element
-        var totalElement = document.getElementById("cart-total"); // Define totalElement here
-      
-        if (user !== "AnonymousUser") {
-          // User is logged in, hide user-info and show shipping-info
-          document.getElementById("user-info").style.display = "none";
-          document.getElementById("shipping-info").style.display = "block";
-        }
-      
-        if (shipping_required === "False" && user !== "AnonymousUser") {
-          // User is logged in and no need for shipping, hide the entire form-wrapper
-          var formWrapper = document.getElementById("form-wrapper");
-          if (formWrapper) {
-            formWrapper.style.display = "none";
-          }
-          document.getElementById("user-info").style.display = "none";
-        }
-      
-        // Function to enable/disable the payment button based on form field values
-        function togglePaymentButton() {
-          console.log("togglePaymentButton called");
-          var formFields = [
-            "name",
-            "email",
-            "address",
-            "state",
-            "country",
-            "zipcode",
-          ];
-          var allFieldsFilled = true;
-      
-          for (var i = 0; i < formFields.length; i++) {
-            var fieldName = formFields[i];
-            var fieldValue = document.querySelector(`[name=${fieldName}]`).value.trim();
-      
-            if (fieldValue === "") {
-              allFieldsFilled = false;
-              break; // Exit the loop if any field is empty
-            }
-          }
-      
-          if (allFieldsFilled) {
-            paymentButton.disabled = false; // Enable the payment button
-          } else {
-            paymentButton.disabled = true; // Disable the payment button
-          }
-        }
-      
-        // Attach an event listener to each form field to check when they change
-        var formFields = document.querySelectorAll(
-          'input[type="text"], input[type="email"]'
-        );
-        formFields.forEach(function (field) {
-          field.addEventListener("input", togglePaymentButton);
-        });
-      
-        document.getElementById("form").addEventListener("submit", function (e) {
-          e.preventDefault(); // Prevent the form from submitting normally
-      
-          // Create an object to hold form data
-          var formData = {
-            name: document.querySelector('[name="name"]').value,
-            email: document.querySelector('[name="email"]').value,
-            total: totalElement.textContent,
+        var user = "{{ request.user }}";
+        var paymentButton = document.getElementById("make-payment");
+    
+        // Define formData here so it's accessible within the submitFormData function
+        var formData = {
+            form: {
+                name: null,
+                email: null,
+                total: null,
+            },
             shipping: {
-              address: document.querySelector('[name="address"]').value,
-              state: document.querySelector('[name="state"]').value,
-              country: document.querySelector('[name="country"]').value,
-              zipcode: document.querySelector('[name="zipcode"]').value,
+                address: null,
+                state: null,
+                country: null,
+                zipcode: null,
             },
-          };
-      
-          // Convert formData object to JSON
-          var jsonData = JSON.stringify(formData);
-      
-          // Now you can submit the form data as JSON
-          submitFormData(jsonData);
+        };
+    
+        // Get the totalElement from the HTML
+        var totalElement = document.getElementById("cart-total");
+    
+        if (user !== "AnonymousUser") {
+            // User is logged in, hide user-info and show shipping-info
+            document.getElementById("user-info").style.display = "none";
+            document.getElementById("shipping-info").style.display = "block";
+        }
+    
+        if (shipping_required === "False" && user !== "AnonymousUser") {
+            // User is logged in and no need for shipping, hide the entire form-wrapper
+            var formWrapper = document.getElementById("form-wrapper");
+            if (formWrapper) {
+                formWrapper.style.display = "none";
+            }
+            document.getElementById("user-info").style.display = "none";
+        }
+    
+        function togglePaymentButton() {
+            console.log("togglePaymentButton called");
+            var formFields = [
+                "name",
+                "email",
+                "address",
+                "state",
+                "country",
+                "zipcode",
+            ];
+            var allFieldsFilled = true;
+    
+            for (var i = 0; i < formFields.length; i++) {
+                var fieldName = formFields[i];
+                var fieldValue = document.querySelector(`[name=${fieldName}]`).value.trim();
+    
+                if (fieldValue === "") {
+                    allFieldsFilled = false;
+                    break;
+                }
+            }
+    
+            if (allFieldsFilled) {
+                paymentButton.disabled = false;
+            } else {
+                paymentButton.disabled = true;
+            }
+        }
+    
+        var formFields = document.querySelectorAll('input[type="text"], input[type="email"]');
+        formFields.forEach(function (field) {
+            field.addEventListener("input", togglePaymentButton);
         });
-      
+    
+        document.getElementById("form").addEventListener("submit", function (e) {
+            e.preventDefault();
+    
+            // Update formData with the form data
+            formData.form.name = document.querySelector('[name="name"]').value;
+            formData.form.email = document.querySelector('[name="email"]').value;
+    
+            // Extract the total from totalElement
+            formData.form.total = totalElement.textContent;
+    
+            if (shipping_required === "True") {
+                formData.shipping.address = document.querySelector('[name="address"]').value;
+                formData.shipping.state = document.querySelector('[name="state"]').value;
+                formData.shipping.country = document.querySelector('[name="country"]').value;
+                formData.shipping.zipcode = document.querySelector('[name="zipcode"]').value;
+            }
+    
+            // Call submitFormData with the updated formData
+            submitFormData(formData);
+        });
+    
         paymentButton.addEventListener("click", function (e) {
-          // Target make-payment button
-          if (!paymentButton.disabled) {
-            submitFormData();
-          }
+            if (!paymentButton.disabled) {
+                // Pass formData to submitFormData
+                submitFormData(formData);
+            }
         });
-      
-        function submitFormData(jsonData) {
-          console.log("submitFormData called");
-      
-          var url = "{% url 'store:process_order' %}";
-      
-          // Get the CSRF token from the cookie
-          var csrftoken = getCookie("csrftoken");
-          console.log("CSRF Token:", csrftoken);
-      
-          fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": csrftoken,
-            },
-            body: jsonData, // Use the JSON data here
-          })
+    
+        function submitFormData(formData) {
+            console.log("submitFormData called");
+    
+            var url = "{% url 'store:process_order' %}";
+    
+            var csrftoken = getCookie("csrftoken");
+            console.log("CSRF Token:", csrftoken);
+    
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+                body: JSON.stringify(formData),
+            })
             .then((response) => response.json())
             .then((data) => {
-              console.log("Success:", data);
-              alert("Transaction completed");
-              window.location.href = "{% url 'store:store' %}";
+                console.log("Success:", data);
+                alert("Transaction completed");
+                window.location.href = "{% url 'store:store' %}";
             })
             .catch((error) => {
-              console.error("Error:", error);
+                console.error("Error:", error);
             });
         }
-      });
-      
-</script>
+    });
+    </script>
+    
 
 {% endblock content %}
