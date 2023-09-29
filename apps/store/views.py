@@ -26,9 +26,9 @@ def updateItem(request):
                 customer = request.user.customer
             except Customer.DoesNotExist:
                 customer = None
+            order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
             product = Product.objects.get(id=productId)
-            order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
             # Define orderItem before accessing its properties
             orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
@@ -100,7 +100,7 @@ def updateItem(request):
 def processOrder(request):
     print('Data:', request.body)
     transaction_id = datetime.datetime.now().timestamp()
-    
+
     try:
         data = json.loads(request.body.decode('utf-8'))
     except json.JSONDecodeError as e:
@@ -116,16 +116,16 @@ def processOrder(request):
         print(f"Created customer profile for {request.user.username}")
 
     order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    
+
     # Check if 'form' key exists in the data dictionary
     if 'form' in data:
         form_data = data['form']
         total = form_data.get('total', '0.00')
-        total = float(total)
+        total = float(total)  # Convert total to float here
 
         order.transaction_id = transaction_id
 
-        if total == order.get_cart_total():
+        if total == order.get_cart_total:
             order.complete = True
         order.save()
 

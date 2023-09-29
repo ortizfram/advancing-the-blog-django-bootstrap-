@@ -22,6 +22,9 @@ crispy_forms_tags %} {% block content %}
                 name="name"
                 type="text"
                 class="form-control"
+                {% if request.user.is_authenticated %}
+                value="{{ request.user.username }}"
+                {% endif %}
               />
               {% for error in checkout_form.name.errors %}
               <span class="text-danger">{{ error }}</span>
@@ -34,6 +37,9 @@ crispy_forms_tags %} {% block content %}
                 name="email"
                 type="email"
                 class="form-control"
+                {% if request.user.is_authenticated %}
+                value="{{ request.user.email }}"
+                {% endif %}
               />
               {% for error in checkout_form.email.errors %}
               <span class="text-danger">{{ error }}</span>
@@ -175,7 +181,7 @@ crispy_forms_tags %} {% block content %}
     
         if (user !== "AnonymousUser") {
             // User is logged in, hide user-info and show shipping-info
-            document.getElementById("user-info").style.display = "none";
+            document.getElementById("user-info").style.display = "block";
             document.getElementById("shipping-info").style.display = "block";
         }
     
@@ -252,12 +258,15 @@ crispy_forms_tags %} {% block content %}
     
         function submitFormData(formData) {
             console.log("submitFormData called");
-    
+        
             var url = "{% url 'store:process_order' %}";
-    
+        
             var csrftoken = getCookie("csrftoken");
             console.log("CSRF Token:", csrftoken);
-    
+        
+            // Before sending the data
+            console.log(formData);
+
             fetch(url, {
                 method: "POST",
                 headers: {
@@ -266,16 +275,27 @@ crispy_forms_tags %} {% block content %}
                 },
                 body: JSON.stringify(formData),
             })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then((data) => {
                 console.log("Success:", data);
-                alert("Transaction completed");
+                if (data.message) {
+                    alert(data.message);
+                }
                 window.location.href = "{% url 'store:store' %}";
             })
             .catch((error) => {
                 console.error("Error:", error);
+                alert("An error occurred while processing your request.");
             });
         }
+        
+        
+        
     });
     </script>
     
