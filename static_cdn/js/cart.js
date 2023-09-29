@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to update the cart total
     function updateCartTotal() {
-        console.log('Updating cart total...'); // Add this line for debugging
+        console.log('Updating cart total...');
         var url = "update_item/";
-
+    
         fetch(url, {
             method: 'GET',
             headers: {
@@ -18,16 +18,18 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
         .then((response) => {
+            if (!response.ok) {
+                console.error('Response not ok:', response.status, response.statusText);
+                throw new Error('Network response was not ok');
+            }
             return response.json();
         })
         .then((data) => {
-            console.log('AJAX response data:', data); // Add this line for debugging
-            // Before assignment
-            console.log('Before assignment:', cartTotalElement.textContent);
-            // Update the cart total element on the page
-            cartTotalElement.textContent = data.cart_total.toFixed(2);
-            cartItemsElement.textContent = data.cart_quantity; // Add this line to update cart items count
-            console.log('After assignment:', cartTotalElement.textContent); // debugging
+            console.log('AJAX response data:', data);
+            // ... rest of your code
+        })
+        .catch((error) => {
+            console.error('Fetch error:', error);
         });
     }
 

@@ -64,13 +64,19 @@ MARKDOWN_DEUX_STYLES = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Place this before AuthenticationMiddleware
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # or 'cache' for caching sessions
+SESSION_COOKIE_NAME = 'non_auth_cookie_583'  # Replace with your chosen name
+
 
 LOGIN_URL='/login/'
 ROOT_URLCONF = 'core.urls'

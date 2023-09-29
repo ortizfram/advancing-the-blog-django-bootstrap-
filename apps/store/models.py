@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.sessions.models import Session  # Import the Session model
 
 # Create your models here.
 class Customer(models.Model):
@@ -17,7 +18,7 @@ class Customer(models.Model):
         return self.name
     
 class Product(models.Model):
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=7,decimal_places=2)
     name = models.CharField(max_length=200, 
                             null=True)
     digital = models.BooleanField(default=False,
@@ -40,6 +41,7 @@ class Product(models.Model):
     
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    session_id = models.CharField(max_length=32, null=True, blank=True)  # Add this field for session ID
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
     transaction_id = models.CharField(max_length=100, null=True)

@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from .models import *
 from django.http import JsonResponse
+from django.http import HttpResponse
 import json
 import datetime
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CheckoutForm
-from django.contrib.sessions.models import Session
+from django.core.exceptions import ObjectDoesNotExist
 
 
 @csrf_exempt
@@ -18,95 +19,44 @@ def store(request):
 # endpoint view: update_item
 @csrf_exempt
 def updateItem(request):
-    response_data = {'message': '', 'cart_total': 0}
+    # Get the product_id and action from the request parameters
+    product_id = request.GET.get('productId')
+    action = request.GET.get('action')
 
-    if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
-        productId = data.get('productId')
-        action = data.get('action')
+    try:
+        # Attempt to retrieve the product by ID
+        product = Product.objects.get(id=product_id)
+    except ObjectDoesNotExist:
+        # Product not found, return an error response
+        return JsonResponse({'error': f'Product not found for ID: {product_id}'}, status=404)
 
-        customer = None
-        order = None
+    # Session management logic
+    session_id = request.session.session_key
+    if session_id is None:
+        request.session.save()
+        session_id = request.session.session_key
 
-        # Check if the user is authenticated
-        if request.user.is_authenticated:
-            try:
-                customer = request.user.customer
-            except Customer.DoesNotExist:
-                customer = None
-            order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        else:
-            # For non-authenticated users, create an order without associating it with a customer
-            # and filter based on session or other unique identifier
-            session_id = request.session.session_key
-            order, created = Order.objects.get_or_create(session_id=session_id, complete=False)
+    # Retrieve or create an order for the session
+    order, created = Order.objects.get_or_create(session_id=session_id, complete=False)
 
-        product = Product.objects.get(id=productId)
+    # Retrieve or create an order item for the product
+    order_item, created = OrderItem.objects.get_or_create(order=order, product=product)
 
-        # Define orderItem before accessing its properties
-        orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+    # Update the quantity based on the action
+    if action == 'add':
+        order_item.quantity += 1
+    elif action == 'remove':
+        order_item.quantity -= 1
 
-        if action == 'add':
-            orderItem.quantity += 1
-        elif action == 'remove':
-            orderItem.quantity -= 1
+    # Save the order item
+    order_item.save()
 
-        if orderItem.quantity <= 0:
-            orderItem.delete()
-        else:
-            # Save the orderItem
-            orderItem.save()
+    # If the quantity reaches 0, delete the order item
+    if order_item.quantity <= 0:
+        order_item.delete()
 
-        # Check if the order is empty (no items left)
-        if order and order.orderitem_set.count() == 0:
-            order.complete = True
-            order.save()
-
-        # Calculate the updated cart total and quantity
-        cart_items = order.orderitem_set.all()
-        cart_total = sum(item.product.price * item.quantity for item in cart_items)
-        cart_quantity = sum(item.quantity for item in cart_items)
-
-        # Calculate the updated total price for the specific item
-        item_total_price = product.price * orderItem.quantity
-
-        # Include the cart_total, cart_quantity, and item_total_price in the response
-        response_data['cart_total'] = cart_total
-        response_data['cart_quantity'] = cart_quantity
-        response_data['item_total_price'] = item_total_price
-        response_data['quantity'] = orderItem.quantity
-
-    elif request.method == 'GET':
-        # Handle GET request to calculate and return the cart total
-        customer = None
-        order = None
-
-        # Check if the user is authenticated
-        if request.user.is_authenticated:
-            try:
-                customer = request.user.customer
-            except Customer.DoesNotExist:
-                customer = None
-            order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        else:
-            # For non-authenticated users, create an order without associating it with a customer
-            order, created = Order.objects.get_or_create(customer=None, complete=False)
-
-        if order:
-            cart_items = order.orderitem_set.all()
-            cart_total = sum(item.product.price * item.quantity for item in cart_items)
-            cart_quantity = sum(item.quantity for item in cart_items)
-
-            response_data['cart_total'] = cart_total
-            response_data['cart_quantity'] = cart_quantity
-
-    else:
-        response_data['message'] = 'Invalid request method'
-
-        # Set cart_total to 0 for non-POST and non-GET requests
-        response_data['cart_total'] = 0
-
-    return JsonResponse(response_data)
+    # Return a success response
+    return JsonResponse({'message': 'Item was updated'})
 
 # endpoint view: process_order
 @csrf_exempt
@@ -157,20 +107,29 @@ def processOrder(request):
 
 @csrf_exempt
 def cart(request):
+    session_id = request.session.session_key  # Get the session ID
+    if session_id is None:
+        request.session.save()  # Generate a new session key
     if request.user.is_authenticated:
+        # Authenticated user
         try:
             customer = request.user.customer
         except Customer.DoesNotExist:
             customer = None
-
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
+            order, created = Order.objects.get_or_create(customer=customer, complete=False)
+            items = order.orderitem_set.all()
     else:
+        # Non-authenticated user
         items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0}
+        order, created = Order.objects.get_or_create(session_id=session_id, complete=False)
 
-    context = {"items": items, "order": order}
-    return render(request, "cart.html", context)
+    context = {
+        'order': order,
+        'items': items,
+    }
+    return render(request, 'cart.html', context)
+    
+    # ... rest of your view ...
 
 @csrf_exempt
 def checkout(request):
