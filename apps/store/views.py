@@ -105,32 +105,54 @@ def processOrder(request):
 
     return JsonResponse({'message': 'Payment completed'})
 
-@csrf_exempt
 def cart(request):
-    session_id = request.session.session_key  # Get the session ID
-    if session_id is None:
-        request.session.save()  # Generate a new session key
+    
     if request.user.is_authenticated:
-        # Authenticated user
-        try:
-            customer = request.user.customer
-        except Customer.DoesNotExist:
-            customer = None
-            order, created = Order.objects.get_or_create(customer=customer, complete=False)
-            items = order.orderitem_set.all()
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items
     else:
-        # Non-authenticated user
+        try:
+            cart = json.loads(request.COOKIES['cart'])
+        except:
+            cart = {}
+        print('Cart:', cart)
         items = []
-        order, created = Order.objects.get_or_create(session_id=session_id, complete=False)
+        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
+        cartItems = order['get_cart_items']
 
-    context = {
-        'order': order,
-        'items': items,
-    }
+        for i in cart:
+            try:
+                cartItems += cart[i]["quantity"]
+                
+                product = Product.objects.get(id=i)
+                total = (product.price * cart[i]["quantity"])
+
+                order['get_cart_total'] += total
+                order['get_cart_items'] += cart[i]["quantity"]
+
+                item = {
+                    'product':{
+                        'id': product.id,
+                        'name':product.name,
+                        'price':product.price,
+                        'imageURL':product.imageURL
+                    },
+                    'quantity':cart[i]['quantity'],
+                    'get_total':total,
+                    }
+                items.append(item)
+
+                if product.digital == False:
+                    order['shipping'] = True
+            except:
+                pass
+
+            
+    context = {'order': order, 'items': items, 'cartItems':cartItems}
     return render(request, 'cart.html', context)
     
-    # ... rest of your view ...
-
 @csrf_exempt
 def checkout(request):
     # Instantiate the form
