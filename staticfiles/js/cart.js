@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateCartTotal() {
         console.log('Updating cart total...');
         var url = "update_item/";
+
     
         fetch(url, {
             method: 'GET',
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (typeof user !== "undefined") {
                 if (user === "AnonymousUser") {
-                    console.log("Not logged in");
+                    
                 } else {
                     updateUserOrder(productId, action);
                 }
@@ -56,8 +57,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function addCookieItem(productId, action){
+        console.log("Not logged in");
+    }
+
     function updateUserOrder(productId, action) {
-        var url = 'update_item/';
+        var url = "update_item/";
+
 
         fetch(url, {
             method: 'POST',
