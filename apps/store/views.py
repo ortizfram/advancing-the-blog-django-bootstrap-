@@ -6,13 +6,17 @@ import datetime
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CheckoutForm
+from django.contrib.sessions.models import Session
 
+
+@csrf_exempt
 def store(request):
     products = Product.objects.all()
-    context = {'products':products}
+    context = {'products': products}
     return render(request, "store.html", context)
 
 # endpoint view: update_item
+@csrf_exempt
 def updateItem(request):
     response_data = {'message': '', 'cart_total': 0}
 
@@ -21,71 +25,81 @@ def updateItem(request):
         productId = data.get('productId')
         action = data.get('action')
 
+        customer = None
+        order = None
+
+        # Check if the user is authenticated
         if request.user.is_authenticated:
             try:
                 customer = request.user.customer
             except Customer.DoesNotExist:
                 customer = None
             order, created = Order.objects.get_or_create(customer=customer, complete=False)
-
-            product = Product.objects.get(id=productId)
-
-            # Define orderItem before accessing its properties
-            orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
-
-            if action == 'add':
-                orderItem.quantity += 1
-            elif action == 'remove':
-                orderItem.quantity -= 1
-
-            if orderItem.quantity <= 0:
-                orderItem.delete()
-            else:
-                # Save the orderItem
-                orderItem.save()
-
-            # Check if the order is empty (no items left)
-            if order.orderitem_set.count() == 0:
-                order.complete = True
-                order.save()
-
-            # Calculate the updated cart total and quantity
-            cart_items = order.orderitem_set.all()
-            cart_total = sum(item.product.price * item.quantity for item in cart_items)
-            cart_quantity = sum(item.quantity for item in cart_items)
-
-            # Calculate the updated total price for the specific item
-            item_total_price = product.price * orderItem.quantity
-
-            # Include the cart_total, cart_quantity, and item_total_price in the response
-            response_data['cart_total'] = cart_total
-            response_data['cart_quantity'] = cart_quantity
-            response_data['item_total_price'] = item_total_price
-            response_data['quantity'] = orderItem.quantity
-
         else:
-            customer = None
-            response_data['message'] = 'User is not authenticated'
+            # For non-authenticated users, create an order without associating it with a customer
+            # and filter based on session or other unique identifier
+            session_id = request.session.session_key
+            order, created = Order.objects.get_or_create(session_id=session_id, complete=False)
+
+        product = Product.objects.get(id=productId)
+
+        # Define orderItem before accessing its properties
+        orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+        if action == 'add':
+            orderItem.quantity += 1
+        elif action == 'remove':
+            orderItem.quantity -= 1
+
+        if orderItem.quantity <= 0:
+            orderItem.delete()
+        else:
+            # Save the orderItem
+            orderItem.save()
+
+        # Check if the order is empty (no items left)
+        if order and order.orderitem_set.count() == 0:
+            order.complete = True
+            order.save()
+
+        # Calculate the updated cart total and quantity
+        cart_items = order.orderitem_set.all()
+        cart_total = sum(item.product.price * item.quantity for item in cart_items)
+        cart_quantity = sum(item.quantity for item in cart_items)
+
+        # Calculate the updated total price for the specific item
+        item_total_price = product.price * orderItem.quantity
+
+        # Include the cart_total, cart_quantity, and item_total_price in the response
+        response_data['cart_total'] = cart_total
+        response_data['cart_quantity'] = cart_quantity
+        response_data['item_total_price'] = item_total_price
+        response_data['quantity'] = orderItem.quantity
 
     elif request.method == 'GET':
         # Handle GET request to calculate and return the cart total
+        customer = None
+        order = None
+
+        # Check if the user is authenticated
         if request.user.is_authenticated:
             try:
                 customer = request.user.customer
             except Customer.DoesNotExist:
                 customer = None
-
             order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        else:
+            # For non-authenticated users, create an order without associating it with a customer
+            order, created = Order.objects.get_or_create(customer=None, complete=False)
+
+        if order:
             cart_items = order.orderitem_set.all()
             cart_total = sum(item.product.price * item.quantity for item in cart_items)
             cart_quantity = sum(item.quantity for item in cart_items)
 
             response_data['cart_total'] = cart_total
             response_data['cart_quantity'] = cart_quantity
-        else:
-            response_data['message'] = 'User is not authenticated'
-            order = None
-            items = []
+
     else:
         response_data['message'] = 'Invalid request method'
 
@@ -141,7 +155,7 @@ def processOrder(request):
 
     return JsonResponse({'message': 'Payment completed'})
 
-
+@csrf_exempt
 def cart(request):
     if request.user.is_authenticated:
         try:
@@ -154,10 +168,11 @@ def cart(request):
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
-    
+
     context = {"items": items, "order": order}
     return render(request, "cart.html", context)
 
+@csrf_exempt
 def checkout(request):
     # Instantiate the form
     checkout_form = CheckoutForm()
@@ -179,7 +194,5 @@ def checkout(request):
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
         shipping_required = False  # Set to False for anonymous users
-    context = {"items": items, "order": order, "shipping_required": shipping_required, "checkout_form": checkout_form,}
+    context = {"items": items, "order": order, "shipping_required": shipping_required, "checkout_form": checkout_form}
     return render(request, "checkout.html", context)
-
-
