@@ -42,28 +42,25 @@ document.addEventListener("DOMContentLoaded", function () {
             event.preventDefault();
             var productId = this.dataset.product;
             var action = this.dataset.action;
+            console.log('productId:', productId,"action:", action);
 
-            console.log('Button clicked:', productId, action);
-
-            if (typeof user !== "undefined") {
-                if (user === "AnonymousUser") {
-                    
-                } else {
-                    updateUserOrder(productId, action);
-                }
+            console.log("USER:", user)
+            if (user === "AnonymousUser") {
+                addCookieItem()
             } else {
-                console.log("USER variable is undefined.");
+                updateUserOrder(productId, action);
             }
         });
     }
 
     function addCookieItem(productId, action){
-        console.log("Not logged in");
+        console.log("Not logged in..");
     }
 
     function updateUserOrder(productId, action) {
-        var url = "update_item/";
+        console.log("User is logged in, sending data...")
 
+        var url = "update_item/";
 
         fetch(url, {
             method: 'POST',
