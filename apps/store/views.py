@@ -8,13 +8,18 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CheckoutForm
 from django.core.exceptions import ObjectDoesNotExist
+from .utils import cookieCart,cartData
 
 
-@csrf_exempt
 def store(request):
+
+    data = cartData(request)
+    cartItems = data['cartItems']
+
     products = Product.objects.all()
-    context = {'products': products}
+    context = {'products': products,'cartItems':cartItems}
     return render(request, "store.html", context)
+
 
 # endpoint view: update_item
 @csrf_exempt
@@ -107,73 +112,22 @@ def processOrder(request):
 
 def cart(request):
     
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        try:
-            cart = json.loads(request.COOKIES['cart'])
-        except:
-            cart = {}
-        print('Cart:', cart)
-        items = []
-        order = {'get_cart_total':0, 'get_cart_items':0, 'shipping':False}
-        cartItems = order['get_cart_items']
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
 
-        for i in cart:
-            try:
-                cartItems += cart[i]["quantity"]
-                
-                product = Product.objects.get(id=i)
-                total = (product.price * cart[i]["quantity"])
-
-                order['get_cart_total'] += total
-                order['get_cart_items'] += cart[i]["quantity"]
-
-                item = {
-                    'product':{
-                        'id': product.id,
-                        'name':product.name,
-                        'price':product.price,
-                        'imageURL':product.imageURL
-                    },
-                    'quantity':cart[i]['quantity'],
-                    'get_total':total,
-                    }
-                items.append(item)
-
-                if product.digital == False:
-                    order['shipping'] = True
-            except:
-                pass
-
-            
     context = {'order': order, 'items': items, 'cartItems':cartItems}
     return render(request, 'cart.html', context)
     
-@csrf_exempt
-def checkout(request):
-    # Instantiate the form
-    checkout_form = CheckoutForm()
 
-    if request.user.is_authenticated:
-        try:
-            customer = request.user.customer
-        except Customer.DoesNotExist:
-            customer = None
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-        # Debugging: Print the values of item.product.digital for each item
-        for item in items:
-            print(f"Product {item.product.name}, Digital: {item.product.digital}")
-        # Check if any product in the order needs shipping
-        shipping_required = any(item.product.digital is False for item in items)
-        print("Shipping Required:", shipping_required)
-    else:
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0}
-        shipping_required = False  # Set to False for anonymous users
-    context = {"items": items, "order": order, "shipping_required": shipping_required, "checkout_form": checkout_form}
+def checkout(request):
+
+    checkout_form = CheckoutForm()
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
+    
+    context = {"items": items, "order": order, "cartItems":cartItems, "checkout_form": checkout_form}
     return render(request, "checkout.html", context)
