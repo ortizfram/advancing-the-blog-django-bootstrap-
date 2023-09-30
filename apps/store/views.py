@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from .forms import CheckoutForm
 from django.core.exceptions import ObjectDoesNotExist
-from .utils import cookieCart,cartData
+from .utils import cookieCart,cartData, guestOrder
 
 
 def store(request):
@@ -22,7 +22,6 @@ def store(request):
 
 
 # endpoint view: update_item
-@csrf_exempt
 def updateItem(request):
     # Get the product_id and action from the request parameters
     product_id = request.GET.get('productId')
@@ -64,50 +63,34 @@ def updateItem(request):
     return JsonResponse({'message': 'Item was updated'})
 
 # endpoint view: process_order
-@csrf_exempt
-@login_required
 def processOrder(request):
-    print('Data:', request.body)
     transaction_id = datetime.datetime.now().timestamp()
+    data = json.loads(request.body)
 
-    try:
-        data = json.loads(request.body.decode('utf-8'))
-    except json.JSONDecodeError as e:
-        # Handle invalid JSON data
-        return JsonResponse({'error': 'Invalid JSON data'}, status=400)
-
-    customer = None
-
-    try:
+    if request.user.is_authenticated:
         customer = request.user.customer
-    except Customer.DoesNotExist:
-        customer = Customer.objects.create(user=request.user, name=request.user.username, email=request.user.email)
-        print(f"Created customer profile for {request.user.username}")
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        
+    else: 
+        customer, order = guestOrder(request, data) # utils.py
+            
 
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id
 
-    # Check if 'form' key exists in the data dictionary
-    if 'form' in data:
-        form_data = data['form']
-        total = form_data.get('total', '0.00')
-        total = float(total)  # Convert total to float here
+    if total == float(order.get_cart_total):
+        order.complete = True
+    order.save()
 
-        order.transaction_id = transaction_id
-
-        if total == order.get_cart_total:
-            order.complete = True
-        order.save()
-
-    if 'shipping' in data and isinstance(data['shipping'], dict):
+    if order.shipping == True :
         ShippingAddress.objects.create(
             customer=customer,
             order=order,
-            address=data['shipping'].get('address', ''),
-            country=data['shipping'].get('country', ''),
-            state=data['shipping'].get('state', ''),
-            zipcode=data['shipping'].get('zipcode', ''),
+            address=data['shipping']['address'],
+            country=data['shipping']['country'],
+            state=data['shipping']['state'],
+            zipcode=data['shipping']['zipcode'],
         )
-
     return JsonResponse({'message': 'Payment completed'})
 
 def cart(request):
