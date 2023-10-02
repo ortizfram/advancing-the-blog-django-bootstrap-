@@ -96,7 +96,6 @@ def updateItem(request):
 
 # endpoint view: process_order
 @csrf_exempt
-@login_required
 def processOrder(request):
     print('Data:', request.body)
     transaction_id = datetime.datetime.now().timestamp()
