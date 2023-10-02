@@ -18,7 +18,7 @@
 
             <table class='table'>
                 <tr>
-                    <th><h5>Items: <strong><span id="cart-items"></span></strong></h5></th>
+                    <th><h5>Items: <strong><span id="cart-items">{{ order.get_cart_items }}</span></strong></h5></th>
                     <th><h5>Total: $<span id="cart-total">{{ order.get_cart_total|floatformat:2 }}</span></h5></th>
                     <th>
                         <a style="float:right; margin:5px" href="{% url 'store:checkout' %}" class='btn btn-success'>Checkout</a>
@@ -54,7 +54,6 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-
             </div>
         </div>
     </div>

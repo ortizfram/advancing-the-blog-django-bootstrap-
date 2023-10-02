@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.sessions.models import Session  # Import the Session model
 
 # Create your models here.
 class Customer(models.Model):
@@ -17,7 +18,7 @@ class Customer(models.Model):
         return self.name
     
 class Product(models.Model):
-    price = models.FloatField()
+    price = models.DecimalField(max_digits=7,decimal_places=2)
     name = models.CharField(max_length=200, 
                             null=True)
     digital = models.BooleanField(default=False,
@@ -39,14 +40,11 @@ class Product(models.Model):
         return url
     
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, 
-                                 on_delete=models.SET_NULL,
-                                 null=True, 
-                                 blank=True)
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True, blank=True)
+    session_id = models.CharField(max_length=32, null=True, blank=True)  # Add this field for session ID
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False)
-    transaction_id = models.CharField(max_length=100, 
-                                      null=True)
+    transaction_id = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f"Order ID: {self.id}, Customer: {self.customer.name if self.customer else 'N/A'}"
@@ -62,6 +60,15 @@ class Order(models.Model):
         orderitems = self.orderitem_set.all()
         total = sum([item.quantity for item in orderitems])
         return total
+
+    def save(self, *args, **kwargs):
+        # Check if this order is complete before saving
+        if self.complete:
+            # Mark all other orders for this customer as complete
+            if self.customer:
+                Order.objects.filter(customer=self.customer, complete=False).exclude(id=self.id).update(complete=True)
+        super(Order, self).save(*args, **kwargs)
+
     
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
