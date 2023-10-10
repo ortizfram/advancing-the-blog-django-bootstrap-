@@ -19,6 +19,7 @@ urlpatterns = [
     path("comments/", include("apps.comments.urls")),
     path("posts/", include("apps.posts.urls"), name='posts'),
     path("store/", include("apps.store.urls"), name='store'),
+    path("", include("apps.landing.urls"), name='home'),
 ]
 
 # for online static
