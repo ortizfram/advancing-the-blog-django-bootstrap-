@@ -26,18 +26,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # third party
     'crispy_forms',
     "crispy_bootstrap5",
     'markdown_deux',
-    'pagedown', # markdown editor
+    'pagedown', 
 
-    # local
+    # own
+    'apps.accounts.apps.UsersConfig',
     'apps.comments',
     'apps.posts',
     'apps.store',
     'apps.landing',
-    'apps.accounts',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -74,41 +75,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # or 'cache' for caching sessions
-SESSION_COOKIE_NAME = 'non_auth_cookie_583'  # Replace with your chosen name
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
-AUTH_USER_MODEL = 'accounts.UserBase'
-LOGIN_URL='/login/'
-
-ROOT_URLCONF = 'core.urls'
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'apps.store.context_processors.cart_count',
-            ],
-        },
-    },
-]
-
-WSGI_APPLICATION = 'core.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -116,53 +82,49 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
+TEMPLATES = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Include your template directory path here
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
     },
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # or 'cache' for caching sessions
+SESSION_COOKIE_NAME = 'non_auth_cookie_583'  # Replace with your chosen name
 
-LANGUAGE_CODE = 'en-us'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'apps.accounts.CustomAccountManager',
+]
+AUTH_USER_MODEL = 'accounts.UserBase'
+LOGIN_URL='/login/'
 
-TIME_ZONE = 'UTC'
+ROOT_URLCONF = 'core.urls'
 
 USE_I18N = True
 
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-# Static files (CSS, JavaScript, static images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "staticfiles"),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "static_cdn")
 
-# Media files (user-uploaded files like images)
+
 MEDIA_ROOT = os.path.join(BASE_DIR,"media_cdn")
 MEDIA_URL = "/media/"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

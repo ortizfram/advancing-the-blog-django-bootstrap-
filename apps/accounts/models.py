@@ -39,13 +39,16 @@ class CustomAccountManager(BaseUserManager):
         if email is None:
             email = kwargs.get(self.model.EMAIL_FIELD)
         if email is None or password is None:
-            return
+            return None
         try:
             user = self.get(email=email)
         except self.model.DoesNotExist:
-            return
+            return None
         if user.check_password(password) and self.user_can_authenticate(user):
             return user
+
+
+
 
 
 class UserBase(AbstractBaseUser, PermissionsMixin): #apps.accounts.models.UserBase
