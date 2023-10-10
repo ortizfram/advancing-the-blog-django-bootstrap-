@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render
 
 def register(request):
-    return render(request, "accounts/register.html")
+    form = UserCreationForm()
+    return render(request, "accounts/register.html", {'form':form})
