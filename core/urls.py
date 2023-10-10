@@ -9,13 +9,16 @@ from apps.accounts.views import (
 )
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    
     # user registration
     path("login/", login_view, name='login'),
     path("logout/", logout_view, name='logout'),
     path("register/", register_view, name='register'),
+    # path("account/", register_view, name='account'),
+
 
     # apps
-    path('admin/', admin.site.urls),
     path("comments/", include("apps.comments.urls")),
     path("posts/", include("apps.posts.urls"), name='posts'),
     path("store/", include("apps.store.urls"), name='store'),

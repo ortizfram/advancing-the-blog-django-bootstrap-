@@ -3,5 +3,9 @@
 {% load markdown_deux_tags %}
 
 {% block content %}
-Landing Page
+{% if user.is_authenticated %}
+  <h1>Hello, {{ user.user_name }}</h1>
+{% else %}
+  <p>Welcome to the landing page.</p>
+{% endif %}
 {% endblock content %}

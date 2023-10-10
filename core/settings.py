@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'apps.posts',
     'apps.store',
     'apps.landing',
+    'apps.accounts',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -74,12 +75,15 @@ MIDDLEWARE = [
 ]
 
 
-
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # or 'cache' for caching sessions
 SESSION_COOKIE_NAME = 'non_auth_cookie_583'  # Replace with your chosen name
 
-
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+AUTH_USER_MODEL = 'accounts.UserBase'
 LOGIN_URL='/login/'
+
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [

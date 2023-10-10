@@ -5,7 +5,7 @@ from django.contrib.sessions.models import Session  # Import the Session model
 
 # Create your models here.
 class Customer(models.Model):
-    user = models.OneToOneField(User, 
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, 
                                 on_delete=models.CASCADE, 
                                 null=True, 
                                 blank=True)
