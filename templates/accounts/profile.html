@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %} 
+{% load markdown_deux_tags %}
+
+{% block content %}
+
+  <div class="container">
+    <legend class="border-bottom mb-4">Profile Details</legend>
+    <div class="container border border-1 border-rounded-4">
+        <h4><span class='text-muted'>username:</span> {{ user.username }}</h4>
+        <h4><span class='text-muted'>email:</span> {{ user.email }}</h4>
+    </div>
+  </div>
+
+{% endblock content %}

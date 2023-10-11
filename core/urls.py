@@ -3,22 +3,24 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from apps.accounts import views
+from django.contrib.auth import views as auth_view
 
 urlpatterns = [
     # admin panel
     path('admin/', admin.site.urls),
     
     # authentication 
-    #path("login/", login_view, name='login'),
-    #path("logout/", logout_view, name='logout'),
     path("register/", views.register , name='register'),
+    path("profile/", views.profile , name='profile'),
+    path("login/", auth_view.LoginView.as_view(template_name='accounts/login.html'), name='login'),
+    path("logout/", auth_view.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
 
 
     # apps
     path("comments/", include("apps.comments.urls")),
     path("posts/", include("apps.posts.urls"), name='posts'),
     path("store/", include("apps.store.urls"), name='store'),
-    path("", include("apps.landing.urls"), name='home'),
+    path("", include("apps.landing.urls")),
 ]
 
 # for online static

@@ -1,17 +1,12 @@
 from pathlib import Path
 import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-^6zd(_j43e=7s91xq$6te$7qok&kh2l8yg5j71+zi*=#tzr@sx'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -42,7 +37,6 @@ INSTALLED_APPS = [
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
-
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MARKDOWN_DEUX_EXTENSIONS = [
@@ -102,12 +96,9 @@ TEMPLATES = [
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # or 'cache' for caching sessions
 SESSION_COOKIE_NAME = 'non_auth_cookie_583'  # Replace with your chosen name
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'apps.accounts.CustomAccountManager',
-]
-AUTH_USER_MODEL = 'accounts.UserBase'
-LOGIN_URL='/login/'
+
+LOGIN_URL= '/login/'
+LOGIN_REDIRECT_URL= '/'
 
 ROOT_URLCONF = 'core.urls'
 
