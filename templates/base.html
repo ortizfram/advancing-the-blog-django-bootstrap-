@@ -87,7 +87,9 @@
 
     <!--load user var js-->
     <script type='text/javascript'>
-      var user = '{{request.user}}'
+      {% with user_username=request.user.username %}
+        var user = '{{ user_username }}';
+      {% endwith %}
     </script>
 
 

@@ -6,9 +6,14 @@
 
   <div class="container">
     <legend class="border-bottom mb-4">Profile Details</legend>
+    <span class='btn btn-outline-primary btn-sm mb-4 underline'><a href="{% url 'profile_update' %}"><i class="fas fa-edit"></i> Edit</a></span>
     <div class="container border border-1 border-rounded-4">
+        <img src="{{ user.profile_image.url }}" alt="profile image"/>
         <h4><span class='text-muted'>username:</span> {{ user.username }}</h4>
         <h4><span class='text-muted'>email:</span> {{ user.email }}</h4>
+        <h4><span class='text-muted'>first name:</span> {{ user.first_name }}</h4>
+        <h4><span class='text-muted'>surname:</span> {{ user.surname }}</h4>
+        <h4><span class='text-muted'>phone:</span> {{ user.phone }}</h4>
     </div>
   </div>
 
