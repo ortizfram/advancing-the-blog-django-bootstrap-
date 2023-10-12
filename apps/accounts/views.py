@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm, ProfileUsernameForm
+from .forms import ProfileUpdateForm, ProfileUsernameForm
 from .models import Profile
 from django.contrib.auth import login
 from .forms import EmailUpdateForm
@@ -44,7 +44,7 @@ def profile(request):
 def profile_update(request):
     """Request user and user Profile, if does not exist, create one
     based on Profile model that takes user. Combines UserRegisterForm and
-    ProfileForm, if the form has changed save, alert, redirect."""
+    ProfileUpdateForm, if the form has changed save, alert, redirect."""
     user = request.user
     try:
         profile = user.profile
@@ -52,10 +52,11 @@ def profile_update(request):
         profile = Profile(user=user)
 
     if request.method == "POST":
-        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=user)
 
         if profile_form.is_valid():
             profile_form_has_changed = profile_form.has_changed()
+            login(request, user)
 
             if profile_form_has_changed:
                 profile_form.save()
@@ -69,7 +70,7 @@ def profile_update(request):
             messages.error(request, "Please correct the errors below.")
 
     else:
-        profile_form = ProfileForm(instance=profile)
+        profile_form = ProfileUpdateForm(instance=profile)
 
     return render(
         request, "accounts/profile_update.html", {"profile_form": profile_form}

@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Profile
 from .models import CustomUser
 
 class UserRegisterForm(UserCreationForm):
@@ -12,11 +11,10 @@ class UserRegisterForm(UserCreationForm):
         model = CustomUser  
         fields = ['username','email','password1','password2']
 
-class ProfileForm(forms.ModelForm):
+class ProfileUpdateForm(forms.ModelForm):
     """Update fileds once user is already registered, except username"""
-
     class Meta:
-        model = Profile
+        model = CustomUser
         fields = ['profile_image', 'first_name', 'surname', 'phone']
 
 class ProfileUsernameForm(UserCreationForm):
