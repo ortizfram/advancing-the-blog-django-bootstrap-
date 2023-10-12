@@ -1,24 +1,53 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %} 
+{% load crispy_forms_tags %}
+{% load static %}
 {% load markdown_deux_tags %}
 
 {% block content %}
-
-  <div class="container">
-    <legend class="border-bottom mb-4">Profile Details</legend>
-    <span class='btn btn-outline-primary btn-sm mb-4 underline'><a href="{% url 'profile_update' %}"><i class="fas fa-edit"></i> Edit</a></span>
-    <div class="container border border-1 border-rounded-4">
+<div class="container">
+  <div class="profile-header">
+    <legend class="border-bottom mb-4 profile-title">Profile Details</legend>
+    <a class="edit-profile-link" href="{% url 'profile_update' %}">
+      <i class="fas fa-edit"></i> Edit
+    </a>
+  </div>
+  <div class="row align-items-center">
+    <div class="col-md-4 col-sm-12 text-center mx-auto"> <!-- Center on small and medium screens -->
+      <div class="circular-profile-image shadow circular-shadow">
         {% if user.profile_image %}
-        <img src="{{ user.profile_image.url }}" alt="profile image"/>
+        <img src="{{ user.profile_image.url }}" alt="profile image" class="img-fluid rounded-circle" />
         {% else %}
-        <p>No profile image available.</p>
+        <div class="default-profile-image text-light">
+          <span style="font-size: 100px;">&#128060;</span>
+        </div>
         {% endif %}
-        <h4><span class='text-muted'>username:</span> {{ user.username }}</h4>
-        <h4><span class='text-muted'>email:</span> {{ user.email }}</h4>
-        <h4><span class='text-muted'>first name:</span> {{ user.first_name }}</h4>
-        <h4><span class='text-muted'>surname:</span> {{ user.surname }}</h4>
-        <h4><span class='text-muted'>phone:</span> {{ user.phone }}</h4>
+
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="profile-info">
+        <div class="profile-field">
+          <h3 class="field-label">Username:</h3>
+          <span class="field-value">{{ user.username }}</span>
+        </div>
+        <div class="profile-field">
+          <h3 class="field-label">Email:</h3>
+          <span class="field-value">{{ user.email }}</span>
+        </div>
+        <div class="profile-field">
+          <h3 class="field-label">First Name:</h3>
+          <span class="field-value">{{ user.first_name }}</span>
+        </div>
+        <div class="profile-field">
+          <h3 class="field-label">Surname:</h3>
+          <span class="field-value">{{ user.surname }}</span>
+        </div>
+        <div class="profile-field">
+          <h3 class="field-label">Phone:</h3>
+          <span class="field-value">{{ user.phone }}</span>
+        </div>
+      </div>
     </div>
   </div>
-
+</div>
 {% endblock content %}
