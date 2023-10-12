@@ -4,6 +4,7 @@ from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm, ProfileUsernameForm
 from .models import Profile
+from .forms import EmailUpdateForm
 
 
 def register(request):
@@ -88,3 +89,23 @@ def profile_update_username(request):
     return render(
         request, "accounts/profile_update_username.html", {"user_form": user_form}
     )
+
+
+@login_required
+def email_update(request):
+    if request.method == "POST":
+        email_form = EmailUpdateForm(request.POST)
+
+        if email_form.is_valid():
+            new_email = email_form.cleaned_data["new_email"]
+            request.user.email = new_email
+            request.user.save()
+
+            messages.success(request, "Your email address has been updated.")
+            return redirect("profile")
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        email_form = EmailUpdateForm()
+
+    return render(request, "accounts/email_update.html", {"email_form": email_form})

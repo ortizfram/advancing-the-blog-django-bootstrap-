@@ -8,6 +8,7 @@
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Edit Profile</legend>
             <p><span>Username:</span> {{user.username}}<span class='btn btn-outline-primary btn-sm ms-4 mb-4 underline'><a href="{% url 'profile_update_username' %}"> <i class="fas fa-edit"></i> Edit username</a></span></p>
+            <p><span>Email:</span> {{user.email}}<span class='btn btn-outline-primary btn-sm ms-4 mb-4 underline'><a href="{% url 'email_update' %}"> <i class="fas fa-edit"></i> Edit Email</a></span></p>
             {{ profile_form|crispy }}
         </fieldset>
         <div class="form-group" id="signup-button">

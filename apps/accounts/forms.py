@@ -13,14 +13,16 @@ class UserRegisterForm(UserCreationForm):
 
 class ProfileForm(forms.ModelForm):
     """Update fileds once user is already registered, except username"""
-    email = forms.EmailField()
 
     class Meta:
         model = Profile
-        fields = ['email','profile_image', 'first_name', 'surname', 'phone']
+        fields = ['profile_image', 'first_name', 'surname', 'phone']
 
 class ProfileUsernameForm(UserCreationForm):
     """Update just username, to prevent saving error of username already in use"""
     class Meta:
         model = User
         fields = ['username','password1','password2']
+
+class EmailUpdateForm(forms.Form):
+    new_email = forms.EmailField()

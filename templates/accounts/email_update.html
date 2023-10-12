@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+{% load crispy_forms_tags %} 
+
+<div class="container">
+    <form method="post">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Update Email</legend>
+            {{ email_form|crispy }}
+        </fieldset>
+        <div class="form-group" id="email-update-button">
+            <button type="submit" class="btn btn-info">Update Email</button>
+            <button type="button" class="btn btn-danger"><a href="{% url 'profile' %}">Cancel</a></button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
