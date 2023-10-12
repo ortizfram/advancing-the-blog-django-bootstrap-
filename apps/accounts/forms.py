@@ -2,13 +2,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from .models import Profile
+from .models import CustomUser
 
 class UserRegisterForm(UserCreationForm):
     """Only for user registration"""
     email = forms.EmailField()
 
     class Meta:
-        model = User
+        model = CustomUser  
         fields = ['username','email','password1','password2']
 
 class ProfileForm(forms.ModelForm):
@@ -21,7 +22,7 @@ class ProfileForm(forms.ModelForm):
 class ProfileUsernameForm(UserCreationForm):
     """Update just username, to prevent saving error of username already in use"""
     class Meta:
-        model = User
+        model = CustomUser  
         fields = ['username','password1','password2']
 
 class EmailUpdateForm(forms.Form):

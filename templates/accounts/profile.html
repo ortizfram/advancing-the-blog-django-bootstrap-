@@ -8,7 +8,11 @@
     <legend class="border-bottom mb-4">Profile Details</legend>
     <span class='btn btn-outline-primary btn-sm mb-4 underline'><a href="{% url 'profile_update' %}"><i class="fas fa-edit"></i> Edit</a></span>
     <div class="container border border-1 border-rounded-4">
+        {% if user.profile_image %}
         <img src="{{ user.profile_image.url }}" alt="profile image"/>
+        {% else %}
+        <p>No profile image available.</p>
+        {% endif %}
         <h4><span class='text-muted'>username:</span> {{ user.username }}</h4>
         <h4><span class='text-muted'>email:</span> {{ user.email }}</h4>
         <h4><span class='text-muted'>first name:</span> {{ user.first_name }}</h4>
