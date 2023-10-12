@@ -79,10 +79,12 @@ def profile_update(request):
 
 @login_required
 def profile_update_username(request):
+    user = request.user
     if request.method == "POST":
         user_form = ProfileUsernameForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
+            login(request, user)
             messages.success(request, "Your username has been updated.")
             return redirect("profile")
         else:
@@ -97,14 +99,15 @@ def profile_update_username(request):
 
 @login_required
 def email_update(request):
+    user = request.user
     if request.method == "POST":
         email_form = EmailUpdateForm(request.POST)
 
         if email_form.is_valid():
-            new_email = email_form.cleaned_data["new_email"]
+            new_email = email_form.cleaned_data["new_email"].lower()
             request.user.email = new_email
             request.user.save()
-
+            login(request, user)
             messages.success(request, "Your email address has been updated.")
             return redirect("profile")
         else:
