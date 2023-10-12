@@ -4,6 +4,7 @@ from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileForm, ProfileUsernameForm
 from .models import Profile
+from django.contrib.auth import login
 from .forms import EmailUpdateForm
 
 
@@ -11,11 +12,13 @@ def register(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get("username")
+            login(request, user)
             messages.success(
                 request, f"Hi {username}, your account was created successfully"
             )
+
             return redirect("/")
     else:
         form = UserRegisterForm()
