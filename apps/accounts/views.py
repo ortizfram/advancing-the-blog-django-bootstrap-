@@ -118,6 +118,7 @@ def email_update(request):
     return render(request, "accounts/email_update.html", {"email_form": email_form})
 
 from django.http import HttpResponseForbidden
+from django.contrib.auth import get_user_model
 
 def is_staff_or_admin(view_func):
     """Custom decorator: for manage_staff_users view"""
@@ -131,4 +132,8 @@ def is_staff_or_admin(view_func):
 @login_required
 @is_staff_or_admin
 def manage_staff_users(request):
-    return render(request, "accounts/admin_and_staff/manage_staff_users.html")
+    """use Django's built-in admin features to display and manage users. 
+    In the view, retrieve the list of users and pass them to the template."""
+    User = get_user_model()
+    users = User.objects.all() #.filter(is_staff=True)
+    return render(request, "accounts/admin_and_staff/manage_staff_users.html", {'users': users})
