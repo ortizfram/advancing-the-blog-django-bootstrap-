@@ -116,3 +116,19 @@ def email_update(request):
         email_form = EmailUpdateForm()
 
     return render(request, "accounts/email_update.html", {"email_form": email_form})
+
+from django.http import HttpResponseForbidden
+
+def is_staff_or_admin(view_func):
+    """Custom decorator: for manage_staff_users view"""
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_staff or request.user.is_superuser:
+            return view_func(request, *args, **kwargs)
+        else:
+            return HttpResponseForbidden("Access denied. You must be a staff member or administrator to access this page.")
+    return _wrapped_view
+
+@login_required
+@is_staff_or_admin
+def manage_staff_users(request):
+    return render(request, "accounts/admin_and_staff/manage_staff_users.html")

@@ -12,6 +12,7 @@ urlpatterns = [
     # authentication 
     path("register/", views.register , name='register'),
     path("profile/", views.profile , name='profile'),
+    path("profile/manage_staff_users/", include("apps.accounts.urls"), name="manage_staff_users"),
     path("profile/update", views.profile_update , name='profile_update'),
     path('profile/update/username/', views.profile_update_username, name='profile_update_username'),
     path('email_update/', views.email_update, name='email_update'),
