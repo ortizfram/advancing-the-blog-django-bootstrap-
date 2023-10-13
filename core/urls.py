@@ -6,7 +6,7 @@ from apps.accounts import views
 from django.contrib.auth import views as auth_view
 
 urlpatterns = [
-    # admin panel
+    # admin panels
     path('admin/', admin.site.urls),
     
     # authentication 
