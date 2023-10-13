@@ -1,6 +1,4 @@
 {% extends "base.html" %}
-{% block head_title %}Admin • Manage Staff Users{% endblock head_title %}<!--Alt + 0149-->
-
 {% block content %}
 {% load crispy_forms_tags %} 
 
@@ -8,14 +6,20 @@
     <legend class="border-bottom mb-4">Manage Staff Users</legend>
 
     {% block search %}
-        <div id="search-bar">
-            <form method="get" action="{% url 'admin:accounts_customuser_changelist' %}">
-                <label for="searchbar">Search:</label>
-                <input type="text" id="searchbar" name="q" value="{{ request.GET.q }}" />
-                <input type="submit" value="Search" />
-            </form>
-        </div>
+    <div id="search-bar">
+        <form method="get" action="{% url 'admin:accounts_customuser_changelist' %}">
+            <label for="searchbar">Search:</label>
+            <input type="text" id="searchbar" name="q" value="{{ request.GET.q }}" />
+            <input type="submit" value="Search" />
+        </form>
+    </div>
     {% endblock %}
+    
+    {% if message %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+    {% endif %}
     
     <table class="table">
         <thead>

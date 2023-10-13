@@ -6,6 +6,7 @@ from .forms import ProfileUpdateForm, ProfileUsernameForm
 from .models import Profile
 from django.contrib.auth import login
 from .forms import EmailUpdateForm
+from django.db.models import Q
 
 
 def register(request):
@@ -117,23 +118,47 @@ def email_update(request):
 
     return render(request, "accounts/email_update.html", {"email_form": email_form})
 
+
 from django.http import HttpResponseForbidden
 from django.contrib.auth import get_user_model
 
+
 def is_staff_or_admin(view_func):
     """Custom decorator: for manage_staff_users view"""
+
     def _wrapped_view(request, *args, **kwargs):
         if request.user.is_staff or request.user.is_superuser:
             return view_func(request, *args, **kwargs)
         else:
-            return HttpResponseForbidden("Access denied. You must be a staff member or administrator to access this page.")
+            return HttpResponseForbidden(
+                "Access denied. You must be a staff member or administrator to access this page."
+            )
+
     return _wrapped_view
+
 
 @login_required
 @is_staff_or_admin
 def manage_staff_users(request):
-    """use Django's built-in admin features to display and manage users. 
-    In the view, retrieve the list of users and pass them to the template."""
     User = get_user_model()
-    users = User.objects.all() #.filter(is_staff=True)
-    return render(request, "accounts/admin_and_staff/manage_staff_users.html", {'users': users})
+    search_query = request.GET.get("q")
+
+    if search_query:
+        search_results = User.objects.filter(
+            Q(username__icontains=search_query)
+            | Q(email__icontains=search_query)
+            | Q(first_name__icontains=search_query)
+            | Q(surname__icontains=search_query)
+        )
+    else:
+        # If no search query, fetch all users
+        search_results = User.objects.all()
+
+    if not search_results:
+        message = "No search results found."
+
+    return render(
+        request,
+        "accounts/admin_and_staff/manage_staff_users.html",
+        {"users": search_results, "message": message if not search_results else ""},
+    )
