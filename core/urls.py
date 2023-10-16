@@ -18,7 +18,12 @@ urlpatterns = [
     path('email_update/', views.email_update, name='email_update'),
     path("login/", auth_view.LoginView.as_view(template_name='accounts/login.html'), name='login'),
     path("logout/", auth_view.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
-
+    
+    # reset password
+    path('reset_password/',auth_view.PasswordResetView.as_view(),name='reset_password'),
+    path('reset_password_sent/',auth_view.PasswordResetDoneView.as_view(),name='password_reset_done'),
+    path('reset/<uidb64>/<token>/',auth_view.PasswordResetConfirmView.as_view(),name='password_reset_confirm'),
+    path('reset_password_complete/',auth_view.PasswordResetCompleteView.as_view(),name='password_reset_complete'),
 
     # apps
     path("comments/", include("apps.comments.urls")),

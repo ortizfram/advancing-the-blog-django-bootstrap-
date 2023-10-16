@@ -1,9 +1,13 @@
 from pathlib import Path
 import os
+import dotenv
+
+dotenv.load_dotenv()
+
+SECRET_KEY =  os.getenv('SECRET_KEY')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-^6zd(_j43e=7s91xq$6te$7qok&kh2l8yg5j71+zi*=#tzr@sx'
 
 DEBUG = True
 
@@ -116,3 +120,14 @@ MEDIA_URL = "/media/"
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#SMTP Configuration
+# email settings for built-in password reset function
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587  #tls
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')#google app_name after 2step verification
+
