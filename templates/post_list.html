@@ -4,10 +4,17 @@
 
 <div class='posts-list-and-pagination py-3'>
    <!-- Search Form -->
-<form method="GET" class="pb-3">
-    <input type="text" name="q" placeholder="Search posts" value="{{ request.GET.q }}">
-    <input type="submit" value="Search">
+   <form method="GET" class="pb-3">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Search posts" value="{{ request.GET.q }}">
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-info">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
 </form>
+
 
 
     <!-- /// POSTS -->

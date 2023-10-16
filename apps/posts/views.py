@@ -101,7 +101,7 @@ def post_list(request): #list items
             Q(title__icontains=query) |
             Q(content__icontains=query) |
             Q(user__first_name__icontains=query) |
-            Q(user__last_name__icontains=query) 
+            Q(user__surname__icontains=query) 
         ).distinct()
     paginator = Paginator(queryset_list, 6)  # Show 6 posts per page.
     page_number = request.GET.get("page")
