@@ -160,11 +160,6 @@
           </li>               
         </ul>
 
-        <!--create post/ item Links-->
-        <div class="justify-content-end ms-auto">
-          
-        </div>
-
 
         <!-- Authenticated User Links -->
         <div class="justify-content-end ms-auto">
@@ -197,8 +192,14 @@
                   {% endif %}
               </li>
                 <li class="nav-item btn ms-lg-3">
-                  <a class="nav-link " href="{% url 'profile' %}"><i class="fas fa-user"></i></a>
-              </li>
+                  <a class="nav-link" href="{% url 'profile' %}">
+                      {% if user.profile_image %}
+                          <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle cover" width="30" height="30">
+                      {% else %}
+                          <i class="fas fa-user"></i>
+                      {% endif %}
+                  </a>
+                </li>
             </ul>
             {% endif %}
         </div>

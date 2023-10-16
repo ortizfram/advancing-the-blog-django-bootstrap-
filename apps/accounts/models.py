@@ -34,6 +34,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+    def get_full_name(self):
+        if self.first_name and self.surname:
+            return f"{self.first_name} {self.surname}"
+        return self.username  # Fallback to the username
+    
     def __str__(self):
         return self.username
 
