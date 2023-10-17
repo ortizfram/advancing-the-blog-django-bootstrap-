@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+
 {% block content %}
 
 <div class='posts-list-and-pagination py-3'>
@@ -40,7 +41,7 @@
                                 <h3 class="card-title"><a class='text-decoration-none fw-bold' href='{{ obj.get_absolute_url }}'>{{ obj.title }}</a></h3>
                             </div>
                             <div class="col-md-4 text-muted">
-                                <p class='font-size-sm'>{{ obj.publish|timesince }}</p>
+                                <p class="font-size-sm">{{ obj.publish|date:"F d, Y" }}</p>
                             </div>
                         </div>
                         {% if obj.user.get_full_name  %}

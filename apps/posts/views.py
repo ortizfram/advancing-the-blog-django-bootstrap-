@@ -24,8 +24,9 @@ from apps.comments.forms import CommentForm
 def post_create(request):
     if not request.user.is_staff or not request.user.is_superuser: # change in /admin/
         raise PermissionDenied
-    # make fields requested or POST
-    form = PostForm(request.POST or None, request.FILES or None) #from forms.py
+    # Set the initial value for 'publish' to today
+    initial_publish_date = timezone.now()
+    form = PostForm(request.POST or None, request.FILES or None, initial={'publish': initial_publish_date})
     if form.is_valid():
         instance = form.save(commit=False)
         instance.save()
@@ -39,8 +40,9 @@ def post_create(request):
 def post_detail(request, slug): # retrieve
     #=> drafts can be seen by 'staff or superuser', and annon only if publish < today. else 404
     instance = get_object_or_404(Post, slug=slug)
-    if instance.draft or instance.publish > timezone.now().date(): 
-        if not request.user.is_staff or not request.user.is_superuser: # change in /admin/
+        # Convert instance.publish to date
+    if instance.draft or instance.publish.date() > timezone.now().date():
+        if not request.user.is_staff or not request.user.is_superuser:
             raise Http404
     # instance.user = request.user #-> require auth to see
     share_string = quote_plus(instance.content)

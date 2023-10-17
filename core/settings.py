@@ -8,6 +8,7 @@ SECRET_KEY =  os.getenv('SECRET_KEY')
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+TIME_ZONE = 'America/Buenos_Aires'
 
 DEBUG = True
 
