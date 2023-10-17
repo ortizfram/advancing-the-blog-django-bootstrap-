@@ -1,0 +1,113 @@
+/* Comment Info Line Styling ===========================================================================*/
+/* (replies, actions) */
+#comment-info-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+/* Reply Info Styling */
+.reply-info {
+  display: flex;
+  align-items: center;
+}
+
+.reply-info span {
+  margin-right: 5px;
+  border-radius: 50%;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.5); /* Transparent background color */
+  color: white;
+  transition: background 0.3s ease-in-out;
+}
+
+/* User Actions Styling */
+.user-actions .delete-comment {
+  text-decoration: none;
+  color: rgba(255, 0, 0, 0.5); /* Muted red color */
+  margin-left: 10px;
+  transition: color 0.3s ease-in-out;
+}
+
+/* Hover Effect on Reply Info */
+#comment-info-line:hover .reply-info span {
+  background: rgba(255, 0, 0, 0.5); /* Red background color on hover */
+  color: white; /* Text color on hover */
+}
+
+/* Hover Effect on Delete Comment */
+#comment-info-line:hover .user-actions .delete-comment {
+  color: red; /* Red color on hover */
+}
+
+/* Blockquote Styling */
+blockquote {
+  margin: 0;
+  padding: 10px;
+  border-left: 2px solid #e1e1e1; /* Left border for blockquote */
+  background-color: #f9f9f9; /* Background color for blockquote */
+  border-radius: 5px;
+  margin-top: 10px;
+  font-style: italic;
+  position: relative; /* Needed for the triangle shape */
+}
+
+/* Pseudo-element for the triangular quote shape */
+blockquote::before {
+  content: " ";
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid #f9f9f9; /* Match the background color */
+  position: absolute;
+  top: -10px;
+  left: 10px;
+}
+
+/* ================================================================================ */
+
+/* Container for New Comment Form */
+#new-comment-form {
+  margin: 20px 0; /* Add spacing around the form */
+  position: relative; /* Make the form a positioned element */
+}
+
+/* Style the Comment Input Field */
+#new-comment-form input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 25px; /* Rounded corners */
+  outline: none;
+}
+
+/* Style the Comment Submit Button */
+#new-comment-form button {
+  background-color: #007bff; /* Blue button background color */
+  color: #fff; /* White button text color */
+  border: none;
+  border-radius: 25px;
+  padding: 10px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute; /* Position the button absolutely */
+  top: 4px; /* Adjust the negative margin to move it inside the form */
+  right: 0; /* Align the button to the right within the form */
+}
+
+/* Hover effect for the Comment Submit Button */
+#new-comment-form button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style the "Paper Plane" icon inside the button */
+#new-comment-form i.fas.fa-paper-plane {
+  margin-left: 0px; /* Add spacing between the button text and the icon */
+}
+
+/* Style the Comment Textarea */
+#new-comment-form textarea {
+  max-height: 50px; /* Adjust the height as needed */
+}

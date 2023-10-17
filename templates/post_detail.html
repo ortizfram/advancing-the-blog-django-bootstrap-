@@ -119,31 +119,34 @@ head_title %} {% block content %}
     </div>
 
     <!--Comments-->
-    <div>
+    <div id='post-comments-container'>
       <hr />
       <p class="lead">Leave a comment :</p>
 
       <!-- New comment form -->
       {% if request.user.is_authenticated %}
-      <form
-        action="{% url 'posts:post_detail' slug=instance.slug %}"
-        method="post"
-      >
-        {% csrf_token %} {{ comment_form|crispy }}
-        <div style="text-align: right">
-          <button
-            type="submit"
-            class="btn btn-primary rounded"
-            style="float: right"
+        <div>
+          <form
+            id="new-comment-form"
+            action="{% url 'posts:post_detail' slug=instance.slug %}"
+            method="post"
           >
-            <i class="fas fa-paper-plane"></i>
-          </button>
+            {% csrf_token %} {{ comment_form|crispy }}
+            <div id="new-comment-form-button">
+              <button
+                type="submit"
+                class="btn btn-primary rounded"
+              >
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+            
+          </form>
+          {% else %}
+          <p class="text-danger">
+            <a href="{% url 'login' %}">You must login to comment</a>
+          </p>
         </div>
-      </form>
-      {% else %}
-      <p class="text-danger">
-        <a href="{% url 'login' %}">You must login to comment</a>
-      </p>
       {% endif %}
 
       <!-- list comments-->
@@ -176,18 +179,22 @@ head_title %} {% block content %}
             <p id='content'>{{ comment.content }}</p>
 
             <div id="comment-info-line">
-                {% comment %} count replies {% endcomment %}
-                {% if comment.children.count > 0 %}
-                {{ comment.children.count }} <i class="fas fa-comment"></i>replies |<!-- Font Awesome chat icon -->
-                {% else %}
-                <i class="fa-brands fa-rocketchat"></i>reply | 
-                {% endif %}
-
-                {% comment %} Manage commet {% endcomment %}
-                {% if request.user == comment.user %}
-                  <a href="{{ comment.get_delete_url }}"><i class="fa-solid fa-x text-danger"></i></a>
-                {% endif %}
-            </div>
+              <div class="reply-info">
+                  {% if comment.children.count > 0 %}
+                      <span>{{ comment.children.count }}</span><i class="fas fa-comment"></i>
+                  {% else %}
+                      <i class="fa-brands fa-rocketchat"></i>
+                  {% endif %}
+              </div>
+              <div class="user-actions">
+                  {% if request.user == comment.user %}
+                      <a href="{{ comment.get_delete_url }}" class="delete-comment">
+                          <i class="fa-solid fa-x text-danger"></i>
+                      </a>
+                  {% endif %}
+              </div>
+          </div>
+            
           </blockquote>
           <hr>
         </div>
