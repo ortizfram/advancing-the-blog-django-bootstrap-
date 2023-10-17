@@ -159,8 +159,8 @@ head_title %} {% block content %}
              {% comment %} first_name surname • @username | {% endcomment %}
             <small>
               {% if comment.user.first_name and comment.user.surname %}
-                <small id='fullname'>
-                  <strong class='text-black'>{{ comment.user.first_name }} {{ comment.user.surname }}</strong>
+                <small class='fullname'>
+                  <strong>{{ comment.user.first_name }} {{ comment.user.surname }}</strong>
                   <small class='text-muted'>@{{ comment.user.username }}</small>
                 </small>
               {% else %}
@@ -176,14 +176,18 @@ head_title %} {% block content %}
               </small>
             </small>
 
-            <p id='content'>{{ comment.content }}</p>
+            <p class='content'>{{ comment.content }}</p>
 
             <div id="comment-info-line">
               <div class="reply-info">
                   {% if comment.children.count > 0 %}
-                      <span>{{ comment.children.count }}<i class="fas fa-comment"></i></span>
+                  <div class="number-comments">
+                    <span>{{ comment.children.count }}<i class="fas fa-comment"></i></span>
+                  </div>
                   {% else %}
-                      <i class="fa-brands fa-rocketchat"></i>
+                  <div class="number-comments">
+                    <i class="fa-brands fa-rocketchat"></i>
+                  </div>
                   {% endif %}
               </div>
               <div class="user-actions">
