@@ -181,7 +181,7 @@ head_title %} {% block content %}
             <div id="comment-info-line">
               <div class="reply-info">
                   {% if comment.children.count > 0 %}
-                      <span>{{ comment.children.count }}</span><i class="fas fa-comment"></i>
+                      <span>{{ comment.children.count }}<i class="fas fa-comment"></i></span>
                   {% else %}
                       <i class="fa-brands fa-rocketchat"></i>
                   {% endif %}
@@ -189,7 +189,7 @@ head_title %} {% block content %}
               <div class="user-actions">
                   {% if request.user == comment.user %}
                       <a href="{{ comment.get_delete_url }}" class="delete-comment">
-                          <i class="fa-solid fa-x text-danger"></i>
+                          <i class="fa-solid fa-x"></i>
                       </a>
                   {% endif %}
               </div>
