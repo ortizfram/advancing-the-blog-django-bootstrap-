@@ -156,7 +156,7 @@ head_title %} {% block content %}
         <div class="comment-box">
           <blockquote class="blockquote">
 
-             {% comment %} first_name surname • @username | {% endcomment %}
+             <!--first_name surname @username | -->
             <small>
               {% if comment.user.first_name and comment.user.surname %}
                 <small class='fullname'>
@@ -170,7 +170,7 @@ head_title %} {% block content %}
               {% endif %}
 
               
-              {% comment %} timesince {% endcomment %}
+              <!-- published timesince -->
               <small id='published' class="text-muted">
                   • {{ comment.timestamp|timesince }} ago
               </small>
@@ -197,7 +197,7 @@ head_title %} {% block content %}
                       </a>
                   {% endif %}
               </div>
-          </div>
+            </div>
             
           </blockquote>
           <hr>
