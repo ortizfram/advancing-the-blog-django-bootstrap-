@@ -10,7 +10,7 @@
 
 <div class="col-md-8 mx-auto py-5">
 
-    <h2>Confirm Delete</h2>
+    <h2>Comment Confirm Delete</h2>
     <form method="POST" action="{% url 'comments:delete' comment.id %}"> {% csrf_token %}
         <p>Are you sure you want to delete: {{ comment.content }}</p>
 

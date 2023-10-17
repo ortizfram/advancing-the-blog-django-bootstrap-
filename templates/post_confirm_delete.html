@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="col-md-8 mx-auto py-5">
+    <h2>Confirm Delete Post</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <p>Are you sure you want to delete this post?</p>
+
+        <!-- Confirm deletion -->
+        <input type="submit" value="Confirm" class="btn btn-warning">
+
+        <!-- Cancel deletion - Go back to the post list page -->
+        <a href="{% url 'posts:list' %}" class="btn btn-default">Cancel</a>
+    </form>
+</div>
+{% endblock content %}

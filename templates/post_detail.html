@@ -1,139 +1,172 @@
-{% extends "base.html" %}
-{% load urlify %}
-{% load crispy_forms_tags %} 
+{% extends "base.html" %} {% load urlify %} {% load crispy_forms_tags %} {%
+block head_title %}{{ instance.title }} | {{ block.super }}{% endblock
+head_title %} {% block content %}
 
+<div class="anchortags-and-post-body">
+  <div class="col-md-8 mx-auto py-5">
+    <div class="anchortags pb-3">
+      <a
+        href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+        target="_blank"
+      >
+        <i class="fab fa-facebook-square fa-fw"></i>
+        |
+      </a>
 
-{% block head_title %}{{ instance.title }} | {{ block.super }}{% endblock head_title %}
+      <a
+        href="https://x.com/home?status={{ instance.content|urlify }}%20{{ request.build_absolute_uri }}"
+        target="_blank"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          class="r-1nao33i r-4qtqp9 r-yyyyoo r-16y2uox r-8kz0gk r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-lrsllp fa-fw"
+        >
+          <g>
+            <path
+              d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+            ></path>
+          </g>
+        </svg>
+        |
+      </a>
 
-{% block content %}
+      <a
+        href="https://plus.google.com/share?url={{ request.build_absolute_uri }}"
+        target="_blank"
+      >
+        <i class="fab fa-google-plus-square fa-fw"></i>
+        |
+      </a>
 
-<div class='anchortags-and-post-body'>
-    <div class="col-md-8 mx-auto py-5">
-        
+      <a
+        href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ instance.title }}&summary={{ share_string }}&source={{ request.build_absolute_uri }}"
+        target="_blank"
+      >
+        <i class="fab fa-linkedin fa-fw"></i>
+        |
+      </a>
 
-        <div class='anchortags pb-3'>
+      <a
+        href="http://www.reddit.com/submit?url={{ request.build_absolute_uri }}&title={{ share_string }}."
+        target="_blank"
+      >
+        <i class="fab fa-reddit-square fa-fw"></i>
+      </a>
 
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"  target="_blank">
-                <i class="fab fa-facebook-square fa-fw"></i>
-                |
-            </a>
-        
-            <a href="https://x.com/home?status={{ instance.content|urlify }}%20{{ request.build_absolute_uri }}"  target="_blank">
-                <svg viewBox="0 0 24 24" aria-hidden="true" class="r-1nao33i r-4qtqp9 r-yyyyoo r-16y2uox r-8kz0gk r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-lrsllp fa-fw">
-                    <g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></g>
-                </svg>
-                |
-            </a>
-        
-            <a href='https://plus.google.com/share?url={{ request.build_absolute_uri }}'  target="_blank">
-                <i class="fab fa-google-plus-square fa-fw"></i>
-                |
-            </a>
-        
-            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ instance.title }}&summary={{ share_string }}&source={{ request.build_absolute_uri }}"  target="_blank">
-                <i class="fab fa-linkedin fa-fw"></i>
-                |
-            </a>
-        
-            <a href="http://www.reddit.com/submit?url={{ request.build_absolute_uri }}&title={{ share_string }}." target="_blank">
-                <i class="fab fa-reddit-square fa-fw"></i>
-            </a>
-        </div>
-        
-        
+      {% if request.user.is_staff or request.user.is_superuser %}
+      <!-- Edit button with pen icon -->
+      <a
+        href="{% url 'posts:update' slug=instance.slug %}"
+        class="btn btn-secondary btn-sm"
+      >
+        <i class="fas fa-pen"></i> Edit
+      </a>
 
-            <div class='post-body'>
-                <!-- Like button -->
-                <div class="fb-like" 
-                data-href="{{ request.build_absolute_uri }}" 
-                data-width="200"
-                data-layout="standard" 
-                data-action="like" 
-                data-size="small"  
-                data-share="false">
-                </div>
-                
-                <hr />
-                {% if instance.image %}
-                <div class="post-image">
-                    <img src={{ instance.image.url }} class='img-fluid'/>
-                </div>
-                {% endif %}
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-between">
-                        <h1 class="fw-bold">{{ instance.title }}</h1>
-                        <h4>
-                            {% if instance.draft %}
-                                <span style='color:red;'>Draft</span>
-                            {% endif %}
-                            {{ instance.publish|date:"F d, Y" }}
-
-
-                        </h4>
-                    </div>
-                </div>
-                
-                {% if instance.user.first_name and instance.user.surname %}
-                    <p class="fst-italic">Written by: {{ instance.user.get_full_name }}</p>
-                {% else %}
-                    <p class="fst-italic">Written by: {{ instance.user.username }}</p>
-                {% endif %}
-                <p class='text-muted'>Read Time: {{instance.read_time|time:'i'}}min.</p>
-                <h5 class='pt-3 post-detail-content'>{{instance.get_markdown|linebreaksbr}}</h5>
-            </div>
-
-            <!--Comments-->
-            <div>
-                <hr>
-                <p class='lead'>Leave a comment :</p>
-            
-                <!-- New comment form -->
-                {% if request.user.is_authenticated %}
-                <form action="{% url 'posts:post_detail' slug=instance.slug %}" method="post">
-                    {% csrf_token %}
-                    {{ comment_form|crispy }}
-                    <div style="text-align: right;">
-                        <button type="submit" class="btn btn-primary rounded " style="float: right;">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </form>
-                {% else %}
-                <p>You must login to comment</p>
-                {% endif %}
-                
-                
-            
-                <!-- list comments-->
-                <hr/>
-                {% for comment in comments %}
-                <a href="{% url 'comments:thread' id=comment.id %}" class='comment-thread-link' style="text-decoration: none;">
-                    <div class="comment">
-                            <blockquote class="blockquote">
-                                <small class='text-muted'>
-                                    <strong>@{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago|
-                                    {% if comment.children.count > 0 %}
-                                        {{ comment.children.count }}
-                                        <i class="fas fa-comment"></i> |<!-- Font Awesome chat icon -->
-                                    {% else %} 
-                                    <i class="fa-brands fa-rocketchat"></i> |
-                                    {% endif %} 
-                                    {%  if request.user == comment.user %}<a href='{{ comment.get_delete_url }}'><i class="fa-solid fa-x text-danger"></i></a>{% endif %}
-                                </small>
-                                <p>{{ comment.content }}</p>
-                            </blockquote>
-                        </div>
-                    </a>
-                    <hr/>
-                {% endfor %}
-
-            </div>
-            
-            
+      <!-- Delete button with bin icon -->
+      <a
+        href="{% url 'posts:post_confirm_delete' slug=instance.slug %}"
+        class="btn btn-danger btn-sm"
+      >
+        <i class="fas fa-trash"></i> Delete
+      </a>
+      {% endif %}
     </div>
-</div>
 
-        
-        
+    <div class="post-body">
+      <!-- Like button -->
+      <div
+        class="fb-like"
+        data-href="{{ request.build_absolute_uri }}"
+        data-width="200"
+        data-layout="standard"
+        data-action="like"
+        data-size="small"
+        data-share="false"
+      ></div>
+
+      <hr />
+      {% if instance.image %}
+      <div class="post-image">
+        <img src="{{ instance.image.url }}" class="img-fluid" />
+      </div>
+      {% endif %}
+      <div class="row">
+        <div class="col-12 d-flex justify-content-between">
+          <h1 class="fw-bold">{{ instance.title }}</h1>
+          <h4>
+            {% if instance.draft %}
+            <span style="color: red">Draft</span>
+            {% endif %} {{ instance.publish|date:"F d, Y" }}
+          </h4>
+        </div>
+      </div>
+
+      {% if instance.user.first_name and instance.user.surname %}
+      <p class="fst-italic">Written by: {{ instance.user.get_full_name }}</p>
+      {% else %}
+      <p class="fst-italic">Written by: {{ instance.user.username }}</p>
+      {% endif %}
+      <p class="text-muted">Read Time: {{instance.read_time|time:'i'}}min.</p>
+      <h5 class="pt-3 post-detail-content">
+        {{instance.get_markdown|linebreaksbr}}
+      </h5>
+    </div>
+
+    <!--Comments-->
+    <div>
+      <hr />
+      <p class="lead">Leave a comment :</p>
+
+      <!-- New comment form -->
+      {% if request.user.is_authenticated %}
+      <form
+        action="{% url 'posts:post_detail' slug=instance.slug %}"
+        method="post"
+      >
+        {% csrf_token %} {{ comment_form|crispy }}
+        <div style="text-align: right">
+          <button
+            type="submit"
+            class="btn btn-primary rounded"
+            style="float: right"
+          >
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </form>
+      {% else %}
+      <p>You must login to comment</p>
+      {% endif %}
+
+      <!-- list comments-->
+      <hr />
+      {% for comment in comments %}
+      <a href="{% url 'comments:thread' id=comment.id %}" class="comment-thread-link" style="text-decoration: none">
+        <div class="comment">
+          <blockquote class="blockquote">
+            <small class="text-muted">
+              <strong>@{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago|
+    
+              {% if comment.children.count > 0 %}
+                {{ comment.children.count }} <i class="fas fa-comment"></i> |<!-- Font Awesome chat icon -->
+              {% else %}
+                <i class="fa-brands fa-rocketchat"></i> |
+              {% endif %}
+    
+              {% if request.user == comment.user %}
+                <a href="{{ comment.get_delete_url }}"><i class="fa-solid fa-x text-danger"></i></a>
+              {% endif %}
+            </small>
+            <p>{{ comment.content }}</p>
+          </blockquote>
+        </div>
+      </a>
+    {% empty %}
+      <p>No comments available.</p>
+    {% endfor %}
+    </div>
+  </div>
+</div>
 
 {% endblock content %}

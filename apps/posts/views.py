@@ -139,6 +139,34 @@ def post_delete(request, slug=None):
     if not request.user.is_staff or not request.user.is_superuser:
         raise PermissionDenied
     instance = get_object_or_404(Post, slug=slug)
-    instance.delete()
-    messages.success(request, "Successfully deleted")
-    return redirect(reverse('list'))
+    
+    if request.method == 'POST':
+        # Handle the post request for confirmation
+        instance.delete()
+        messages.success(request, "Successfully deleted")
+        return redirect(reverse('posts:list'))
+    
+    # Render the delete confirmation page
+    context = {
+        "instance": instance,
+    }
+    return render(request, "confirm_delete.html", context)
+
+
+@login_required
+def post_confirm_delete(request, slug=None):
+    if not request.user.is_staff or not request.user.is_superuser:
+        raise PermissionDenied
+    instance = get_object_or_404(Post, slug=slug)
+    
+    if request.method == 'POST':
+        # Handle the post request for confirmation
+        instance.delete()
+        messages.success(request, "Post successfully deleted")
+        return redirect('posts:list') 
+    
+    # Render the delete confirmation page for posts
+    context = {
+        "instance": instance,
+    }
+    return render(request, "post_confirm_delete.html", context)
