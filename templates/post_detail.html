@@ -150,27 +150,55 @@ head_title %} {% block content %}
       <hr />
       {% for comment in comments %}
       <a href="{% url 'comments:thread' id=comment.id %}" class="comment-thread-link" style="text-decoration: none">
-        <div class="comment">
+        <div class="comment-box">
           <blockquote class="blockquote">
-            <small class="text-muted">
-              <strong>@{{ comment.user }}</strong> | {{ comment.timestamp|timesince }} ago| 
-              {% if comment.children.count > 0 %}
-                {{ comment.children.count }} <i class="fas fa-comment"></i> |<!-- Font Awesome chat icon -->
+
+             {% comment %} first_name surname • @username | {% endcomment %}
+            <small>
+              {% if comment.user.first_name and comment.user.surname %}
+                <small id='fullname'>
+                  <strong class='text-black'>{{ comment.user.first_name }} {{ comment.user.surname }}</strong>
+                  <small class='text-muted'>@{{ comment.user.username }}</small>
+                </small>
               {% else %}
-                <i class="fa-brands fa-rocketchat"></i> | 
+                <small id='username' class="text-muted">
+                  <strong>@{{ comment.user.username }}</strong>
+                </small>
               {% endif %}
-              {% if request.user == comment.user %}
-                <a href="{{ comment.get_delete_url }}"><i class="fa-solid fa-x text-danger"></i></a>
-              {% endif %}
+
+              
+              {% comment %} timesince {% endcomment %}
+              <small id='published' class="text-muted">
+                  • {{ comment.timestamp|timesince }} ago
+              </small>
             </small>
-            <p>{{ comment.content }}</p>
+
+            <p id='content'>{{ comment.content }}</p>
+
+            <div id="comment-info-line">
+                {% comment %} count replies {% endcomment %}
+                {% if comment.children.count > 0 %}
+                {{ comment.children.count }} <i class="fas fa-comment"></i>replies |<!-- Font Awesome chat icon -->
+                {% else %}
+                <i class="fa-brands fa-rocketchat"></i>reply | 
+                {% endif %}
+
+                {% comment %} Manage commet {% endcomment %}
+                {% if request.user == comment.user %}
+                  <a href="{{ comment.get_delete_url }}"><i class="fa-solid fa-x text-danger"></i></a>
+                {% endif %}
+            </div>
           </blockquote>
+          <hr>
         </div>
       </a>
     {% empty %}
       <p class="fst-italic">No comments Yet. Be the first!</p>
     {% endfor %}
     
+
+    
+
     </div>
   </div>
 </div>

@@ -10,7 +10,14 @@
 <div class="comment">
     <blockquote class="blockquote">
         
-        <small class='text-muted'><strong>@{{ parent_comment.user }}</strong> | {{ parent_comment.timestamp|timesince }} ago| {% if children_comments.count > 0 %}{{ children_comments.count }} <i class="fas fa-comment"></i> |{% endif %}{%  if request.user == parent_comment.user %}<a href='{{ parent_comment.get_delete_url }}'> <i class="fa-solid fa-x text-danger"></i></a>{% endif %}</small>
+        <small class='text-muted'><strong>
+            {{ parent_comment.user.first_name|default_if_none:"" }}
+            {{ parent_comment.user.surname|default_if_none:"" }}</strong>  
+            • @{{ parent_comment.user.username }}
+        
+        | {{ parent_comment.timestamp|timesince }} ago
+        | {% if children_comments.count > 0 %}{{ children_comments.count }} <i class="fas fa-comment"></i> 
+        |{% endif %}{%  if request.user == parent_comment.user %}<a href='{{ parent_comment.get_delete_url }}'> <i class="fa-solid fa-x text-danger"></i></a>{% endif %}</small>
         <p>{{ parent_comment.content }}</p>
     </blockquote>
     <hr/>
