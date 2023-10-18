@@ -4,58 +4,9 @@ head_title %} {% block content %}
 
 <div class="anchortags-and-post-body">
   <div class="col-md-8 mx-auto py-5">
-    <div class="anchortags pb-3 d-flex justify-content-between">
-        
-      <div>
-                <a
-                href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
-                target="_blank"
-            >
-                <i class="fab fa-facebook-square fa-fw"></i>
-                |
-            </a>
 
-            <a
-                href="https://x.com/home?status={{ instance.content|urlify }}%20{{ request.build_absolute_uri }}"
-                target="_blank"
-            >
-                <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-                class="r-1nao33i r-4qtqp9 r-yyyyoo r-16y2uox r-8kz0gk r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-lrsllp fa-fw"
-                >
-                <g>
-                    <path
-                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-                    ></path>
-                </g>
-                </svg>
-                |
-            </a>
-
-            <a
-                href="https://plus.google.com/share?url={{ request.build_absolute_uri }}"
-                target="_blank"
-            >
-                <i class="fab fa-google-plus-square fa-fw"></i>
-                |
-            </a>
-
-            <a
-                href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ instance.title }}&summary={{ share_string }}&source={{ request.build_absolute_uri }}"
-                target="_blank"
-            >
-                <i class="fab fa-linkedin fa-fw"></i>
-                |
-            </a>
-
-            <a
-                href="http://www.reddit.com/submit?url={{ request.build_absolute_uri }}&title={{ share_string }}."
-                target="_blank"
-            >
-                <i class="fab fa-reddit-square fa-fw"></i>
-            </a>
-      </div>
+    <div id='share-and-admin-actions' class="anchortags pb-3 d-flex justify-content-between">
+      {% include 'posts/anchortags.html' %}
 
       {% if request.user.is_staff or request.user.is_superuser %}
       <div>
