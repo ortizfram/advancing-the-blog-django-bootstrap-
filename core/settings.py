@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     'markdown_deux',
     'pagedown', 
+    'django_social_share', 
 
     # own
     'apps.accounts.apps.UsersConfig',

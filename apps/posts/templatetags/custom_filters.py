@@ -1,12 +1,16 @@
+# custom_filters.py
 from django import template
-from django.template.defaultfilters import stringfilter
 
 register = template.Library()
 
-@register.filter(name='urlify')
-@stringfilter
-def urlify(value):
-    # Your custom URLify logic here
-    # This filter should return a URL-friendly version of the input value
-    return value  # Replace with your actual URLify logic
+@register.filter(name='facebook_share_url')
+def facebook_share_url(absolute_url):
+    return f'https://www.facebook.com/sharer/sharer.php?u={absolute_url}'
 
+@register.filter(name='whatsapp_share_url')
+def whatsapp_share_url(absolute_url):
+    return f'https://api.whatsapp.com/send?text={absolute_url}'
+
+@register.filter(name='linkedin_share_url')
+def linkedin_share_url(absolute_url):
+    return f'https://www.linkedin.com/shareArticle?mini=true&url={absolute_url}'

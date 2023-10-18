@@ -1,30 +1,36 @@
 {% load custom_filters %}
+{% load static %}
+
+<style>
+    .social-icon {
+        margin-right: 6px; /* Adjust the margin to control the spacing */
+    }
+
+    a {
+        text-decoration: none;
+    }
+</style>
 
 <div class="anchortags pb-3 d-flex justify-content-between">
     <div>
-      <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank">
-        <i class="fab fa-facebook-square fa-fw"></i>
-      </a>
-      |
-      <a href="https://x.com/home?status={{ instance.content|urlify }}%20{{ request.build_absolute_uri }}" target="_blank">
-        <svg viewBox="0 0 24 24" aria-hidden="true" class="r-1nao33i r-4qtqp9 r-yyyyoo r-16y2uox r-8kz0gk r-dnmrzs r-bnwqim r-1plcrui r-lrvibr r-lrsllp fa-fw">
-          <g>
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
-          </g>
-        </svg>
-      </a>
-      |
-      <a href="https://plus.google.com/share?url={{ request.build_absolute_uri }}" target="_blank">
-        <i class="fab fa-google-plus-square fa-fw"></i>
-      </a>
-      |
-      <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ instance.title }}&summary={{ share_string }}&source={{ request.build_absolute_uri }}" target="_blank">
-        <i class="fab fa-linkedin fa-fw"></i>
-      </a>
-      |
-      <a href="http://www.reddit.com/submit?url={{ request.build_absolute_uri }}&title={{ share_string }}." target="_blank">
-        <i class="fab fa-reddit-square fa-fw"></i>
-      </a>
+        {# Share on Twitter #}
+        <a href="https://twitter.com/intent/tweet?url={{ instance.get_absolute_url|urlencode }}" target="_blank" class="social-icon">
+            <img src="{% static 'images/twitter-icon.svg' %}" alt="Twitter Share" width="24" height="24">
+        </a>
+
+        {# Share on Facebook #}
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ instance.get_absolute_url|urlencode }}" target="_blank" class="social-icon">
+            <img src="{% static 'images/facebook-icon.svg' %}" alt="Facebook Share" width="20" height="20">
+        </a>
+
+        {# Share on WhatsApp #}
+        <a href="whatsapp://send?text={{ instance.get_absolute_url|urlencode }}" target="_blank" class="social-icon">
+            <img src="{% static 'images/whatsapp-icon.svg' %}" alt="WhatsApp Share" width="20" height="20">
+        </a>
+
+        {# Share on LinkedIn #}
+        <a href="https://www.linkedin.com/shareArticle?url={{ instance.get_absolute_url|urlencode }}" target="_blank" class="social-icon">
+            <img src="{% static 'images/linkedin-icon.svg' %}" alt="LinkedIn Share" width="30" height="30">
+        </a>
     </div>
 </div>
-  
