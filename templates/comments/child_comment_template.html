@@ -1,0 +1,45 @@
+<div class="comment-box">
+    <blockquote class="blockquote ms-4">
+  
+      <!-- First Name, Surname, and Username -->
+      <small>
+        {% if child_comment.user.first_name and child_comment.user.surname %}
+          <small class='fullname'>
+            <strong>{{ child_comment.user.first_name }} {{ child_comment.user.surname }}</strong>
+            <small class='text-muted'>@{{ child_comment.user.username }}</small>
+          </small>
+        {% else %}
+          <small id='username' class="text-muted">
+            <strong>@{{ child_comment.user.username }}</strong>
+          </small>
+        {% endif %}
+        
+        <!-- Published Timesince -->
+        <small id='published' class="text-muted">
+          • {{ child_comment.timestamp|timesince }} ago
+        </small>
+        
+        <p class='content'>{{ child_comment.content }}</p>
+      </small>
+  
+      {% comment %} <div id="comment-info-line">
+        <div class="user-actions">
+          {% if request.user == child_comment.user %}
+            <a href="{{ child_comment.get_delete_url }}" class="delete-comment">
+              <i class="fa-solid fa-x"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div> {% endcomment %}
+      <div id="comment-info-line">
+        <div class="user-actions">
+          {% if request.user == child_comment.user %}
+            <a href="{{ child_comment.get_delete_url }}" class="delete-comment">
+              <i class="fa-solid fa-x"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </blockquote>
+  </div>
+  

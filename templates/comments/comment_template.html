@@ -1,0 +1,49 @@
+<div class="comment-box">
+    <blockquote class="blockquote">
+  
+      <!-- First Name, Surname, and Username -->
+      <small>
+        {% if comment.user.first_name and comment.user.surname %}
+          <small class='fullname'>
+            <strong>{{ comment.user.first_name }} {{ comment.user.surname }}</strong>
+            <small class='text-muted'>@{{ comment.user.username }}</small>
+          </small>
+        {% else %}
+          <small id='username' class="text-muted">
+            <strong>@{{ comment.user.username }}</strong>
+          </small>
+        {% endif %}
+  
+        <!-- Published Timesince -->
+        <small id='published' class="text-muted">
+          • {{ comment.timestamp|timesince }} ago
+        </small>
+      </small>
+  
+      <p class='content'>{{ comment.content }}</p>
+  
+      <div id="comment-info-line">
+        <div class="reply-info">
+          {% if comment.children.count > 0 %}
+          <div class="number-comments">
+            <span>{{ comment.children.count }}<i class="fas fa-comment"></i></span>
+          </div>
+          {% else %}
+          <div class="number-comments">
+            <i class="fa-brands fa-rocketchat"></i>
+          </div>
+          {% endif %}
+        </div>
+        <div class="user-actions">
+          {% if request.user == comment.user %}
+            <a href="{{ comment.get_delete_url }}" class="delete-comment">
+              <i class="fa-solid fa-x"></i>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+  
+    </blockquote>
+    <hr />
+  </div>
+  

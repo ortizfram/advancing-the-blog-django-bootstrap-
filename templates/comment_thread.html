@@ -7,126 +7,33 @@
   <h1>Thread</h1>
 
   <!-- Parent Comment =========================================================-->
-  <div class="comment">
-    <blockquote class="blockquote">
-      <div id="comment-info-line">
-        <div class="reply-info">
+  {% include 'comments/comment_template.html' with comment=parent_comment %}
 
-          <small class='text-muted fullname'><strong>
-              {{ parent_comment.user.first_name|default_if_none:"" }}
-              {{ parent_comment.user.surname|default_if_none:"" }}</strong>
-            @{{ parent_comment.user.username }}
-
-            <small id='published' class="text-muted">
-              • {{ parent_comment.timestamp|timesince }} ago
-            </small>
-
-            <p class='content'>{{ parent_comment.content }}</p>
-
-            <div id="comment-info-line">
-              <div class="reply-info">
-                {% if children_comments.count > 0 %}
-                <div class="number-comments">
-                  <span>{{ children_comments.count }} <i class="fas fa-comment"></i></span>
-                </div>
-                {% else %}
-                <div class="number-comments">
-                  <i class="fa-brands fa-rocketchat"></i>
-                </div>
-                {% endif %}
-              </div>
-
-              <div class="user-actions">
-                {% if request.user == parent_comment.user %}
-                <a href="{{ parent_comment.get_delete_url }}" class="delete-comment">
-                  <i class="fa-solid fa-x"></i>
-                </a>
-                {% endif %}
-              </div>
-            </div>
-
-          </small>
-        </div>
-      </div>
-    </blockquote>
-    <hr />
-  </div>
 
   <!-- Children Comments =============================================================-->
   <div class="child-comments">
     {% for child_comment in children_comments %}
     <div class="comment-box">
-      <blockquote class="blockquote ms-4">
+        <!-- Include child_comment_template -->
+        {% include 'comments/child_comment_template.html' with child_comment=child_comment %}
         
-        <!--first_name surname @username | -->
-        <small>
-          {% if child_comment.user.first_name and child_comment.user.surname %}
-            <small class='fullname'>
-              <strong>{{ child_comment.user.first_name }} {{ child_comment.user.surname }}</strong>
-              <small class='text-muted'>@{{ child_comment.user.username }}</small>
-            </small>
-          {% else %}
-            <small id='username' class="text-muted">
-              @{{ child_comment.user.username }}
-            </small>
-          {% endif %}
-          
-          <!-- published timesince -->
-          <small id='published' class="text-muted">
-            • {{ child_comment.timestamp|timesince }} ago
-          </small>
-          
-          <p class='content'>{{ child_comment.content }}</p>
-
-
-          <div id="comment-info-line">
-            <div class="user-actions">
-                {% if request.user == child_comment.user %}
-                    <a href="{{ child_comment.get_delete_url }}" class="delete-comment">
-                        <i class="fa-solid fa-x"></i>
-                    </a>
-                {% endif %}
-            </div>
+        <!-- Replies to Child Comment view --------------------------------------------->
+        <div class="child-replies">
+          {% for reply_comment in child_comment.children.all %}
+          <div class="comment-box">
+            <blockquote class="blockquote ms-4">
+              <!-- Include child_comment_template for reply comments -->
+              {% include 'comments/child_comment_template.html' with child_comment=reply_comment %}
+            </blockquote>
           </div>
-        </small>
-      </blockquote>
-
-      <!-- Replies to Child Comment view--------------------------------------------->
-      <div class="child-replies">
-        {% for reply_comment in child_comment.children.all %}
-        <div class="comment-box">
-          <blockquote class="blockquote ms-4">
-
-            <!--first_name surname @username | -->
-            <small> 
-              {% if comment.user.first_name and comment.user.surname %}
-                <small class='fullname'>
-                  <strong>{{ reply_comment.user.first_name }} {{ reply_comment.user.surname }}</strong>
-                  <small class='text-muted'>@{{ reply_comment.user.username }}</small>
-                </small>
-              {% else %}
-                <small id='username' class="text-muted">
-                  <strong>@{{ reply_comment.user.username }}</strong>
-                </small>
-              {% endif %}
-
-
-              <!-- published timesince -->
-              <small id='published' class="text-muted">
-                • {{ reply_comment.timestamp|timesince }} ago
-              </small>
-            </small>
-
-            <p class='content'>{{ reply_comment.content }}</p>
-
-          </blockquote>
+          {% endfor %}
         </div>
-        {% endfor %}
-      </div>
-
     </div>
     {% endfor %}
   </div>
+  
+
+
 
   <!-- new comment form ====================================================================================================-->
   <div id="reply-form-wrapper">
