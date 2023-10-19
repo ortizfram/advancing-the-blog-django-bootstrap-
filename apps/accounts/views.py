@@ -7,6 +7,7 @@ from .models import Profile
 from django.contrib.auth import login
 from .forms import EmailUpdateForm
 from django.db.models import Q
+from apps.store.models import Customer
 
 
 def register(request):
@@ -15,6 +16,16 @@ def register(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get("username")
+            email = form.cleaned_data.get("email")
+
+            # Check if the user has a customer profile
+            if hasattr(user, 'customer'):
+                customer = user.customer
+            else:
+                # If not, create a Customer object for the user
+                customer = Customer(user=user, name=username, email=email)
+                customer.save()
+
             login(request, user)
             messages.success(
                 request, f"Hi {username}, your account was created successfully"
