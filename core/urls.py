@@ -29,6 +29,7 @@ urlpatterns = [
     path("comments/", include("apps.comments.urls")),
     path("posts/", include("apps.posts.urls"), name='posts'),
     path("store/", include("apps.store.urls"), name='store'),
+    path("about/", include("apps.about.urls"), name='about'),
     path("", include("apps.landing.urls")),
 ]
 

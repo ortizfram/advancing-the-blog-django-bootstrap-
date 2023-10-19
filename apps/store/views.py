@@ -10,6 +10,7 @@ from .forms import CheckoutForm
 from django.core.exceptions import ObjectDoesNotExist
 from .utils import cookieCart,cartData, guestOrder
 
+# apps/store/view.py
 
 def store(request):
 

@@ -18,9 +18,13 @@
     <!-- Showdown library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
 
+    <!-- CSRFToken -->
+    <script>
+      var csrftoken = '{{ csrf_token }}';
+    </script>
+
     <!-- Get Cookie -->
     <script>
-      const csrftoken = '{{ csrf_token }}';
 
       function getCookie(name) {
         var cookieArr = document.cookie.split(";")
@@ -78,12 +82,7 @@
             updatePreview();
         });
     </script>
-
     
-
-    
-    <!--cart button js-->
-    <script type='text/javascript' src='{% static 'js/cart.js' %}'></script>
 
     <!--load user var js-->
     <script type='text/javascript'>
@@ -148,6 +147,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'posts:list' %}">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about:about' %}">About</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'store:store' %}">Store</a>
