@@ -18,7 +18,7 @@ def store(request):
 
     products = Product.objects.all()
     context = {'products': products,'cartItems':cartItems}
-    return render(request, "store.html", context)
+    return render(request, "store/store.html", context)
 
 
 # endpoint view: update_item
@@ -101,7 +101,7 @@ def cart(request):
     items = data['items']
 
     context = {'order': order, 'items': items, 'cartItems':cartItems}
-    return render(request, 'cart.html', context)
+    return render(request, 'store/cart.html', context)
     
 
 def checkout(request):
@@ -113,4 +113,4 @@ def checkout(request):
     items = data['items']
     
     context = {"items": items, "order": order, "cartItems":cartItems, "checkout_form": checkout_form}
-    return render(request, "checkout.html", context)
+    return render(request, "store/checkout.html", context)

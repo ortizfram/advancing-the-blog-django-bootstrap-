@@ -16,8 +16,8 @@ urlpatterns = [
     path("profile/update", views.profile_update , name='profile_update'),
     path('profile/update/username/', views.profile_update_username, name='profile_update_username'),
     path('email_update/', views.email_update, name='email_update'),
-    path("login/", views.CustomLoginView.as_view(template_name='accounts/login.html'), name='login'),
-    path("logout/", auth_view.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
+    path("login/", views.CustomLoginView.as_view(template_name='accounts/authentication/login.html'), name='login'),
+    path("logout/", auth_view.LogoutView.as_view(template_name='accounts/authentication/logout.html'), name='logout'),
     
     # reset password
     path('reset_password/',auth_view.PasswordResetView.as_view(template_name='accounts/password_reset/reset_password.html'),name='reset_password'),

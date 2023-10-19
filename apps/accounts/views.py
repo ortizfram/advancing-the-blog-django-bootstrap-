@@ -38,7 +38,7 @@ def register(request):
     else:
         form = UserRegisterForm()
 
-    return render(request, "accounts/register.html", {"form": form})
+    return render(request, "accounts/authentication/register.html", {"form": form})
 
 
 class CustomLoginView(auth_views.LoginView):
@@ -68,7 +68,7 @@ class CustomLoginView(auth_views.LoginView):
 
 @login_required
 def profile(request):
-    return render(request, "accounts/profile.html")
+    return render(request, "accounts/authentication/profile.html")
 
 
 @login_required
@@ -104,7 +104,7 @@ def profile_update(request):
         profile_form = ProfileUpdateForm(instance=profile)
 
     return render(
-        request, "accounts/profile_update.html", {"profile_form": profile_form}
+        request, "accounts/update/profile_update.html", {"profile_form": profile_form}
     )
 
 
@@ -124,7 +124,7 @@ def profile_update_username(request):
         user_form = ProfileUsernameForm(instance=request.user)
 
     return render(
-        request, "accounts/profile_update_username.html", {"user_form": user_form}
+        request, "accounts/update/profile_update_username.html", {"user_form": user_form}
     )
 
 
@@ -146,7 +146,7 @@ def email_update(request):
     else:
         email_form = EmailUpdateForm()
 
-    return render(request, "accounts/email_update.html", {"email_form": email_form})
+    return render(request, "accounts/update/email_update.html", {"email_form": email_form})
 
 
 from django.http import HttpResponseForbidden

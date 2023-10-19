@@ -40,7 +40,7 @@ def comment_delete(request, id):
     context = {
         "comment": comment,
     }
-    return render(request, "confirm_delete.html", context)
+    return render(request, "comments/confirm_delete.html", context)
 
 
 
@@ -117,4 +117,4 @@ def comment_thread(request, id):
         "comment_form": comment_form,
     }
 
-    return render(request, "comment_thread.html", context)
+    return render(request, "comments/comment_thread.html", context)

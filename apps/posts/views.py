@@ -35,7 +35,7 @@ def post_create(request):
     context = {
         "form": form,
     }
-    return render(request, "post_form.html", context)
+    return render(request, "posts/post_form.html", context)
 
 def post_detail(request, slug): # retrieve
     #=> drafts can be seen by 'staff or superuser', and annon only if publish < today. else 404
@@ -88,7 +88,7 @@ def post_detail(request, slug): # retrieve
         "comments": comments,
         "comment_form":form,
     }
-    return render(request, "post_detail.html", context)
+    return render(request, "posts/post_detail.html", context)
 
 def post_list(request): #list items
     #=> staff and superuser can see drafts 
@@ -113,7 +113,7 @@ def post_list(request): #list items
         "title" : "List",
         "today":today,
     }
-    return render(request, "post_list.html", context)
+    return render(request, "posts/post_list.html", context)
 
 @login_required
 def post_update(request, slug):
@@ -132,7 +132,7 @@ def post_update(request, slug):
         "form": form,
         "slug": instance.slug,
     }
-    return render(request, "post_form.html", context)
+    return render(request, "posts/post_form.html", context)
     
 @login_required
 def post_delete(request, slug=None):
@@ -150,7 +150,7 @@ def post_delete(request, slug=None):
     context = {
         "instance": instance,
     }
-    return render(request, "confirm_delete.html", context)
+    return render(request, "posts/confirm_delete.html", context)
 
 
 @login_required
@@ -169,4 +169,4 @@ def post_confirm_delete(request, slug=None):
     context = {
         "instance": instance,
     }
-    return render(request, "post_confirm_delete.html", context)
+    return render(request, "posts/post_confirm_delete.html", context)
