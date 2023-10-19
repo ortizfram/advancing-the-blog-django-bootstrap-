@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'apps.comments',
     'apps.posts',
     'apps.store',
+    'apps.courses',
     'apps.landing',
     'apps.about',
 ]
