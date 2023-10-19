@@ -16,7 +16,7 @@ urlpatterns = [
     path("profile/update", views.profile_update , name='profile_update'),
     path('profile/update/username/', views.profile_update_username, name='profile_update_username'),
     path('email_update/', views.email_update, name='email_update'),
-    path("login/", auth_view.LoginView.as_view(template_name='accounts/login.html'), name='login'),
+    path("login/", views.CustomLoginView.as_view(template_name='accounts/login.html'), name='login'),
     path("logout/", auth_view.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
     
     # reset password

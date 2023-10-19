@@ -8,6 +8,7 @@ from django.contrib.auth import login
 from .forms import EmailUpdateForm
 from django.db.models import Q
 from apps.store.models import Customer
+from django.contrib.auth import views as auth_views
 
 
 def register(request):
@@ -21,10 +22,12 @@ def register(request):
             # Check if the user has a customer profile
             if hasattr(user, 'customer'):
                 customer = user.customer
+                print("requested customer:",customer)
             else:
                 # If not, create a Customer object for the user
                 customer = Customer(user=user, name=username, email=email)
                 customer.save()
+                print("new customer:",customer)
 
             login(request, user)
             messages.success(
@@ -38,13 +41,29 @@ def register(request):
     return render(request, "accounts/register.html", {"form": form})
 
 
-# def login(request):  // no need to
+class CustomLoginView(auth_views.LoginView):
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        if self.request.user.is_authenticated:
+            # Check if the user has a customer profile
+            if hasattr(self.request.user, 'customer'):
+                customer = self.request.user.customer
+                print("Requested customer:", customer)
+            else:
+                # If not, create a Customer object for the user
+                customer = Customer(user=self.request.user, name=self.request.user.username, email=self.request.user.email)
+                customer.save()
+                print("New customer:", customer)
+
+        # You don't need to manually return the response
+        return super().form_valid(form)
+    
+# def logout(request):  // no need to, same as above
 # here we use just a template login and a url: in urls.py
 # from django.contrib.auth import views as auth_view
-# path("login/", auth_view.LoginView.as_view(template_name='accounts/login.html'), name='login'),
 
 
-# def logout(request):  // no need to, same as above
 
 
 @login_required
