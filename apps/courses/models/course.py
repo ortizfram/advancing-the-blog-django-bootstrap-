@@ -13,7 +13,7 @@ class Course(models.Model):
     lenght = models.IntegerField(null= False)
 
 class CourseProperty(models.Model):
-    description = models.CharField(max_length= 20, null= False)
+    description = models.CharField(max_length= 100, null= False)
     course = models.ForeignKey(Course, null= False, on_delete=models.CASCADE)
 
     class Meta: # defines a way of how an instance of a class is build. Changes the behavior of the model
