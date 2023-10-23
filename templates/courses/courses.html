@@ -5,8 +5,48 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1>courses</h1>
 
-{{ courses }}
+<style>
+    .price {
+        font-size:20px;
+    }
+</style>
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+        {% for course in courses %}
+            <div class="col mx-auto">
+                <div class="card mx-auto" style="width: 18rem;">
+                    <img src="{{course.thumbnail.url}}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{course.name}}</h5>
+                        <p class="card-text m-0 p-0">
+                            Save {{course.discount}}%
+                            <br>
+                            <span class='price'>
+                                <del>$ {{course.price}}</del>
+                            &nbsp;
+                            <span>$ {{course.price}}</span>
+                            </span>
+                            
+                        </p>
+
+                    </div>
+                    <div class="card-footer p-0">
+                        <div class="row mx-0">
+                            <div class="col border-right">
+                                <a href="#" class="btn btn-light btn-block">Enroll Now</a>
+                            </div>
+                            <div class="col">
+                                <a href="#" class="btn btn-light btn-block">Show More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% endblock content %}
