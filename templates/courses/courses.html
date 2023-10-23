@@ -3,6 +3,7 @@
 {% load static %}
 {% load urlify %}
 {% load crispy_forms_tags %}
+{% load course_custom_tags %}
 
 {% block content %}
 
@@ -22,11 +23,15 @@
                     <div class="card-body">
                         <h5 class="card-title">{{course.name}}</h5>
                         <p class="card-text m-0 p-0">
-                            Save {{course.discount}}%
-                            <br>
+                            {% if course.discount > 0 %}
+                                Save {% cal_sellprice course.price course.discount %} %
+                                <br>
+                            {% endif %}
                             <span class='price'>
+                                {% if course.discount > 0 %}
                                 <del>$ {{course.price}}</del>
-                            &nbsp;
+                                &nbsp;
+                                {% endif %}
                             <span>$ {{course.price}}</span>
                             </span>
                             
