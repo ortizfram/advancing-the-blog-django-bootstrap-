@@ -11,3 +11,7 @@ def cal_sellprice(price, discount):
     sellprice = price
     sellprice = price - ( price * discount * 0.01)
     return math.floor(sellprice)
+
+@register.filter
+def money_sign(price):
+    return f'${price}'
