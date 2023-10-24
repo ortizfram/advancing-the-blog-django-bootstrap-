@@ -1,6 +1,6 @@
 from django.contrib import admin
 # ↓ after importing it in __init__ you can call as if it was in models.py
-from .models import Course, Learning, Prerequisite, Tag, Video
+from .models import Course, Payment, UserCourse, Learning, Prerequisite, Tag, Video
 
 # Register your models here.
 
@@ -27,3 +27,5 @@ class CourseAdmin(admin.ModelAdmin):
 # ☻↓ Register the Course model with the custom admin interface.
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Video)
+admin.site.register(Payment)
+admin.site.register(UserCourse)
