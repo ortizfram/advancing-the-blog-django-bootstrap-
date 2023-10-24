@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from apps.courses.models import Course, Video
+from django.contrib import messages
 
 # Create your views here.
 def courses_view(request):
@@ -16,6 +17,10 @@ def course_detail(request, slug):
     # ↓ then ask it in frontend passing video_id to player and each video has it's {{video.serial_number}}">{{video}} 
     video = Video.objects.get(serial_number = serial_number, course = course)
     print(serial_number, video)
+    print("Preview video", video.is_preview)
+    if ((request.user.is_authenticated is False) and (video.is_preview is False)):
+        messages.info(request, "You must be logged in to see more.")
+        return redirect('login')
     context = {
         'course' : course,
         'video': video,
