@@ -45,7 +45,7 @@
                 <!-- Video List -->
                 <div class="col-3">
                         <ul id="video_list"  class="list-group">
-                            {% for v in course.video_set.all %}
+                            {% for v in videos %}<!-- comes sorted from backend-->
                             <!-- ↓ href brought from backend serial_number from each video_id--> 
                             <li class="list-group-item 
                                        {% if v == video %} active-video {% endif %}">

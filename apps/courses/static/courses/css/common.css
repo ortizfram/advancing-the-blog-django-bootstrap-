@@ -5,11 +5,17 @@
 #video_list a {
     text-decoration: none;
 }
+li:hover:not(.active-video) {
+    background-color: rgba(95, 158, 160, 0.303);
+}
 a {
     color: rgb(45, 45, 45)
 }
 .active-video {
     background-color: cadetblue;
+}
+.active-video li:hover{
+    background-color: rgb(61, 104, 106);
 }
 .active-video a{
     color: white;
