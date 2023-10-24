@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from apps.courses.models import Course, Video
 from django.contrib import messages
+from urllib.parse import urlencode
+from django.urls import reverse
 
 # Create your views here.
 def courses_view(request):
@@ -18,9 +20,18 @@ def course_detail(request, slug):
     video = Video.objects.get(serial_number = serial_number, course = course)
     print(serial_number, video)
     print("Preview video", video.is_preview)
+    # ↓ login to see if enrolled when clicking see more
+    # ↓ after login go back to course to see videos
     if ((request.user.is_authenticated is False) and (video.is_preview is False)):
         messages.info(request, "You must be logged in to see more.")
-        return redirect('login')
+        # Construct the URL for the login page with the 'next' parameter
+        login_url = reverse('login')  # Replace 'login' with your login URL name
+        next_param = urlencode({'next': request.get_full_path()})
+        redirect_url = f'{login_url}?{next_param}'
+        return redirect(redirect_url)
+
+    # if enrolled you can see any video...
+
     context = {
         'course' : course,
         'video': video,

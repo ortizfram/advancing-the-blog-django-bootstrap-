@@ -56,8 +56,12 @@ class CustomLoginView(auth_views.LoginView):
                 customer.save()
                 print("New customer:", customer)
 
-        # You don't need to manually return the response
-        return super().form_valid(form)
+        # Use the 'next' parameter to redirect users to the intended page after login
+        next_url = self.request.GET.get('next')
+        if next_url:
+            return redirect(next_url)
+
+        return response
     
 # def logout(request):  // no need to, same as above
 # here we use just a template login and a url: in urls.py
