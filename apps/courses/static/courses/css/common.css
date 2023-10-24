@@ -2,3 +2,15 @@
     overflow-y: scroll;
     max-height: 100%;
 }
+#video_list a {
+    text-decoration: none;
+}
+a {
+    color: rgb(45, 45, 45)
+}
+.active-video {
+    background-color: cadetblue;
+}
+.active-video a{
+    color: white;
+}
