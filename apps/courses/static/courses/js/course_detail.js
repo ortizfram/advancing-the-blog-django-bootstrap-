@@ -1,17 +1,20 @@
+document.addEventListener("DOMContentLoaded", function() {
 // Maintaining Player Height
-player = document.getElementById('player')
+var player; //declare
+var video_list; //declare
 
-document.onreadystatechange = function() {
-    if(document.readystate == 'interactive'){
-        maintainRatio()
-    }
-}
+player = document.getElementById('player');
+video_list = document.getElementById('video_list');
+
+maintainRatio();
 
 function maintainRatio(){
-    var w =player.clientWidth
-    var h =(w*9)/16
-    console.log({w, h})
-    player.height = h
+    var w =player.clientWidth;
+    var h =(w*9)/16;
+    console.log({w, h});
+    player.height = h;
+    video_list.style.maxHeight = h + "px";
 }
 
-window.onresize = maintainRatio
+window.onresize = maintainRatio;
+});

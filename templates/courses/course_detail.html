@@ -6,7 +6,9 @@
 {% load course_custom_tags %}
 
 {% block content %}
+
     <div class="container-fluid">
+        
         <div class="hidden">
 
             <h1 class='display-1'>{{course.name}}</h1>
@@ -30,22 +32,24 @@
             <p>{{course.learning_set.all}}</p><!--learning_set[learning]-->
         </div>
 
-        <!-- VideoPlayer-Modules  -->
+        <!-- VideoPlayer  -->
         <br>
         <div class="card p-3">
             <div class="row">
                 <div class="col">
                     <div class="mx-auto">
-                        <iframe id="player" class="mx-auto" width="100%" height="315" src="https://www.youtube.com/embed/jMHcborMf0Q?si=W_g9zN787f5Pb2oj" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        <iframe id="player" class="mx-auto" width="100%" height="315" src="https://www.youtube.com/embed/{{video.video_id}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                 </div>
-                <div class="col-3">
 
-                    <ul class="list-group">
-                        {% for video in course.video_set.all %}
-                        <li class="list-group-item"><a href="#">{{video}}</a></li>
-                        {% endfor %}
-                    </ul>
+                <!-- Video List -->
+                <div class="col-3">
+                        <ul id="video_list"  class="list-group">
+                            {% for video in course.video_set.all %}
+                            <!-- ↓ href brought from backend serial_number from each video_id--> 
+                            <li class="list-group-item"><a href="?lecture={{video.serial_number}}">{{video}}</a></li>
+                            {% endfor %}
+                        </ul>
                 </div>
             </div>
         </div>
@@ -83,7 +87,6 @@
                     </ol>
                     {% endfor %}
                   </h6>
-                  {% comment %} <p class="card-text"></p> {% endcomment %}
                   <a href="#" class="card-link">Card link</a>
                   <a href="#" class="card-link">Another link</a>
                 </div>
@@ -97,7 +100,9 @@
     </div>
 
 
-    
+
 <script src="{% static 'courses/js/course_detail.js' %}"></script>
+<link rel="stylesheet" href="{% static 'courses/css/scrollbar.css' %}">
+<link rel="stylesheet" href="{% static 'courses/css/common.css' %}">
 
 {% endblock %}
