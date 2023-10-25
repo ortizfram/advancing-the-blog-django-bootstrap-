@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'markdown_deux',
     'pagedown', 
     'django_social_share', 
+    'paypal.standard.ipn',#django-paypal
 
     # own
     'apps.accounts.apps.UsersConfig',
@@ -135,3 +136,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')#google app_name after 2step verification
 
+PAYPAL_RECEIVER_EMAIL = os.getenv('PAYPAL_RECEIVER_EMAIL')
+PAYPAL_TEST = True

@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path
+from django.urls import path, include
 from apps.courses.views import courses_view, course_detail, checkout, payment_failed, payment_success
 
 app_name = 'courses'
@@ -11,6 +11,7 @@ urlpatterns = [
     path('checkout/<str:slug>/', checkout, name='course_checkout'),
     path('checkout/<str:slug>/payment_success', payment_success, name='payment_success'),
     path('checkout/<str:slug>/payment_failed', payment_failed, name='payment_failed'),
+    path('', include('paypal.standard.ipn.urls')),
 ]
 
 if settings.DEBUG:
