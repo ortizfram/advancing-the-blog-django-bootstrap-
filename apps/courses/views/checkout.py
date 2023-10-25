@@ -3,7 +3,7 @@ from apps.courses.models import Course
 from django.contrib import messages
 from urllib.parse import urlencode
 from django.urls import reverse
-from paypal.standard.forms import PaypalPaymentsForm
+from paypal.standard.forms import PayPalPaymentsForm
 from django.conf import settings
 import uuid
 
@@ -28,6 +28,7 @@ def checkout(request, slug):
     # ☻↓ request domain: x.com
     host = request.get_host()
 
+    # ☻↓ prepare checkout course info  
     paypal_checkout = {
         'business': settings.PAYPAL_RECEIVER_EMAIL,
         'amount': amount, # Assign the calculated amount with the discount
@@ -35,12 +36,17 @@ def checkout(request, slug):
         'invoice': uuid.uuid4(), #generate random id
         'currency_code': 'USD',
         'notify_url':  f"https://{host}{reverse('paypal-ipn')}",# send payment req to this endpoin inside library django-paypal
-        'return_url': f"",
+        'return_url': f"https://{host}{reverse('payment_success', kwargs={'slug':course.slug})}",
+        'cancel_url': f"https://{host}{reverse('payment_failed', kwargs={'slug':course.slug})}",
     }
+
+    # comes from library import
+    paypal_payment = PayPalPaymentsForm(initial=paypal_checkout)
 
     context = {
         'course' : course,
-        # Add more context data as needed
+        'paypal' : paypal_payment,
+        # Add more context data as needed 
     }
     return render(request, 'courses/checkout/checkout.html', context=context)
 

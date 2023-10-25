@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'markdown_deux',
     'pagedown', 
     'django_social_share', 
-    'paypal.standard.ipn',#django-paypal
+    'paypal.standard',#django-paypal
 
     # own
     'apps.accounts.apps.UsersConfig',
