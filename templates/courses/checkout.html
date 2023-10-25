@@ -8,13 +8,20 @@
 {% block content %}
 <h1 class="display-4 alert border text-center">Checkout</h1>
 <hr>
-<h1>you are going to enroll {{course.name}}</h1>
+<h1 class="text-center">You are going to enroll:</h1>
+<ul>
+    <li>Course Name: <strong>{{course.name}}</strong></li>
+    <li>Description: {{course.description}}</li>
+    <li>Course price: {{course.price|money_sign}}</li>
+    <li>Discount: {{course.discount}}%</li>
+    <p><strong>Total: {% cal_sellprice course.price course.discount as value %}{{value|money_sign}}</strong></p>
+</ul>
 <hr>
-<div>
-    <form action="/login" method="post">
+<div class="justify-content-center align-items-center  text-center">
+    <form action="/login/" method="post">
         {% csrf_token %}
 
-        <input type="submit" value="Checkout">
+        <input type="submit" value="Checkout" >
     </form>
 </div>
 {% endblock %}
