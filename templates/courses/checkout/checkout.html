@@ -17,11 +17,14 @@
     <p><strong>Total: {% cal_sellprice course.price course.discount as value %}{{value|money_sign}}</strong></p>
 </ul>
 <hr>
-<div class="justify-content-center align-items-center  text-center">
-    <form action="/login/" method="post">
-        {% csrf_token %}
-
-        <input type="submit" value="Checkout" >
-    </form>
+<div class="payment-options">
+    <div class="paypal-container">
+        <!--add paypal integration-->
+    </div>
+    
+    <div class="mercadopago-container">
+        <!--add mercadopago integration-->
+    </div>
 </div>
+
 {% endblock %}

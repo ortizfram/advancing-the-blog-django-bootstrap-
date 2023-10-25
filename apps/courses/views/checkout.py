@@ -10,7 +10,6 @@ def checkout(request, slug):
     # Process the enrollment and payment with PayPal integration here
     # ...
 
-
     # ↓ login before enrolling
     if not request.user.is_authenticated:
         messages.info(request, "You must be logged in to see more.")
@@ -24,4 +23,5 @@ def checkout(request, slug):
         'course' : course,
         # Add more context data as needed
     }
-    return render(request, 'courses/checkout.html', context=context)
+    return render(request, 'courses/checkout/checkout.html', context=context)
+
