@@ -1,13 +1,14 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from apps.courses.views import courses_view, course_detail
+from apps.courses.views import courses_view, course_detail, checkout
 
 app_name = 'courses'
 
 urlpatterns = [
     path('', courses_view, name='courses_view'),
     path('<str:slug>/', course_detail, name='course_detail'),
+    path('checkout/<str:slug>/', checkout, name='course_checkout'),
 ]
 
 if settings.DEBUG:
